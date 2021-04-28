@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    active: test
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/santaclothes
+    username: local_test
+    password: test
+    initialization-mode: always
