@@ -18,12 +18,12 @@ class UserService(
     @Autowired private val userRepository: UserRepository,
     @Autowired private val userTokenRepository: UserTokenRepository
 ) {
-    fun register(token: UUID, name: String, accountType: AccountType): UserToken {
+    fun register(token: UUID, name: String, accountType: AccountType) {
         userRepository.findById(token).ifPresent {
             throw DatabaseException(ExceptionReason.DUPLICATE_ENTITY)
         }
 
-        return userRepository.insert(User(token = token, name = name, accountType = accountType)).let {
+        userRepository.insert(User(token = token, name = name, accountType = accountType)).let {
             userTokenRepository.save(
                 UserToken(
                     accessToken = UUID.randomUUID(),
@@ -34,12 +34,21 @@ class UserService(
         }
     }
 
-    fun login(accessToken: UUID) {
-        val userToken = userTokenRepository.findByAccessToken(accessToken)
-            .orElseThrow { TokenInvalidException(ExceptionReason.USER_TOKEN_NOT_EXISTS) }
+    fun login(userToken: UUID): UserToken {
+        val authentication =
+            userTokenRepository.findByUserToken(userToken).orElseGet { UserToken(userToken = userToken) }
 
-        if (userToken.expiredAt.isBefore(Instant.now())) {
+        if (authentication.expiredAt.isBefore(Instant.now())) {
             throw TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN)
         }
+
+        return authentication
+    }
+
+    fun refresh(refreshToken: UUID): UserToken {
+        val refreshedToken = userTokenRepository.findByRefreshToken(refreshToken)
+            .orElseThrow { TokenInvalidException(ExceptionReason.INVALID_REFRESH_TOKEN) }
+
+        return userTokenRepository.save(UserToken(userToken = refreshedToken.userToken, refreshToken = refreshToken))
     }
 }

@@ -11,8 +11,8 @@ import java.util.UUID
 data class UserToken(
     @JsonIgnore @Id var id: Long? = null,
     var userToken: UUID? = null,
-    val accessToken: UUID,
-    val refreshToken: UUID,
+    val accessToken: UUID = UUID.randomUUID(),
+    val refreshToken: UUID = UUID.randomUUID(),
     val expiredAt: Instant = Instant.now().plus(7, ChronoUnit.DAYS),
     @JsonIgnore val createdAt: Instant = Instant.now()
 )
