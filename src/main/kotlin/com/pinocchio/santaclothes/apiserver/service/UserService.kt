@@ -58,7 +58,12 @@ class UserService(
         return userTokenRepository.save(UserToken(userToken = refreshedToken.userToken, refreshToken = refreshToken))
     }
 
-    fun validateToken(accessToken: UUID) {
-        TODO("Not yet implemented")
+    fun validateAccessToken(accessToken: UUID) {
+        val authorization = userTokenRepository.findFirstByAccessTokenOrderByCreatedAtDesc(accessToken)
+            .orElseThrow { TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN) }
+
+        if (authorization.isExpired(Instant.now())) {
+            throw TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN)
+        }
     }
 }

@@ -25,8 +25,7 @@ class SecurityInterceptor(
 
         val accessToken = UUID.fromString(authorization.substring(TOKEN_PREFIX))
 
-        userService.validateToken(accessToken)
-
+        userService.validateAccessToken(accessToken)
         return true
     }
 

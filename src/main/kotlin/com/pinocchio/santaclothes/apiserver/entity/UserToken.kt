@@ -15,4 +15,8 @@ data class UserToken(
     val refreshToken: UUID = UUID.randomUUID(),
     val expiredAt: Instant = Instant.now().plus(7, ChronoUnit.DAYS),
     @JsonIgnore val createdAt: Instant = Instant.now()
-)
+) {
+    fun isExpired(instant: Instant): Boolean {
+        return expiredAt.isBefore(instant)
+    }
+}

@@ -9,4 +9,6 @@ interface UserTokenRepository : CrudRepository<UserToken, Long> {
     fun findFirstByUserTokenOrderByCreatedAtDesc(userToken: String): Optional<UserToken>
 
     fun findFirstByRefreshTokenOrderByCreatedAtDesc(refreshToken: UUID): Optional<UserToken>
+
+    fun findFirstByAccessTokenOrderByCreatedAtDesc(accessToken: UUID): Optional<UserToken>
 }

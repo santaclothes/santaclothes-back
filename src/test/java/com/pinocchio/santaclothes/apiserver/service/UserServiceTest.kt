@@ -77,4 +77,25 @@ class UserServiceTest(
         then(actual.accessToken).isNotEqualTo(authentication.accessToken)
         then(actual.expiredAt).isNotEqualTo(authentication.expiredAt)
     }
+
+    @Test
+    fun validateAccessToken() {
+        val token = "token"
+        sut.register(token, "name", AccountType.KAKAO)
+        val authentication = sut.login(token)
+
+        thenNoException().isThrownBy { sut.validateAccessToken(authentication.accessToken) }
+    }
+
+    @Test
+    fun validateAccessTokenIsExpiredThrows() {
+        val token = "token"
+        sut.register(token, "name", AccountType.KAKAO)
+        val authentication = sut.login(token)
+        val yesterday = Instant.now().minus(1, ChronoUnit.DAYS)
+        userTokenRepository.save(authentication.copy(expiredAt = yesterday))
+
+        thenThrownBy { sut.validateAccessToken(authentication.accessToken) }
+            .isExactlyInstanceOf(TokenInvalidException::class.java)
+    }
 }
