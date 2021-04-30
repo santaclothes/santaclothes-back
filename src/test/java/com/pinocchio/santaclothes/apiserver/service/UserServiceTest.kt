@@ -92,8 +92,8 @@ class UserServiceTest(
         val token = "token"
         sut.register(token, "name", AccountType.KAKAO)
         val authentication = sut.login(token)
-        val yesterday = Instant.now().minus(1, ChronoUnit.DAYS)
-        userTokenRepository.save(authentication.copy(expiredAt = yesterday))
+        val now = Instant.now()
+        userTokenRepository.save(authentication.copy(expiredAt = now))
 
         thenThrownBy { sut.validateAccessToken(authentication.accessToken) }
             .isExactlyInstanceOf(TokenInvalidException::class.java)

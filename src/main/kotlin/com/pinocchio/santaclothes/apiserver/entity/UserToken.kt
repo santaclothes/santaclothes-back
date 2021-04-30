@@ -17,6 +17,6 @@ data class UserToken(
     @JsonIgnore val createdAt: Instant = Instant.now()
 ) {
     fun isExpired(instant: Instant): Boolean {
-        return expiredAt.isBefore(instant)
+        return !expiredAt.isAfter(instant)
     }
 }
