@@ -27,7 +27,7 @@ class UserServiceTest(
 
         sut.register(token, "name", AccountType.KAKAO)
 
-        val actualToken = userTokenRepository.findByUserToken(token)
+        val actualToken = userTokenRepository.findFirstByUserTokenOrderByCreatedAtDesc(token)
         then(actualToken).isNotEmpty
     }
 
@@ -53,7 +53,7 @@ class UserServiceTest(
     fun loginWithExpiredToken() {
         val token = UUID.randomUUID()
         sut.register(token, "name", AccountType.KAKAO)
-        userTokenRepository.findByUserToken(token).get()
+        userTokenRepository.findFirstByUserTokenOrderByCreatedAtDesc(token).get()
             .copy(expiredAt = Instant.now().minus(1, ChronoUnit.DAYS))
             .apply {
                 userTokenRepository.save(this)

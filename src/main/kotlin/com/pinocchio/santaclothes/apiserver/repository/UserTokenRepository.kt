@@ -6,9 +6,7 @@ import java.util.Optional
 import java.util.UUID
 
 interface UserTokenRepository : CrudRepository<UserToken, Long> {
-    fun findByUserToken(userToken: UUID): Optional<UserToken>
+    fun findFirstByUserTokenOrderByCreatedAtDesc(userToken: UUID): Optional<UserToken>
 
-    fun findByAccessToken(accessToken: UUID): Optional<UserToken>
-
-    fun findByRefreshToken(refreshToken: UUID): Optional<UserToken>
+    fun findFirstByRefreshTokenOrderByCreatedAtDesc(refreshToken: UUID): Optional<UserToken>
 }
