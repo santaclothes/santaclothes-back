@@ -24,7 +24,9 @@ class SecurityInterceptor(
             ?: throw TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN)
 
         val accessToken = UUID.fromString(authorization.substring(TOKEN_PREFIX))
-        userService.login(accessToken)
+
+        userService.validateToken(accessToken)
+
         return true
     }
 

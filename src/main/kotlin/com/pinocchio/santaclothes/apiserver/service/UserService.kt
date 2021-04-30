@@ -22,7 +22,7 @@ class UserService(
 ) {
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    fun register(token: UUID, name: String, accountType: AccountType) {
+    fun register(token: String, name: String, accountType: AccountType) {
         userRepository.findById(token).ifPresent {
             throw DatabaseException(ExceptionReason.DUPLICATE_ENTITY)
         }
@@ -38,7 +38,7 @@ class UserService(
         }
     }
 
-    fun login(userToken: UUID): UserToken {
+    fun login(userToken: String): UserToken {
         val authentication =
             userTokenRepository.findFirstByUserTokenOrderByCreatedAtDesc(userToken)
                 .orElseGet { UserToken(userToken = userToken) }
@@ -56,5 +56,9 @@ class UserService(
             .orElseThrow { TokenInvalidException(ExceptionReason.INVALID_REFRESH_TOKEN) }
 
         return userTokenRepository.save(UserToken(userToken = refreshedToken.userToken, refreshToken = refreshToken))
+    }
+
+    fun validateToken(accessToken: UUID) {
+        TODO("Not yet implemented")
     }
 }

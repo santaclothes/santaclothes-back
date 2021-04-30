@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS CARE_LABEL
 
 CREATE TABLE IF NOT EXISTS "USER"
 (
-    token        uuid PRIMARY KEY,
+    token        varchar(64) PRIMARY KEY,
     name         varchar(255),
     account_type varchar(50)
 );
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS "USER"
 CREATE TABLE IF NOT EXISTS USER_TOKEN
 (
     id            bigserial PRIMARY KEY,
-    user_token    uuid,
+    user_token    varchar(64),
     access_token  uuid unique,
     refresh_token uuid,
     expired_at    timestamp default now() + interval '1 week',

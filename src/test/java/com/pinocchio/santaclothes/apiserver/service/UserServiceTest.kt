@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import java.util.UUID
 
 @Transactional
 class UserServiceTest(
@@ -23,7 +22,7 @@ class UserServiceTest(
 ) : SpringTest() {
     @Test
     fun register() {
-        val token = UUID.randomUUID()
+       val token = "token"
 
         sut.register(token, "name", AccountType.KAKAO)
 
@@ -33,7 +32,7 @@ class UserServiceTest(
 
     @Test
     fun registerTwice() {
-        val token = UUID.randomUUID()
+        val token = "token"
         sut.register(token, "name", AccountType.KAKAO)
 
         thenThrownBy { sut.register(token, "name", AccountType.KAKAO) }
@@ -43,7 +42,7 @@ class UserServiceTest(
 
     @Test
     fun login() {
-        val token = UUID.randomUUID()
+        val token = "token"
         sut.register(token, "name", AccountType.KAKAO)
 
         thenNoException().isThrownBy { sut.login(token) }
@@ -51,7 +50,7 @@ class UserServiceTest(
 
     @Test
     fun loginWithExpiredToken() {
-        val token = UUID.randomUUID()
+        val token = "token"
         sut.register(token, "name", AccountType.KAKAO)
         userTokenRepository.findFirstByUserTokenOrderByCreatedAtDesc(token).get()
             .copy(expiredAt = Instant.now().minus(1, ChronoUnit.DAYS))
@@ -66,7 +65,7 @@ class UserServiceTest(
 
     @Test
     fun refresh() {
-        val token = UUID.randomUUID()
+        val token = "token"
         sut.register(token, "name", AccountType.KAKAO)
         val authentication = sut.login(token)
         val refreshToken = authentication.refreshToken
