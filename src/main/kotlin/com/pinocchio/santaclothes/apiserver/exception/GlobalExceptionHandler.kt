@@ -63,7 +63,8 @@ class GlobalExceptionHandler : CommonGlobalExceptionHandler() {
     companion object {
         val REASON_STATUS_MAP: Map<ExceptionReason, Status> = mapOf(
             ExceptionReason.DUPLICATE_ENTITY to Status.CONFLICT,
-            ExceptionReason.USER_TOKEN_NOT_EXISTS to Status.BAD_REQUEST
+            ExceptionReason.USER_TOKEN_NOT_EXISTS to Status.BAD_REQUEST,
+            ExceptionReason.INVALID_REFRESH_TOKEN to Status.BAD_REQUEST
         )
     }
 }
