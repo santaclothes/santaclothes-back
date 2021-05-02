@@ -1,9 +1,15 @@
 spring:
-  profiles:
-    active: test
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/santaclothes
-    username: local_test
-    password: test
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:santaclothes
+    username: sa
+    password:
     initialization-mode: always
+
+logging:
+  level:
+    org:
+      springframework:
+        jdbc:
+          core:
+            JdbcTemplate: debug

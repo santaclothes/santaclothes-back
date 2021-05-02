@@ -20,6 +20,7 @@ dependencies {
         exclude group: "io.swagger", module: "swagger-annotations"
         exclude group: "io.swagger", module: "swagger-models"
     }
+    implementation("com.h2database:h2")
     implementation("io.swagger:swagger-annotations:1.5.21")
     implementation("io.swagger:swagger-models:1.5.21")
     implementation("org.zalando:problem-spring-web-starter:${PROBLEM_SPRING_VERSION}")
