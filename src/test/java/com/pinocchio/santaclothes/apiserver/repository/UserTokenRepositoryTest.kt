@@ -1,16 +1,14 @@
 package com.pinocchio.santaclothes.apiserver.repository
 
 import com.pinocchio.santaclothes.apiserver.entity.UserToken
-import com.pinocchio.santaclothes.apiserver.test.SpringTest
+import com.pinocchio.santaclothes.apiserver.test.SpringDataTest
 import org.assertj.core.api.BDDAssertions.then
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
 import java.util.UUID
 
-@Transactional
-class UserTokenRepositoryTest(@Autowired val sut: UserTokenRepository) : SpringTest() {
+class UserTokenRepositoryTest(@Autowired val sut: UserTokenRepository) : SpringDataTest() {
     @Test
     fun save() {
         val userToken = UserToken(accessToken = UUID.randomUUID(), refreshToken = UUID.randomUUID())

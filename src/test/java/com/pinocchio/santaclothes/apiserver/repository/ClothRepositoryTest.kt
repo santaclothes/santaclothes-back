@@ -3,14 +3,12 @@ package com.pinocchio.santaclothes.apiserver.repository
 import com.pinocchio.santaclothes.apiserver.entity.CareLabel
 import com.pinocchio.santaclothes.apiserver.entity.Cloth
 import com.pinocchio.santaclothes.apiserver.entity.type.*
-import com.pinocchio.santaclothes.apiserver.test.SpringTest
+import com.pinocchio.santaclothes.apiserver.test.SpringDataTest
 import org.assertj.core.api.BDDAssertions.then
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.transaction.annotation.Transactional
 
-@Transactional
-class ClothRepositoryTest(@Autowired val sut: ClothRepository) : SpringTest() {
+class ClothRepositoryTest(@Autowired val sut: ClothRepository) : SpringDataTest() {
     @Test
     fun findById() {
         val expected = sut.save(Cloth(name = "티셔츠", color = ClothesColor.GREEN, type = ClothesType.TOP))

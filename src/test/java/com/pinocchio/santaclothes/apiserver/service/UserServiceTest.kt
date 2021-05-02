@@ -5,6 +5,7 @@ import com.pinocchio.santaclothes.apiserver.exception.DatabaseException
 import com.pinocchio.santaclothes.apiserver.exception.ExceptionReason
 import com.pinocchio.santaclothes.apiserver.exception.TokenInvalidException
 import com.pinocchio.santaclothes.apiserver.repository.UserTokenRepository
+import com.pinocchio.santaclothes.apiserver.test.SpringDataTest
 import com.pinocchio.santaclothes.apiserver.test.SpringTest
 import org.assertj.core.api.BDDAssertions.then
 import org.assertj.core.api.BDDAssertions.thenNoException
@@ -15,11 +16,10 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 
-@Transactional
 class UserServiceTest(
     @Autowired val sut: UserService,
     @Autowired val userTokenRepository: UserTokenRepository
-) : SpringTest() {
+) : SpringDataTest() {
     @Test
     fun register() {
        val token = "token"
