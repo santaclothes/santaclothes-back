@@ -38,3 +38,17 @@ CREATE TABLE IF NOT EXISTS USER_TOKEN
     FOREIGN KEY (user_token)
         REFERENCES "USER" (token)
 );
+
+CREATE TABLE IF NOT EXISTS IMAGE
+(
+    id             bigserial PRIMARY KEY,
+    file_path      varchar(255),
+    thumbnail_path varchar(255),
+    image_type     varchar(50),
+    cloth          bigint,
+    care_label     bigint,
+    FOREIGN KEY (cloth)
+        REFERENCES cloth (id),
+    FOREIGN KEY (care_label)
+        REFERENCES CARE_LABEL (id)
+)

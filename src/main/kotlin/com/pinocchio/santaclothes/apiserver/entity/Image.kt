@@ -9,8 +9,7 @@ class Image(
     val filePath: String,
     val thumbnailPath: String?,
     val imageType: ImageType,
-    val cloth: Cloth?,
-    val careLabel: CareLabel?
+    // TODO: 객체 참조 필요한지 검토
 )
 
 
