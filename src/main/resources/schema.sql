@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS USER_TOKEN
 (
     id            integer auto_increment PRIMARY KEY,
     user_token    varchar(64),
+    device_token  varchar(64),
     access_token  uuid unique,
     refresh_token uuid,
     expired_at    timestamp default DATEADD('DAY', 7, NOW()),

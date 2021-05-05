@@ -7,9 +7,7 @@ spring:
   application:
     name: santa-clothes-api-server
   profiles:
-    active: local
-server:
-  port: 8082
-  servlet:
-    encoding:
-      force: true
+    group:
+      default: "local"
+      local: "database-develop, external-api"
+      real: "database-real, external-api"
