@@ -22,40 +22,39 @@ class UserService(
 ) {
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    fun register(token: String, name: String, accountType: AccountType) {
-        userRepository.findById(token).ifPresent {
+    fun register(token: String, name: String, accountType: AccountType) =
+        if (userRepository.findById(token).isPresent)
             throw DatabaseException(ExceptionReason.DUPLICATE_ENTITY)
-        }
+        else
+            userRepository.insert(User(token = token, name = name, accountType = accountType))
 
-        userRepository.insert(User(token = token, name = name, accountType = accountType)).let {
-            userTokenRepository.save(
-                UserToken(
-                    accessToken = UUID.randomUUID(),
-                    refreshToken = UUID.randomUUID(),
-                    userToken = it.token
-                )
-            )
-        }
-    }
 
-    fun login(userToken: String): UserToken {
-        val authentication =
-            userTokenRepository.findFirstByUserTokenOrderByCreatedAtDesc(userToken)
-                .orElseGet { UserToken(userToken = userToken) }
+    fun login(userToken: String, deviceToken: String): UserToken =
+        userTokenRepository.findFirstByUserTokenOrderByCreatedAtDesc(userToken)
+            .orElseGet { userTokenRepository.save(UserToken(userToken = userToken, deviceToken = deviceToken)) }
+            .apply {
+                if (this.isExpired(Instant.now())) {
+                    throw TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN)
+                }
 
-        if (authentication.expiredAt.isBefore(Instant.now())) {
-            throw TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN)
-        }
-
-        return authentication
-    }
+                if (this.deviceToken != this.deviceToken) {
+                    userTokenRepository.save(this.copy(deviceToken = this.deviceToken))
+                }
+            }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     fun refresh(refreshToken: UUID): UserToken {
-        val refreshedToken = userTokenRepository.findFirstByRefreshTokenOrderByCreatedAtDesc(refreshToken)
+        return userTokenRepository.findFirstByRefreshTokenOrderByCreatedAtDesc(refreshToken)
             .orElseThrow { TokenInvalidException(ExceptionReason.INVALID_REFRESH_TOKEN) }
-
-        return userTokenRepository.save(UserToken(userToken = refreshedToken.userToken, refreshToken = refreshToken))
+            .run {
+                userTokenRepository.save(
+                    UserToken(
+                        userToken = this.userToken,
+                        deviceToken = this.deviceToken,
+                        refreshToken = refreshToken
+                    )
+                )
+            }
     }
 
     fun validateAccessToken(accessToken: UUID) {

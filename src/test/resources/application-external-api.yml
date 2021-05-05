@@ -1,0 +1,4 @@
+google-fcm:
+  host: localhost:${wiremock.server.port}
+  url: http://${google-fcm.host}/v1/projects/${google-fcm.project-id}
+  project-id: santaclothes-28490

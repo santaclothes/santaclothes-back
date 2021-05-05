@@ -5,6 +5,6 @@ import java.util.UUID
 
 data class RegisterRequest(val userToken: String, val name: String, val accountType: AccountType)
 
-data class LoginRequest(val userToken: String)
+data class LoginRequest(val userToken: String, val deviceToken: String)
 
 data class RefreshRequest(val refreshToken: UUID)

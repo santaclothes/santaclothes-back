@@ -46,7 +46,8 @@ class AuthController(
     )
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    fun login(@RequestBody loginRequest: @Valid LoginRequest): UserToken = userService.login(loginRequest.userToken)
+    fun login(@RequestBody loginRequest: @Valid LoginRequest): UserToken =
+        userService.login(loginRequest.userToken, loginRequest.deviceToken)
 
     @ApiOperation("인증 토큰 갱신")
     @ApiResponses(

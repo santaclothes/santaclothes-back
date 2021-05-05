@@ -6,8 +6,8 @@ import org.springframework.data.relational.core.mapping.Table
 @Table("USER")
 data class User(
     @Id var token: String? = null,
-    var name: String,
-    var accountType: AccountType,
+    val name: String,
+    val accountType: AccountType
 )
 
 enum class AccountType {
