@@ -13,14 +13,12 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
 import java.time.Instant
-import java.util.UUID
 
 @Service
 class UserService(
     @Autowired private val userRepository: UserRepository,
     @Autowired private val userTokenRepository: UserTokenRepository
 ) {
-
     @Transactional(isolation = Isolation.SERIALIZABLE)
     fun register(token: String, name: String, accountType: AccountType) =
         if (userRepository.findById(token).isPresent)
@@ -33,7 +31,7 @@ class UserService(
         userTokenRepository.findFirstByUserTokenOrderByCreatedAtDesc(userToken)
             .orElseGet { userTokenRepository.save(UserToken(userToken = userToken, deviceToken = deviceToken)) }
             .apply {
-                if (this.isExpired(Instant.now())) {
+                if (this.isExpiredWhen(Instant.now())) {
                     throw TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN)
                 }
 
@@ -41,28 +39,4 @@ class UserService(
                     userTokenRepository.save(this.copy(deviceToken = this.deviceToken))
                 }
             }
-
-    @Transactional(isolation = Isolation.SERIALIZABLE)
-    fun refresh(refreshToken: UUID): UserToken {
-        return userTokenRepository.findFirstByRefreshTokenOrderByCreatedAtDesc(refreshToken)
-            .orElseThrow { TokenInvalidException(ExceptionReason.INVALID_REFRESH_TOKEN) }
-            .run {
-                userTokenRepository.save(
-                    UserToken(
-                        userToken = this.userToken,
-                        deviceToken = this.deviceToken,
-                        refreshToken = refreshToken
-                    )
-                )
-            }
-    }
-
-    fun validateAccessToken(accessToken: UUID) {
-        val authorization = userTokenRepository.findFirstByAccessTokenOrderByCreatedAtDesc(accessToken)
-            .orElseThrow { TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN) }
-
-        if (authorization.isExpired(Instant.now())) {
-            throw TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN)
-        }
-    }
 }

@@ -1,5 +1,6 @@
 package com.pinocchio.santaclothes.apiserver.controller
 
+import com.pinocchio.santaclothes.apiserver.authorization.TokenManager
 import com.pinocchio.santaclothes.apiserver.controller.dto.LoginRequest
 import com.pinocchio.santaclothes.apiserver.controller.dto.RefreshRequest
 import com.pinocchio.santaclothes.apiserver.controller.dto.RegisterRequest
@@ -20,7 +21,8 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/auth")
 class AuthController(
-    @Autowired val userService: UserService
+    @Autowired val userService: UserService,
+    @Autowired val tokenManager: TokenManager
 ) {
     @ApiOperation("회원가입")
     @ApiResponses(
@@ -57,5 +59,6 @@ class AuthController(
         ]
     )
     @PutMapping("/accessToken")
-    fun refresh(@RequestBody request: @Valid RefreshRequest): UserToken = userService.refresh(request.refreshToken)
+    fun refresh(@RequestBody request: @Valid RefreshRequest): UserToken =
+        tokenManager.refreshAccessToken(request.refreshToken)
 }

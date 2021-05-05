@@ -1,15 +1,15 @@
 package com.pinocchio.santaclothes.apiserver.config.interceptor
 
+import com.pinocchio.santaclothes.apiserver.authorization.TokenManager
 import com.pinocchio.santaclothes.apiserver.exception.ExceptionReason
 import com.pinocchio.santaclothes.apiserver.exception.TokenInvalidException
-import com.pinocchio.santaclothes.apiserver.service.UserService
 import org.springframework.web.servlet.HandlerInterceptor
 import java.util.UUID
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 class SecurityInterceptor(
-    private val userService: UserService
+    private val tokenManager: TokenManager
 ) : HandlerInterceptor {
 
     override fun preHandle(
@@ -23,10 +23,18 @@ class SecurityInterceptor(
         val authorization = request.getHeader("Authorization")
             ?: throw TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN)
 
-        val accessToken = UUID.fromString(authorization.substring(TOKEN_PREFIX))
+        getAccessTokenFrom(authorization).run {
+            tokenManager.validateAccessToken(this)
+        }
 
-        userService.validateAccessToken(accessToken)
         return true
+    }
+
+    private fun getAccessTokenFrom(authorization: String): UUID {
+        if (authorization.length <= 7) {
+            throw TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN)
+        }
+        return UUID.fromString(authorization.substring(TOKEN_PREFIX))
     }
 
     companion object {
