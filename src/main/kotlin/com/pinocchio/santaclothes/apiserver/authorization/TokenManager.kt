@@ -49,20 +49,21 @@ class TokenManager(
         }
     }
 
-    fun acquireAccessToken(userToken: String, deviceToken: String): UserToken =
-        cacheTemplate[userToken] ?: userTokenRepository.findFirstByUserTokenOrderByCreatedAtDesc(userToken).orElseGet {
-            userTokenRepository.saveWithCache(UserToken(userToken = userToken, deviceToken = deviceToken))
+    fun acquireAccessToken(userToken: String, deviceToken: String): UserToken = runCatching {
+        findUserToken(userToken)
+    }.onSuccess {
+        if (it.isExpiredWhen(Instant.now())) {
+            throw TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN)
         }
-            .apply {
-                if (this.isExpiredWhen(Instant.now())) {
-                    throw TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN)
-                }
 
-                if (this.deviceToken != this.deviceToken) {
-                    userTokenRepository.saveWithCache(this.copy(deviceToken = this.deviceToken))
-                }
-            }
+        if (it.deviceToken != deviceToken) {
+            userTokenRepository.saveWithCache(it.copy(deviceToken = deviceToken))
+        }
+    }.getOrElse { userTokenRepository.saveWithCache(UserToken(userToken = userToken, deviceToken = deviceToken)) }
 
+    private fun findUserToken(userToken: String): UserToken =
+        cacheTemplate[userToken] ?: userTokenRepository.findFirstByUserTokenOrderByCreatedAtDesc(userToken)
+            .orElseThrow { TokenInvalidException(ExceptionReason.USER_TOKEN_NOT_EXISTS) }
 
     companion object {
         private const val FIREBASE_KEY_PATH = "firebase/santaclothes-key.json"
