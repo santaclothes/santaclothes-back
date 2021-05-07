@@ -1,6 +1,7 @@
 package com.pinocchio.santaclothes.apiserver.authorization
 
 import com.google.auth.oauth2.GoogleCredentials
+import com.pinocchio.santaclothes.apiserver.config.CacheTemplate
 import com.pinocchio.santaclothes.apiserver.entity.UserToken
 import com.pinocchio.santaclothes.apiserver.exception.ExceptionReason
 import com.pinocchio.santaclothes.apiserver.exception.TokenInvalidException
@@ -15,7 +16,8 @@ import java.util.UUID
 
 @Component
 class TokenManager(
-    @Autowired private val userTokenRepository: UserTokenRepository
+    @Autowired private val userTokenRepository: UserTokenRepository,
+    @Autowired private val cacheTemplate: CacheTemplate<UserToken>,
 ) {
     val fcmAccessToken: String
         get() = GoogleCredentials // 내부적으로 캐싱 되있음
@@ -29,7 +31,7 @@ class TokenManager(
         userTokenRepository.findFirstByRefreshTokenOrderByCreatedAtDesc(refreshToken)
             .orElseThrow { TokenInvalidException(ExceptionReason.INVALID_REFRESH_TOKEN) }
             .run {
-                userTokenRepository.save(
+                userTokenRepository.saveWithCache(
                     UserToken(
                         userToken = this.userToken,
                         deviceToken = this.deviceToken,
@@ -47,7 +49,26 @@ class TokenManager(
         }
     }
 
+    fun acquireAccessToken(userToken: String, deviceToken: String): UserToken =
+        cacheTemplate[userToken] ?: userTokenRepository.findFirstByUserTokenOrderByCreatedAtDesc(userToken).orElseGet {
+            userTokenRepository.saveWithCache(UserToken(userToken = userToken, deviceToken = deviceToken))
+        }
+            .apply {
+                if (this.isExpiredWhen(Instant.now())) {
+                    throw TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN)
+                }
+
+                if (this.deviceToken != this.deviceToken) {
+                    userTokenRepository.saveWithCache(this.copy(deviceToken = this.deviceToken))
+                }
+            }
+
+
     companion object {
         private const val FIREBASE_KEY_PATH = "firebase/santaclothes-key.json"
+    }
+
+    fun UserTokenRepository.saveWithCache(entity: UserToken): UserToken = this.save(entity).apply {
+        cacheTemplate[userToken] = this
     }
 }

@@ -1,6 +1,7 @@
 package com.pinocchio.santaclothes.apiserver.repository
 
 import com.pinocchio.santaclothes.apiserver.entity.UserToken
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.repository.CrudRepository
 import java.util.Optional
 import java.util.UUID

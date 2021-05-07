@@ -5,7 +5,7 @@ import org.springframework.data.relational.core.mapping.Table
 
 @Table("USER")
 data class User(
-    @Id var token: String? = null,
+    @Id var token: String,
     val name: String,
     val accountType: AccountType
 )
