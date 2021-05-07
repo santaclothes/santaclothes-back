@@ -50,7 +50,7 @@ class TokenManager(
     }
 
     fun acquireAccessToken(userToken: String, deviceToken: String): UserToken = runCatching {
-        findUserToken(userToken)
+        getUserToken(userToken)
     }.onSuccess {
         if (it.isExpiredWhen(Instant.now())) {
             throw TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN)
@@ -61,7 +61,7 @@ class TokenManager(
         }
     }.getOrElse { userTokenRepository.saveWithCache(UserToken(userToken = userToken, deviceToken = deviceToken)) }
 
-    private fun findUserToken(userToken: String): UserToken =
+    private fun getUserToken(userToken: String): UserToken =
         cacheTemplate[userToken] ?: userTokenRepository.findFirstByUserTokenOrderByCreatedAtDesc(userToken)
             .orElseThrow { TokenInvalidException(ExceptionReason.USER_TOKEN_NOT_EXISTS) }
 
