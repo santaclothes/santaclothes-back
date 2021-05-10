@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
+import java.util.Optional
+import java.util.UUID
 
 @Service
 class UserService(
@@ -30,4 +32,6 @@ class UserService(
             .run {
                 tokenManager.acquireAccessToken(userToken, deviceToken)
             }
+
+    fun findByAccessToken(accessToken: UUID): Optional<User> = userRepository.findByAccessToken(accessToken)
 }
