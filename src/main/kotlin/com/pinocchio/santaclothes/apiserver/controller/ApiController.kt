@@ -3,6 +3,9 @@ package com.pinocchio.santaclothes.apiserver.controller
 import com.pinocchio.santaclothes.apiserver.controller.dto.HomeView
 import com.pinocchio.santaclothes.apiserver.service.ViewService
 import com.pinocchio.santaclothes.apiserver.support.authorizationToUuid
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.ApiParam
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.web.bind.annotation.GetMapping
@@ -10,10 +13,15 @@ import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+@Api(tags = ["Api"])
 @RestController
 @RequestMapping("/api")
 class ApiController(@Autowired val viewService: ViewService) {
+    @ApiOperation("메인화면")
     @GetMapping("/home")
-    fun home(@RequestHeader(name = HttpHeaders.AUTHORIZATION, required = true) authorization: String): HomeView =
+    fun home(
+        @ApiParam(hidden = true)
+        @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = true) authorization: String
+    ): HomeView =
         viewService.homeView(authorizationToUuid(authorization))
 }
