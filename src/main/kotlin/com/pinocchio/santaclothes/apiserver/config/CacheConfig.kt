@@ -14,7 +14,7 @@ class CacheConfig {
     @Bean
     fun userTokenCache() = CaffeineCache(
         "user-token",
-        Caffeine.newBuilder().recordStats()
+        Caffeine.newBuilder().recordStats() // TODO: caffeine 설정 검토
             .maximumSize(1000L) // entries 개수
             .build()
     )
