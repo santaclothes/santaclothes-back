@@ -10,6 +10,6 @@ import java.util.UUID
 
 @Repository
 interface UserRepository : CrudRepository<User, String>, WithInsert<User> {
-    @Query("SELECT token, name, account_type FROM user u LEFT JOIN user_token ut on u.token = ut.user_token WHERE ut.access_token = :accessToken")
+    @Query("SELECT token, name, account_type FROM \"USER\" u LEFT JOIN user_token ut on u.token = ut.user_token WHERE ut.access_token = :accessToken")
     fun findByAccessToken(accessToken: UUID): Optional<User>
 }
