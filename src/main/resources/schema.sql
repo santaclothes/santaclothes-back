@@ -52,4 +52,12 @@ CREATE TABLE IF NOT EXISTS IMAGE
         REFERENCES cloth (id),
     FOREIGN KEY (care_label)
         REFERENCES CARE_LABEL (id)
+);
+
+CREATE TABLE IF NOT EXISTS NOTICE
+(
+    id      integer auto_increment PRIMARY KEY,
+    title   varchar(50),
+    hint    varchar(50),
+    content varchar(255)
 )
