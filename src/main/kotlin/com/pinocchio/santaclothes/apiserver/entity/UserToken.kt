@@ -10,8 +10,8 @@ import java.util.UUID
 @Table
 data class UserToken(
     @JsonIgnore @Id var id: Long? = null,
-    var userToken: String,
-    val deviceToken: String,
+    @JsonIgnore var userToken: String,
+    @JsonIgnore val deviceToken: String,
     val accessToken: UUID = UUID.randomUUID(),
     val refreshToken: UUID = UUID.randomUUID(),
     val expiredAt: Instant = Instant.now().plus(7, ChronoUnit.DAYS),

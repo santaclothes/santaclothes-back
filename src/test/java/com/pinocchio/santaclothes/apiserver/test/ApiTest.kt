@@ -8,9 +8,11 @@ import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.web.context.WebApplicationContext
 
 @SpringBootTest(classes = [ApiServerApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 class ApiTest {
     @Autowired
     lateinit var webApplicationContext: WebApplicationContext
