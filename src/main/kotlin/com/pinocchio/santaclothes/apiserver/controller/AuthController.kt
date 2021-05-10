@@ -49,7 +49,7 @@ class AuthController(
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
     fun login(@RequestBody loginRequest: @Valid LoginRequest): UserToken =
-        tokenManager.acquireAccessToken(loginRequest.userToken, loginRequest.deviceToken)
+        userService.login(loginRequest.userToken, loginRequest.deviceToken)
 
     @ApiOperation("인증 토큰 갱신")
     @ApiResponses(
