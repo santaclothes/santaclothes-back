@@ -7,7 +7,7 @@ import com.pinocchio.santaclothes.apiserver.exception.DatabaseException
 import com.pinocchio.santaclothes.apiserver.exception.ExceptionReason
 import com.pinocchio.santaclothes.apiserver.exception.TokenInvalidException
 import com.pinocchio.santaclothes.apiserver.repository.UserRepository
-import com.pinocchio.santaclothes.apiserver.repository.UserTokenRepository
+import com.pinocchio.santaclothes.apiserver.repository.AuthorizationTokenRepository
 import com.pinocchio.santaclothes.apiserver.test.SpringDataTest
 import org.assertj.core.api.BDDAssertions.then
 import org.assertj.core.api.BDDAssertions.thenNoException
@@ -20,7 +20,7 @@ import java.time.temporal.ChronoUnit
 class UserServiceTest(
     @Autowired val sut: UserService,
     @Autowired val userRepository: UserRepository,
-    @Autowired val userTokenRepository: UserTokenRepository
+    @Autowired val authorizationTokenRepository: AuthorizationTokenRepository
 ) : SpringDataTest() {
     @Test
     fun register() {
@@ -58,7 +58,7 @@ class UserServiceTest(
         val deviceToken = "deviceToken"
 
         userRepository.insert(User(userToken, "name", AccountType.KAKAO))
-        userTokenRepository.save(
+        authorizationTokenRepository.save(
             AuthorizationToken(
                 userToken = userToken,
                 deviceToken = deviceToken,
@@ -77,7 +77,7 @@ class UserServiceTest(
         val deviceToken = "deviceToken"
 
         userRepository.insert(User(userToken, "name", AccountType.KAKAO))
-        userTokenRepository.save(AuthorizationToken(userToken = userToken, deviceToken = deviceToken)).apply {
+        authorizationTokenRepository.save(AuthorizationToken(userToken = userToken, deviceToken = deviceToken)).apply {
             val expected = sut.findByAccessToken(accessToken)
             then(expected).isNotEmpty
         }

@@ -1,12 +1,12 @@
 package com.pinocchio.santaclothes.apiserver.authorization
 
 import com.pinocchio.santaclothes.apiserver.entity.AccountType
-import com.pinocchio.santaclothes.apiserver.entity.User
 import com.pinocchio.santaclothes.apiserver.entity.AuthorizationToken
+import com.pinocchio.santaclothes.apiserver.entity.User
 import com.pinocchio.santaclothes.apiserver.exception.ExceptionReason
 import com.pinocchio.santaclothes.apiserver.exception.TokenInvalidException
+import com.pinocchio.santaclothes.apiserver.repository.AuthorizationTokenRepository
 import com.pinocchio.santaclothes.apiserver.repository.UserRepository
-import com.pinocchio.santaclothes.apiserver.repository.UserTokenRepository
 import com.pinocchio.santaclothes.apiserver.test.SpringDataTest
 import org.assertj.core.api.BDDAssertions.then
 import org.assertj.core.api.BDDAssertions.thenNoException
@@ -19,7 +19,7 @@ import java.time.temporal.ChronoUnit
 class TokenManagerTest(
     @Autowired val sut: TokenManager,
     @Autowired val userRepository: UserRepository,
-    @Autowired val userTokenRepository: UserTokenRepository
+    @Autowired val authorizationTokenRepository: AuthorizationTokenRepository
 ) : SpringDataTest() {
     @Test
     fun refreshAccessToken() {
@@ -27,7 +27,7 @@ class TokenManagerTest(
         val deviceToken = "deviceToken"
 
         userRepository.insert(User(token = userToken, name = "test", accountType = AccountType.KAKAO))
-        userTokenRepository.save(AuthorizationToken(userToken = userToken, deviceToken = deviceToken))
+        authorizationTokenRepository.save(AuthorizationToken(userToken = userToken, deviceToken = deviceToken))
             .run {
                 val actual = sut.refreshAccessToken(refreshToken)
 
@@ -44,7 +44,7 @@ class TokenManagerTest(
         val deviceToken = "deviceToken"
 
         userRepository.insert(User(token = userToken, name = "test", accountType = AccountType.KAKAO))
-        userTokenRepository.save(AuthorizationToken(userToken = userToken, deviceToken = deviceToken))
+        authorizationTokenRepository.save(AuthorizationToken(userToken = userToken, deviceToken = deviceToken))
             .run {
                 thenNoException().isThrownBy { sut.validateAccessToken(accessToken) }
             }
@@ -56,7 +56,7 @@ class TokenManagerTest(
         val deviceToken = "deviceToken"
 
         userRepository.insert(User(token = userToken, name = "test", accountType = AccountType.KAKAO))
-        userTokenRepository.save(AuthorizationToken(userToken = userToken, deviceToken = deviceToken, expiredAt = Instant.now()))
+        authorizationTokenRepository.save(AuthorizationToken(userToken = userToken, deviceToken = deviceToken, expiredAt = Instant.now()))
             .run {
                 thenThrownBy { sut.validateAccessToken(accessToken) }
                     .isExactlyInstanceOf(TokenInvalidException::class.java)
@@ -78,7 +78,7 @@ class TokenManagerTest(
         val deviceToken = "deviceToken"
         userRepository.insert(User(token = userToken, name = "test", accountType = AccountType.KAKAO))
 
-        userTokenRepository.save(
+        authorizationTokenRepository.save(
             AuthorizationToken(
                 userToken = userToken,
                 deviceToken = deviceToken,
@@ -96,8 +96,10 @@ class TokenManagerTest(
         val userToken = "token"
         val deviceToken = "deviceToken"
         userRepository.insert(User(token = userToken, name = "test", accountType = AccountType.KAKAO))
-        sut.acquireAccessToken(userToken, deviceToken).run {
-            userTokenRepository.save(this.copy(expiredAt = Instant.now().minus(1, ChronoUnit.DAYS)))
+        sut.acquireAccessToken(userToken, deviceToken) // generate
+
+        sut.acquireAccessToken(userToken, deviceToken).run { // caching
+            authorizationTokenRepository.save(this.copy(expiredAt = Instant.now().minus(1, ChronoUnit.DAYS)))
         }
 
         thenNoException().isThrownBy { sut.acquireAccessToken(userToken, deviceToken) }

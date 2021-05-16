@@ -1,6 +1,5 @@
 package com.pinocchio.santaclothes.apiserver.service
 
-import com.pinocchio.santaclothes.apiserver.authorization.TokenManager
 import com.pinocchio.santaclothes.apiserver.entity.AnalysisRequest
 import com.pinocchio.santaclothes.apiserver.entity.AnalysisStatus
 import com.pinocchio.santaclothes.apiserver.entity.CareLabel
@@ -17,7 +16,7 @@ import java.util.UUID
 @Service
 class AnalysisRequestService(
     @Autowired val analysisRequestRepository: AnalysisRequestRepository,
-    @Autowired val tokenManager: TokenManager
+    @Autowired val authorizationTokenService: AuthorizationTokenService,
 ) {
     fun getById(id: Long): AnalysisRequest = analysisRequestRepository.findById(id).orElseThrow()
 
@@ -26,7 +25,7 @@ class AnalysisRequestService(
         //       옷 이미지 업로드 후 set
         return analysisRequestRepository.save(
             AnalysisRequest(
-                userToken = tokenManager.getUserTokenByAccessToken(document.accessToken),
+                userToken = authorizationTokenService.getByAccessToken(document.accessToken).userToken,
                 cloth = Cloth(name = document.clothName, color = document.clothesColor, type = document.clothesType),
                 status = AnalysisStatus.REQUEST,
                 createdAt = Instant.now()

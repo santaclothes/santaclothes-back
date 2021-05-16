@@ -1,11 +1,10 @@
 package com.pinocchio.santaclothes.apiserver.authorization
 
 import com.google.auth.oauth2.GoogleCredentials
-import com.pinocchio.santaclothes.apiserver.config.CacheTemplate
 import com.pinocchio.santaclothes.apiserver.entity.AuthorizationToken
 import com.pinocchio.santaclothes.apiserver.exception.ExceptionReason
 import com.pinocchio.santaclothes.apiserver.exception.TokenInvalidException
-import com.pinocchio.santaclothes.apiserver.repository.UserTokenRepository
+import com.pinocchio.santaclothes.apiserver.service.AuthorizationTokenService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Component
@@ -16,8 +15,7 @@ import java.util.UUID
 
 @Component
 class TokenManager(
-    @Autowired private val userTokenRepository: UserTokenRepository,
-    @Autowired private val cacheAuthorizationTokenByUserToken: CacheTemplate<AuthorizationToken>,
+    @Autowired private val authorizationTokenService: AuthorizationTokenService,
 ) {
     val fcmAccessToken: String
         get() = GoogleCredentials // 내부적으로 캐싱 되있음
@@ -28,10 +26,9 @@ class TokenManager(
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     fun refreshAccessToken(refreshToken: UUID): AuthorizationToken =
-        userTokenRepository.findFirstByRefreshTokenOrderByCreatedAtDesc(refreshToken)
-            .orElseThrow { TokenInvalidException(ExceptionReason.INVALID_REFRESH_TOKEN) }
+        authorizationTokenService.getByRefreshToken(refreshToken)
             .run {
-                userTokenRepository.saveWithCache(
+                authorizationTokenService.save(
                     AuthorizationToken(
                         userToken = this.userToken,
                         deviceToken = this.deviceToken,
@@ -41,8 +38,7 @@ class TokenManager(
             }
 
     fun validateAccessToken(accessToken: UUID) {
-        val authorization = userTokenRepository.findFirstByAccessTokenOrderByCreatedAtDesc(accessToken)
-            .orElseThrow { TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN) }
+        val authorization = authorizationTokenService.getByAccessToken(accessToken)
 
         if (authorization.isExpiredWhen(Instant.now())) {
             throw TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN)
@@ -50,17 +46,17 @@ class TokenManager(
     }
 
     fun acquireAccessToken(userToken: String, deviceToken: String): AuthorizationToken = runCatching {
-        getUserToken(userToken)
+        authorizationTokenService.getByUserToken(userToken)
     }.onSuccess {
         if (it.isExpiredWhen(Instant.now())) {
             throw TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN)
         }
 
         if (it.deviceToken != deviceToken) {
-            userTokenRepository.saveWithCache(it.copy(deviceToken = deviceToken))
+            authorizationTokenService.save(it.copy(deviceToken = deviceToken))
         }
     }.getOrElse {
-        userTokenRepository.saveWithCache(
+        authorizationTokenService.save(
             AuthorizationToken(
                 userToken = userToken,
                 deviceToken = deviceToken
@@ -68,25 +64,8 @@ class TokenManager(
         )
     }
 
-    // TODO: Caching
-    fun getUserTokenByAccessToken(accessToken: UUID): String =
-        userTokenRepository.findFirstByAccessTokenOrderByCreatedAtDesc(
-            accessToken
-        )
-            .orElseThrow { TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN) }
-            .userToken
-
-    private fun getUserToken(userToken: String): AuthorizationToken =
-        cacheAuthorizationTokenByUserToken[userToken] ?: userTokenRepository.findFirstByUserTokenOrderByCreatedAtDesc(
-            userToken
-        )
-            .orElseThrow { TokenInvalidException(ExceptionReason.USER_TOKEN_NOT_EXISTS) }
 
     companion object {
         private const val FIREBASE_KEY_PATH = "firebase/santaclothes-key.json"
-    }
-
-    fun UserTokenRepository.saveWithCache(entity: AuthorizationToken): AuthorizationToken = this.save(entity).apply {
-        cacheAuthorizationTokenByUserToken[userToken] = this
     }
 }

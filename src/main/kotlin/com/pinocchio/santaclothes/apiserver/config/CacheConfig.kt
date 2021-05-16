@@ -1,8 +1,6 @@
 package com.pinocchio.santaclothes.apiserver.config
 
 import com.github.benmanes.caffeine.cache.Caffeine
-import com.pinocchio.santaclothes.apiserver.entity.AuthorizationToken
-import com.pinocchio.santaclothes.apiserver.entity.Notice
 import org.springframework.cache.Cache
 import org.springframework.cache.CacheManager
 import org.springframework.cache.caffeine.CaffeineCache
@@ -13,44 +11,32 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class CacheConfig {
     @Bean
-    fun userTokenCacheTemplate(cacheManager: CacheManager) =
-        CacheTemplate<AuthorizationToken>(cacheManager.getCache(Cache.AUTHORIZATION_TOKEN.name)!!)
-
-    @Bean
-    fun noticeCacheTemplate(cacheManager: CacheManager) =
-        CacheTemplate<List<Notice>>(cacheManager.getCache(Cache.NOTICE.name)!!)
-
-    @Bean
     fun clothCountCacheTemplate(cacheManager: CacheManager) =
-        CacheTemplate<Long>(cacheManager.getCache(Cache.CLOTH_COUNT.name)!!)
-
-    @Bean
-    fun cacheUserTokenByAccessToken(cacheManager: CacheManager) =
-        CacheTemplate<String>(cacheManager.getCache(Cache.ACCESS_TOKEN_TO_USER_TOKEN.name)!!)
+        CacheTemplate<Long>(cacheManager.getCache(CLOTH_COUNT_NAME)!!)
 
     @Bean
     fun cacheManager(): CacheManager {
         val caches = listOf(
             CaffeineCache(
-                Cache.AUTHORIZATION_TOKEN.name,
+                AUTHORIZATION_TOKEN_BY_USER_TOKEN_NAME,
                 Caffeine.newBuilder().recordStats() // TODO: caffeine 설정 검토
                     .maximumSize(1000L) // entries 개수
                     .build(),
             ),
             CaffeineCache(
-                Cache.NOTICE.name,
+                NOTICE_NAME,
                 Caffeine.newBuilder().recordStats() // TODO: caffeine 설정 검토
                     .maximumSize(10L)
                     .build()
             ),
             CaffeineCache(
-                Cache.CLOTH_COUNT.name,
+                CLOTH_COUNT_NAME,
                 Caffeine.newBuilder().recordStats()
                     .maximumSize(0L)
                     .build()
             ),
             CaffeineCache(
-                Cache.ACCESS_TOKEN_TO_USER_TOKEN.name,
+                AUTHORIZATION_TOKEN_BY_ACCESS_TOKEN_NAME,
                 Caffeine.newBuilder().recordStats()
                     .maximumSize(1000L)
                     .build()
@@ -60,15 +46,11 @@ class CacheConfig {
         return SimpleCacheManager().apply { setCaches(caches) }
     }
 
-    enum class Cache(
-        val cacheName : String
-    ) {
-        AUTHORIZATION_TOKEN("S"),
-        NOTICE("A"),
-        CLOTH_COUNT("s"),
-        ACCESS_TOKEN_TO_USER_TOKEN("access");
-
-
+    companion object {
+        const val AUTHORIZATION_TOKEN_BY_USER_TOKEN_NAME = "AUTHORIZATION_TOKEN_BY_USER_TOKEN"
+        const val NOTICE_NAME = "NOTICE"
+        const val CLOTH_COUNT_NAME = "CLOTH_COUNT"
+        const val AUTHORIZATION_TOKEN_BY_ACCESS_TOKEN_NAME = "AUTHORIZATION_TOKEN_BY_ACCESS_TOKEN"
     }
 }
 
