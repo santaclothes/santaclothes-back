@@ -4,12 +4,12 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 
 @Table
-class Image(
-    @Id val Id: String,
+data class Image(
+    @Id var imageId: String? = null,
     val filePath: String,
-    val thumbnailPath: String?,
+    val thumbnailPath: String? = null,
     val imageType: ImageType,
-    // TODO: 객체 참조 필요한지 검토
+    var userToken: String? = null
 )
 
 

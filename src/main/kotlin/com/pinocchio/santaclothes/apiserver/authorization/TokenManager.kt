@@ -2,7 +2,7 @@ package com.pinocchio.santaclothes.apiserver.authorization
 
 import com.google.auth.oauth2.GoogleCredentials
 import com.pinocchio.santaclothes.apiserver.config.CacheTemplate
-import com.pinocchio.santaclothes.apiserver.entity.UserToken
+import com.pinocchio.santaclothes.apiserver.entity.AuthorizationToken
 import com.pinocchio.santaclothes.apiserver.exception.ExceptionReason
 import com.pinocchio.santaclothes.apiserver.exception.TokenInvalidException
 import com.pinocchio.santaclothes.apiserver.repository.UserTokenRepository
@@ -17,7 +17,7 @@ import java.util.UUID
 @Component
 class TokenManager(
     @Autowired private val userTokenRepository: UserTokenRepository,
-    @Autowired private val cacheTemplate: CacheTemplate<UserToken>,
+    @Autowired private val cacheAuthorizationTokenByUserToken: CacheTemplate<AuthorizationToken>,
 ) {
     val fcmAccessToken: String
         get() = GoogleCredentials // 내부적으로 캐싱 되있음
@@ -27,12 +27,12 @@ class TokenManager(
             }.accessToken.tokenValue
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    fun refreshAccessToken(refreshToken: UUID): UserToken =
+    fun refreshAccessToken(refreshToken: UUID): AuthorizationToken =
         userTokenRepository.findFirstByRefreshTokenOrderByCreatedAtDesc(refreshToken)
             .orElseThrow { TokenInvalidException(ExceptionReason.INVALID_REFRESH_TOKEN) }
             .run {
                 userTokenRepository.saveWithCache(
-                    UserToken(
+                    AuthorizationToken(
                         userToken = this.userToken,
                         deviceToken = this.deviceToken,
                         refreshToken = refreshToken
@@ -49,7 +49,7 @@ class TokenManager(
         }
     }
 
-    fun acquireAccessToken(userToken: String, deviceToken: String): UserToken = runCatching {
+    fun acquireAccessToken(userToken: String, deviceToken: String): AuthorizationToken = runCatching {
         getUserToken(userToken)
     }.onSuccess {
         if (it.isExpiredWhen(Instant.now())) {
@@ -59,17 +59,34 @@ class TokenManager(
         if (it.deviceToken != deviceToken) {
             userTokenRepository.saveWithCache(it.copy(deviceToken = deviceToken))
         }
-    }.getOrElse { userTokenRepository.saveWithCache(UserToken(userToken = userToken, deviceToken = deviceToken)) }
+    }.getOrElse {
+        userTokenRepository.saveWithCache(
+            AuthorizationToken(
+                userToken = userToken,
+                deviceToken = deviceToken
+            )
+        )
+    }
 
-    private fun getUserToken(userToken: String): UserToken =
-        cacheTemplate[userToken] ?: userTokenRepository.findFirstByUserTokenOrderByCreatedAtDesc(userToken)
+    // TODO: Caching
+    fun getUserTokenByAccessToken(accessToken: UUID): String =
+        userTokenRepository.findFirstByAccessTokenOrderByCreatedAtDesc(
+            accessToken
+        )
+            .orElseThrow { TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN) }
+            .userToken
+
+    private fun getUserToken(userToken: String): AuthorizationToken =
+        cacheAuthorizationTokenByUserToken[userToken] ?: userTokenRepository.findFirstByUserTokenOrderByCreatedAtDesc(
+            userToken
+        )
             .orElseThrow { TokenInvalidException(ExceptionReason.USER_TOKEN_NOT_EXISTS) }
 
     companion object {
         private const val FIREBASE_KEY_PATH = "firebase/santaclothes-key.json"
     }
 
-    fun UserTokenRepository.saveWithCache(entity: UserToken): UserToken = this.save(entity).apply {
-        cacheTemplate[userToken] = this
+    fun UserTokenRepository.saveWithCache(entity: AuthorizationToken): AuthorizationToken = this.save(entity).apply {
+        cacheAuthorizationTokenByUserToken[userToken] = this
     }
 }

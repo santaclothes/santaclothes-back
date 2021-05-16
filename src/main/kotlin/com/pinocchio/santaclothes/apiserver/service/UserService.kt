@@ -3,7 +3,7 @@ package com.pinocchio.santaclothes.apiserver.service
 import com.pinocchio.santaclothes.apiserver.authorization.TokenManager
 import com.pinocchio.santaclothes.apiserver.entity.AccountType
 import com.pinocchio.santaclothes.apiserver.entity.User
-import com.pinocchio.santaclothes.apiserver.entity.UserToken
+import com.pinocchio.santaclothes.apiserver.entity.AuthorizationToken
 import com.pinocchio.santaclothes.apiserver.exception.DatabaseException
 import com.pinocchio.santaclothes.apiserver.exception.ExceptionReason
 import com.pinocchio.santaclothes.apiserver.exception.TokenInvalidException
@@ -27,7 +27,7 @@ class UserService(
         else
             userRepository.insert(User(token = token, name = name, accountType = accountType))
 
-    fun login(userToken: String, deviceToken: String): UserToken =
+    fun login(userToken: String, deviceToken: String): AuthorizationToken =
         userRepository.findById(userToken).orElseThrow { TokenInvalidException(ExceptionReason.USER_TOKEN_NOT_EXISTS) }
             .run {
                 tokenManager.acquireAccessToken(userToken, deviceToken)

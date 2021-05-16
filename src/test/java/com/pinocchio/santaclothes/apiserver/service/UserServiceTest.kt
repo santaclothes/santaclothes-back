@@ -2,7 +2,7 @@ package com.pinocchio.santaclothes.apiserver.service
 
 import com.pinocchio.santaclothes.apiserver.entity.AccountType
 import com.pinocchio.santaclothes.apiserver.entity.User
-import com.pinocchio.santaclothes.apiserver.entity.UserToken
+import com.pinocchio.santaclothes.apiserver.entity.AuthorizationToken
 import com.pinocchio.santaclothes.apiserver.exception.DatabaseException
 import com.pinocchio.santaclothes.apiserver.exception.ExceptionReason
 import com.pinocchio.santaclothes.apiserver.exception.TokenInvalidException
@@ -59,7 +59,7 @@ class UserServiceTest(
 
         userRepository.insert(User(userToken, "name", AccountType.KAKAO))
         userTokenRepository.save(
-            UserToken(
+            AuthorizationToken(
                 userToken = userToken,
                 deviceToken = deviceToken,
                 expiredAt = Instant.now().minus(1, ChronoUnit.DAYS)
@@ -77,7 +77,7 @@ class UserServiceTest(
         val deviceToken = "deviceToken"
 
         userRepository.insert(User(userToken, "name", AccountType.KAKAO))
-        userTokenRepository.save(UserToken(userToken = userToken, deviceToken = deviceToken)).apply {
+        userTokenRepository.save(AuthorizationToken(userToken = userToken, deviceToken = deviceToken)).apply {
             val expected = sut.findByAccessToken(accessToken)
             then(expected).isNotEmpty
         }

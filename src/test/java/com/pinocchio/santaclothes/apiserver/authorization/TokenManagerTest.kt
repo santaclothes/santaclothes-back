@@ -2,7 +2,7 @@ package com.pinocchio.santaclothes.apiserver.authorization
 
 import com.pinocchio.santaclothes.apiserver.entity.AccountType
 import com.pinocchio.santaclothes.apiserver.entity.User
-import com.pinocchio.santaclothes.apiserver.entity.UserToken
+import com.pinocchio.santaclothes.apiserver.entity.AuthorizationToken
 import com.pinocchio.santaclothes.apiserver.exception.ExceptionReason
 import com.pinocchio.santaclothes.apiserver.exception.TokenInvalidException
 import com.pinocchio.santaclothes.apiserver.repository.UserRepository
@@ -27,7 +27,7 @@ class TokenManagerTest(
         val deviceToken = "deviceToken"
 
         userRepository.insert(User(token = userToken, name = "test", accountType = AccountType.KAKAO))
-        userTokenRepository.save(UserToken(userToken = userToken, deviceToken = deviceToken))
+        userTokenRepository.save(AuthorizationToken(userToken = userToken, deviceToken = deviceToken))
             .run {
                 val actual = sut.refreshAccessToken(refreshToken)
 
@@ -44,7 +44,7 @@ class TokenManagerTest(
         val deviceToken = "deviceToken"
 
         userRepository.insert(User(token = userToken, name = "test", accountType = AccountType.KAKAO))
-        userTokenRepository.save(UserToken(userToken = userToken, deviceToken = deviceToken))
+        userTokenRepository.save(AuthorizationToken(userToken = userToken, deviceToken = deviceToken))
             .run {
                 thenNoException().isThrownBy { sut.validateAccessToken(accessToken) }
             }
@@ -56,7 +56,7 @@ class TokenManagerTest(
         val deviceToken = "deviceToken"
 
         userRepository.insert(User(token = userToken, name = "test", accountType = AccountType.KAKAO))
-        userTokenRepository.save(UserToken(userToken = userToken, deviceToken = deviceToken, expiredAt = Instant.now()))
+        userTokenRepository.save(AuthorizationToken(userToken = userToken, deviceToken = deviceToken, expiredAt = Instant.now()))
             .run {
                 thenThrownBy { sut.validateAccessToken(accessToken) }
                     .isExactlyInstanceOf(TokenInvalidException::class.java)
@@ -79,7 +79,7 @@ class TokenManagerTest(
         userRepository.insert(User(token = userToken, name = "test", accountType = AccountType.KAKAO))
 
         userTokenRepository.save(
-            UserToken(
+            AuthorizationToken(
                 userToken = userToken,
                 deviceToken = deviceToken,
                 expiredAt = Instant.now().minus(1, ChronoUnit.DAYS)

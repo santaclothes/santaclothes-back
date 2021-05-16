@@ -8,7 +8,7 @@ import java.time.temporal.ChronoUnit
 import java.util.UUID
 
 @Table
-data class UserToken(
+data class AuthorizationToken(
     @JsonIgnore @Id var id: Long? = null,
     @JsonIgnore var userToken: String,
     @JsonIgnore val deviceToken: String,
