@@ -35,20 +35,18 @@ class ClothRepositoryTest(@Autowired val sut: ClothRepository) : SpringDataTest(
                 name = "티셔츠",
                 color = ClothesColor.BEIGE,
                 type = ClothesType.TOP,
-                careLabels = setOf(
-                    CareLabel(
-                        waterType = WaterType.FORBIDDEN_BLOWER_JP,
-                        bleachType = BleachType.ALL_JP,
-                        dryType = DryType.DRY_BLOWER_FORBIDDEN_KR,
-                        dryCleaning = DryCleaning.DRY_CLEANING_FORBIDDEN_JP,
-                        ironingType = IroningType.FORBIDDEN_JP
-                    )
+                careLabel = CareLabel(
+                    waterType = WaterType.FORBIDDEN_BLOWER_JP,
+                    bleachType = BleachType.ALL_JP,
+                    dryType = DryType.DRY_BLOWER_FORBIDDEN_KR,
+                    dryCleaning = DryCleaning.DRY_CLEANING_FORBIDDEN_JP,
+                    ironingType = IroningType.FORBIDDEN_JP
                 )
             )
         )
 
         val actual = sut.findById(saved.id!!).get()
 
-        then(actual.careLabels).isNotEmpty
+        then(actual.careLabel).isNotNull
     }
 }

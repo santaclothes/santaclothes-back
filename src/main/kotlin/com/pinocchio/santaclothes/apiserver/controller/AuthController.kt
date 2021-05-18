@@ -4,7 +4,7 @@ import com.pinocchio.santaclothes.apiserver.authorization.TokenManager
 import com.pinocchio.santaclothes.apiserver.controller.dto.LoginRequest
 import com.pinocchio.santaclothes.apiserver.controller.dto.RefreshRequest
 import com.pinocchio.santaclothes.apiserver.controller.dto.RegisterRequest
-import com.pinocchio.santaclothes.apiserver.entity.UserToken
+import com.pinocchio.santaclothes.apiserver.entity.AuthorizationToken
 import com.pinocchio.santaclothes.apiserver.exception.ProblemModel
 import com.pinocchio.santaclothes.apiserver.service.UserService
 import io.swagger.annotations.Api
@@ -48,7 +48,7 @@ class AuthController(
     )
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    fun login(@RequestBody loginRequest: @Valid LoginRequest): UserToken =
+    fun login(@RequestBody loginRequest: @Valid LoginRequest): AuthorizationToken =
         userService.login(loginRequest.userToken, loginRequest.deviceToken)
 
     @ApiOperation("인증 토큰 갱신")
@@ -59,6 +59,6 @@ class AuthController(
         ]
     )
     @PutMapping("/accessToken")
-    fun refresh(@RequestBody request: @Valid RefreshRequest): UserToken =
+    fun refresh(@RequestBody request: @Valid RefreshRequest): AuthorizationToken =
         tokenManager.refreshAccessToken(request.refreshToken)
 }

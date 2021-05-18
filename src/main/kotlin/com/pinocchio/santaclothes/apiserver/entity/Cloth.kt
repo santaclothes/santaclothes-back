@@ -3,6 +3,7 @@ package com.pinocchio.santaclothes.apiserver.entity
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesColor
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesType
 import org.springframework.data.annotation.Id
+import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
 
 @Table
@@ -11,5 +12,6 @@ data class Cloth(
     val name: String,
     val color: ClothesColor,
     val type: ClothesType,
-    val careLabels: Set<CareLabel> = setOf()
+    @MappedCollection(idColumn = "ID") var careLabel: CareLabel? = null,
+    @MappedCollection(idColumn = "IMAGE_ID") var image: Image? = null
 )
