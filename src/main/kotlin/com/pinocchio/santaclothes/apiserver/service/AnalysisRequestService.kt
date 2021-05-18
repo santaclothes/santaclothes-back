@@ -25,7 +25,7 @@ class AnalysisRequestService(
         return analysisRequestRepository.save(
             AnalysisRequest(
                 userToken = authorizationTokenService.getByAccessToken(document.accessToken).userToken,
-                cloth = Cloth(name = document.clothName, color = document.clothesColor, type = document.clothesType),
+                cloth = document.toCloth(),
                 status = AnalysisStatus.REQUEST,
                 createdAt = Instant.now()
             )
@@ -41,3 +41,5 @@ data class AnalysisRequestDocument(
     val clothesType: ClothesType,
     val clothesColor: ClothesColor
 )
+
+fun AnalysisRequestDocument.toCloth() = Cloth(name = clothName, color = clothesColor, type = clothesType)

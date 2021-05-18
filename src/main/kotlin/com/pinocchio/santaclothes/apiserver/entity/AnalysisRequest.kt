@@ -15,6 +15,7 @@ data class AnalysisRequest(
     val createdAt: Instant = Instant.now()
 )
 
+// TODO: 이벤트로 상태 비동기적으로 업데이트
 enum class AnalysisStatus {
     REQUEST,
     CLASSIFIED,
