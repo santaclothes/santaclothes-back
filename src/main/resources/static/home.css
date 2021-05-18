@@ -1,0 +1,30 @@
+body{
+    background-color: aliceblue;
+}
+.home-wrapper {
+    height: 98%;
+    width: 100%;
+}
+.title-wrapper{
+    width: 100%;
+    text-align: center;
+    font-family: "Nanum Gothic";
+    margin: auto;
+}
+.imagelist-wrapper{
+    width: 100%;
+}
+.image-gird{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 220px;
+    grid-gap: 10px;
+}
+.image-gird img{
+    vertical-align: middle;
+    width: 100%;
+    height: 100%;
+}
+
+
+

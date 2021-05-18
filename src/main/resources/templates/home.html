@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="home.css" type="text/css">
+
+    <title>Image Analyze HOME</title>
+</head>
+
+<body>
+<!-- 전체 컨테이너 wrapper -->
+<div class="home-wrapper">
+    <!-- 상단 타이틀 wrapper -->
+    <div class="title-wrapper">
+        <div class="main-title"> <!-- 메인 타이틀 -->
+            <h1 class="main">Santa's 이미지 분석 메인 페이지</h1>
+        </div>
+        <div class="sub-title"> <!-- 부제 -->
+            <div th:utext='${"<h3>" + "현재 처리해야할 라벨 수 : " + imageList.size() + "</h3>"}'/>
+            <!--<h3 class="sub" th:text="${imageListCount}">현재 처리해야할 라벨 수 :  </h3>-->
+        </div>
+    </div>
+    <!-- 하단 이미지리스트 wrapper -->
+    <div class="imagelist-wrapper">
+        <div class="image-gird">
+            <div th:each="image : ${imageList}">
+                <a th:href="@{/analyze/index(imageId=${image.getId()})}">
+                    <img th:src="${image.getFilePath()}">
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

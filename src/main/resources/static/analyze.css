@@ -1,0 +1,37 @@
+body{
+    background-color: aqua;
+}
+analyze-wrapper{
+    background-color: aquamarine;
+    width : 100%;
+    height: 100%;
+}
+.image-wrapper{
+    width: 100%;
+    align-items: center;
+}
+.img-of-label{
+    width: 300px;
+    height: 200px;
+}
+.category{
+    height : 80%;
+}
+.cate{
+    width: 100%;
+    display: block;
+}
+label img {
+    width : 70px;
+    height : 70px;
+}
+
+ul{
+    list-style: none;
+}
+
+li{
+    display: inline-block;
+    margin : 10px;
+}
+
