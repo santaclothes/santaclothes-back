@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS IMAGE
     file_path      varchar(255),
     thumbnail_path varchar(255),
     image_type     varchar(50),
+    image_status   varchar(10),
     user_token     varchar(64),
     FOREIGN KEY (user_token)
         REFERENCES "USER" (token)
