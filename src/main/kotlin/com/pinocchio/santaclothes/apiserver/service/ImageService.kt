@@ -7,12 +7,11 @@ import org.springframework.stereotype.Service
 
 @Service
 class ImageService(@Autowired val imageRepository: ImageRepository) {
-    fun findLabels(): List<Image> {
-        return imageRepository.findAll().toList()
+    fun findAllCareLabelsToProcess(): List<Image> {
+        return imageRepository.findAllCareLabelsToProcess()
     }
 
-    fun findLabel(i: Int): Image {
-        return imageRepository.findAll().toList()[i]
+    fun getCareLabelById(id: Long): Image {
+        return imageRepository.findCareLabelById(id).orElseThrow()
     }
-
 }

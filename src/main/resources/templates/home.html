@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="home.css" type="text/css">
+    <link rel="stylesheet" href="/css/home.css" type="text/css">
 
     <title>Image Analyze HOME</title>
 </head>
@@ -24,7 +24,7 @@
     <div class="imagelist-wrapper">
         <div class="image-gird">
             <div th:each="image : ${imageList}">
-                <a th:href="@{/analyze/index(imageId=${image.getId()})}">
+                <a th:href="@{/admin/analyze/index(imageId=${image.getImageId()})}">
                     <img th:src="${image.getFilePath()}">
                 </a>
             </div>
