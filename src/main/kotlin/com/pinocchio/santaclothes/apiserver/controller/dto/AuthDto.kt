@@ -8,3 +8,5 @@ data class RegisterRequest(val userToken: String, val name: String, val accountT
 data class LoginRequest(val userToken: String, val deviceToken: String)
 
 data class RefreshRequest(val refreshToken: UUID)
+
+
