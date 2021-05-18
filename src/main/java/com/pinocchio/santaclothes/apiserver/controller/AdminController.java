@@ -5,22 +5,27 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.pinocchio.santaclothes.apiserver.controller.dto.CareLabelIcon;
 import com.pinocchio.santaclothes.apiserver.entity.Image;
+import com.pinocchio.santaclothes.apiserver.service.AnalysisService;
 import com.pinocchio.santaclothes.apiserver.service.ImageService;
 
 @Controller
 @RequestMapping("/admin")
-public class AdminViewController {
+public class AdminController {
 	@Autowired
-	public AdminViewController(ImageService imageService) {
+	public AdminController(ImageService imageService, AnalysisService analysisService) {
 		this.imageService = imageService;
+		this.analysisService = analysisService;
 	}
 
 	private final ImageService imageService; //불필요하게 변경 가능한 건 지워야한다.
+	private final AnalysisService analysisService;
 
 	@GetMapping("")
 	public ModelAndView home() {
@@ -30,12 +35,19 @@ public class AdminViewController {
 		return modelAndView;
 	}
 
-	@GetMapping("/analyze/index")
-	public ModelAndView getPage(@RequestParam("imageId") Integer imageId) {
+	@GetMapping("/analyze/{imageId}")
+	public ModelAndView getPage(@PathVariable long imageId) {
 		ModelAndView modelAndView = new ModelAndView("analyze");
 		Image image = imageService.getCareLabelById(imageId);
 		String imageURL = image.getFilePath();
 		modelAndView.addObject("imageURL", imageURL);
 		return modelAndView;
+	}
+
+	@PostMapping("/analyze/{imageId}")
+	public ModelAndView analyze(@PathVariable long imageId, CareLabelIcon careLabel) {
+		ModelAndView redirect = new ModelAndView("redirect:/admin");
+		analysisService.analysis(imageId, careLabel);
+		return redirect;
 	}
 }

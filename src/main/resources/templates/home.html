@@ -24,7 +24,7 @@
     <div class="imagelist-wrapper">
         <div class="image-gird">
             <div th:each="image : ${imageList}">
-                <a th:href="@{/admin/analyze/index(imageId=${image.getImageId()})}">
+                <a th:href="@{/admin/analyze/${image.getImageId()}}">
                     <img th:src="${image.getFilePath()}">
                 </a>
             </div>

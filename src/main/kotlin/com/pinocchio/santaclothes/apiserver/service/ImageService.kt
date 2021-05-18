@@ -14,4 +14,6 @@ class ImageService(@Autowired val imageRepository: ImageRepository) {
     fun getCareLabelById(id: Long): Image {
         return imageRepository.findCareLabelById(id).orElseThrow()
     }
+
+    fun save(image: Image): Image = imageRepository.save(image)
 }

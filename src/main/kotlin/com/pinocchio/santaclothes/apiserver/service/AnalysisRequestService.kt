@@ -2,7 +2,6 @@ package com.pinocchio.santaclothes.apiserver.service
 
 import com.pinocchio.santaclothes.apiserver.entity.AnalysisRequest
 import com.pinocchio.santaclothes.apiserver.entity.AnalysisStatus
-import com.pinocchio.santaclothes.apiserver.entity.CareLabel
 import com.pinocchio.santaclothes.apiserver.entity.Cloth
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesColor
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesType
@@ -32,10 +31,6 @@ class AnalysisRequestService(
             )
         )
     }
-
-    fun setCareLabel(requestId: Long, careLabel: CareLabel): AnalysisRequest =
-        getById(requestId).apply { cloth.careLabel = careLabel }
-            .run { analysisRequestRepository.save(this) }
 }
 
 data class AnalysisRequestDocument(

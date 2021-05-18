@@ -8,15 +8,11 @@ data class Image(
     @Id var imageId: Long? = null,
     val filePath: String,
     val thumbnailPath: String? = null,
-    val imageType: ImageType,
-    val imageStatus: ImageStatus = ImageStatus.PROCESS,
-    var userToken: String? = null
+    val type: ImageType,
+    var clothId: Long? = null,
+    var careLabelId: Long? = null,
+    var userToken: String? = null,
 )
-
-enum class ImageStatus{
-    PROCESS,
-    DONE
-}
 
 enum class ImageType {
     CLOTH,

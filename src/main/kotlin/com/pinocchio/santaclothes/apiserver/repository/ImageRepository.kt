@@ -7,14 +7,14 @@ import java.util.Optional
 
 interface ImageRepository : CrudRepository<Image, Long> {
     @Query(
-        "SELECT image_id, file_path, thumbnail_path, image_type, image_status, user_token FROM IMAGE " +
-                "WHERE image_type = \'CARE_LABEL\' and image_status = \'PROCESS\'"
+        "SELECT image_id, file_path, thumbnail_path, type, user_token, cloth_id FROM IMAGE " +
+                "WHERE type = \'CARE_LABEL\' and care_label_id is null"
     )
     fun findAllCareLabelsToProcess(): List<Image>
 
     @Query(
-        "SELECT image_id, file_path, thumbnail_path, image_type, image_status, user_token FROM IMAGE " +
-                "WHERE image_type = \'CARE_LABEL\' and image_status = 'PROCESS' and image_id = :id"
+        "SELECT image_id, file_path, thumbnail_path, type, user_token, cloth_id FROM IMAGE " +
+                "WHERE type = \'CARE_LABEL\' and care_label_id is null and image_id = :id"
     )
     fun findCareLabelById(id: Long): Optional<Image>
 }

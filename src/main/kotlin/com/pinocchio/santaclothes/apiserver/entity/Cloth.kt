@@ -12,6 +12,6 @@ data class Cloth(
     val name: String,
     val color: ClothesColor,
     val type: ClothesType,
-    @MappedCollection(idColumn = "ID") var careLabel: CareLabel? = null,
-    @MappedCollection(idColumn = "IMAGE_ID") var image: Image? = null
+    @MappedCollection(idColumn = "CLOTH_ID") var careLabel: CareLabel? = null,
+    @MappedCollection(idColumn = "CLOTH_ID") var images: Set<Image> = setOf()
 )
