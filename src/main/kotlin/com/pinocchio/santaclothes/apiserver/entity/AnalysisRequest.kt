@@ -2,16 +2,15 @@ package com.pinocchio.santaclothes.apiserver.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.springframework.data.annotation.Id
-import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
 import java.time.Instant
 
 @Table
 data class AnalysisRequest(
-    @JsonIgnore @Id @Column("id") var id: Long? = null,
+    @JsonIgnore @Id var id: Long? = null,
     val userToken: String,
-    @MappedCollection(idColumn = "ID") val cloth: Cloth,
+    @MappedCollection(idColumn = "id") val cloth: Cloth,
     val status: AnalysisStatus = AnalysisStatus.REQUEST,
     val createdAt: Instant = Instant.now()
 )
