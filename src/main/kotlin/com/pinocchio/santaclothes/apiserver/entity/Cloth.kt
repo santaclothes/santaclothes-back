@@ -3,13 +3,14 @@ package com.pinocchio.santaclothes.apiserver.entity
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesColor
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesType
 import org.springframework.data.annotation.Id
+import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
 import java.time.Instant
 
 @Table
 data class Cloth(
-    @Id var id: Long? = null,
+    @Id @Column("id") var id: Long? = null,
     val name: String,
     val color: ClothesColor,
     val type: ClothesType,
