@@ -13,5 +13,5 @@ data class CareLabel(
     val dryType: DryType,
     val dryCleaning: DryCleaning,
     val ironingType: IroningType,
-    @MappedCollection(idColumn = "IMAGE_ID") val images: Set<Image> = setOf(),
+    @MappedCollection(idColumn = "image_id") val images: Set<Image> = setOf(),
 )

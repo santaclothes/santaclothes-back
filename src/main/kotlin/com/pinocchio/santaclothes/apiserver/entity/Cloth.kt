@@ -14,7 +14,7 @@ data class Cloth(
     val color: ClothesColor,
     val type: ClothesType,
     var userToken: String,
-    @MappedCollection(idColumn = "CLOTH_ID") var careLabel: CareLabel? = null,
-    @MappedCollection(idColumn = "CLOTH_ID") var images: Set<Image> = setOf(),
+    @MappedCollection(idColumn = "cloth_id") var careLabel: CareLabel? = null,
+    @MappedCollection(idColumn = "cloth_id") var images: Set<Image> = setOf(),
     val createdAt: Instant = Instant.now()
 )
