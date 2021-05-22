@@ -1,8 +1,7 @@
 package com.pinocchio.santaclothes.apiserver.service
 
-import com.pinocchio.santaclothes.apiserver.controller.dto.AnalysisRequestView
-import com.pinocchio.santaclothes.apiserver.controller.dto.CareLabelDetail
-import com.pinocchio.santaclothes.apiserver.controller.dto.HomeView
+import com.pinocchio.santaclothes.apiserver.controller.dto.*
+import com.pinocchio.santaclothes.apiserver.entity.ImageType
 import com.pinocchio.santaclothes.apiserver.exception.ExceptionReason
 import com.pinocchio.santaclothes.apiserver.exception.TokenInvalidException
 import org.springframework.beans.factory.annotation.Autowired
@@ -50,4 +49,23 @@ class ViewService(
             Instant.now()
         )
     }
+
+    fun myPageView(accessToken: UUID): MyPageView = userService.findByAccessToken(accessToken).orElseThrow()
+        .run {
+            val clothes = clothService.getByUserToken(token)
+            val myClothesCount = clothes.count()
+            val myPageClothes = clothes.map { cloth ->
+                MyPageCloth(
+                    clothId = cloth.id!!,
+                    imageUrl = cloth.images.last { it.type == ImageType.CLOTH }.filePath,
+                    requestAt = cloth.createdAt
+                )
+            }
+
+            MyPageView(
+                userName = name,
+                myClothesCount = myClothesCount.toLong(),
+                myPageClothes = myPageClothes
+            )
+        }
 }

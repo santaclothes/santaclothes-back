@@ -5,4 +5,6 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface ClothRepository : CrudRepository<Cloth, Long>
+interface ClothRepository : CrudRepository<Cloth, Long> {
+    fun findByUserToken(userToken: String): List<Cloth>
+}

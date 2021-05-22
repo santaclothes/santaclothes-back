@@ -28,6 +28,7 @@ class ClothService(
             clothRepository.save(this)
         }
 
+    fun getByUserToken(userToken: String): List<Cloth> = clothRepository.findByUserToken(userToken)
 
     companion object {
         private const val CACHE_NAME = "cloth-count"

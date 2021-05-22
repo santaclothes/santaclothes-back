@@ -10,7 +10,10 @@ CREATE TABLE IF NOT EXISTS CLOTH
     id    integer auto_increment PRIMARY KEY,
     name  varchar(255),
     color varchar(20),
-    type  varchar(20)
+    type  varchar(20),
+    user_token varchar(64),
+    created_at timestamp default now(),
+    FOREIGN KEY (user_token) REFERENCES "USER"(token)
 );
 
 CREATE TABLE IF NOT EXISTS CARE_LABEL

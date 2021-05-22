@@ -5,7 +5,7 @@ import java.time.Instant
 
 data class HomeView(
     val userName: String,
-    val clothesCount: Long,
+    val totalClothesCount: Long,
     val notices: List<Notice>,
     val hasNewNotification: Boolean
 )
@@ -21,3 +21,11 @@ data class AnalysisRequestView(
 )
 
 data class CareLabelDetail(val iconUrl: String, val name: String, val description: String)
+
+data class MyPageView(
+    val userName: String,
+    val myClothesCount : Long,
+    val myPageClothes : List<MyPageCloth>
+)
+
+data class MyPageCloth(val clothId : Long,val imageUrl :String, val requestAt :Instant)

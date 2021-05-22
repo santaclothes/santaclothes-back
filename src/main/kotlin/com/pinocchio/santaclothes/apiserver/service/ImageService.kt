@@ -16,4 +16,6 @@ class ImageService(@Autowired val imageRepository: ImageRepository) {
     }
 
     fun save(image: Image): Image = imageRepository.save(image)
+
+    fun saveAll(images: Iterable<Image>): Iterable<Image> = imageRepository.saveAll(images)
 }
