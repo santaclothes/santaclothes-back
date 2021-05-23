@@ -1,6 +1,7 @@
 package com.pinocchio.santaclothes.apiserver.controller;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,7 @@ public class AdminController {
 
 	private final ImageService imageService; //불필요하게 변경 가능한 건 지워야한다.
 	private final AnalysisService analysisService;
+	private final static Logger LOG = Logger.getGlobal();
 
 	@GetMapping("")
 	public ModelAndView home() {
@@ -37,6 +39,7 @@ public class AdminController {
 
 	@GetMapping("/analyze/{imageId}")
 	public ModelAndView getPage(@PathVariable long imageId) {
+		LOG.warning(Long.toString(imageId));
 		ModelAndView modelAndView = new ModelAndView("analyze");
 		Image image = imageService.getCareLabelById(imageId);
 		String imageURL = image.getFilePath();
