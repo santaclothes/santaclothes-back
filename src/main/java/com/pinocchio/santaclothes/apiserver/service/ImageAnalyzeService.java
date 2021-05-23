@@ -1,2 +1,5 @@
-package com.pinocchio.santaclothes.apiserver.service;public interface ImageAnalyzeService {
+package com.pinocchio.santaclothes.apiserver.service;
+
+public interface ImageAnalyzeService {
+	public void getImageInfoList();
 }
