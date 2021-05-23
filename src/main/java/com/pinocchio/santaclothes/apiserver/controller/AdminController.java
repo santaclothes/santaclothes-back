@@ -49,8 +49,8 @@ public class AdminController {
 
 	@PostMapping("/analyze/{imageId}")
 	public ModelAndView analyze(@PathVariable long imageId, CareLabelIcon careLabel) {
-		ModelAndView redirect = new ModelAndView("redirect:/admin");
+		ModelAndView test = new ModelAndView("redirect:/admin");
 		analysisService.analysis(imageId, careLabel);
-		return redirect;
+		return test;
 	}
 }

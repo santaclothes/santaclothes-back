@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Analyze Data Test</title>
+</head>
+<body>
+
+<div th:utext='${"<h3>" + "imageId : " + data.getImageId() + "</h3>"}'/>
+<br/>
+
+<p>material list</p>
+<div th:each="material : ${data.getMaterial()}">
+    <p th:text="${material}"></p>
+</div>
+<br/>
+
+<p>percent list</p>
+<div th:each="percent : ${data.getPercent()}">
+    <p th:text="${percent}"></p>
+</div>
+<br/>
+
+<div th:utext='${"<h3>" + "waterwash : " + data.getWaterwash() + "</h3>"}'/>
+<br/>
+
+<div th:utext='${"<h3>" + "bleach : " + data.getBleach() + "</h3>"}'/>
+<br/>
+
+<div th:utext='${"<h3>" + "ironing : " + data.getIroning() + "</h3>"}'/>
+<br/>
+
+<div th:utext='${"<h3>" + "dry : " + data.getDry() + "</h3>"}'/>
+<br/>
+
+<div th:utext='${"<h3>" + "drycleaning : " + data.getDrycleaning() + "</h3>"}'/>
+<br/>
+
+
+</body>
+</html>
