@@ -11,3 +11,7 @@ spring:
       default: "local"
       local: "database-develop, external-api"
       real: "database-real, external-api"
+  thymeleaf:
+    prefix: classpath:templates/
+    suffix: .html
+    cache: false
