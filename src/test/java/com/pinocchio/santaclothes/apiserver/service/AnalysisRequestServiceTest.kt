@@ -31,7 +31,11 @@ class AnalysisRequestServiceTest(
             )
         )
 
-        val request = sut.getById(saved.id!!)
-        then(request).isEqualTo(saved)
+        val expected = sut.getById(saved.id!!)
+        with(expected) {
+            then(this.id).isEqualTo(saved.id)
+            then(this.userToken).isEqualTo(saved.userToken)
+            then(this.status).isEqualTo(saved.status)
+        }
     }
 }
