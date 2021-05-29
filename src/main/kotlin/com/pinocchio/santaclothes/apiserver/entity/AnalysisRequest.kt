@@ -10,7 +10,7 @@ import java.time.Instant
 data class AnalysisRequest(
     @JsonIgnore @Id var id: Long? = null,
     val userToken: String,
-    @MappedCollection(idColumn = "id") val cloth: Cloth,
+    @MappedCollection(idColumn = "ID") val cloth: Cloth,
     val status: AnalysisStatus = AnalysisStatus.REQUEST,
     val createdAt: Instant = Instant.now()
 )
