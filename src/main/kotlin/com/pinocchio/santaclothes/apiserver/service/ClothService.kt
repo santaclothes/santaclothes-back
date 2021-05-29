@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 @Service
 class ClothService(
     @Autowired val clothRepository: ClothRepository,
-    @Qualifier("clothCountCacheTemplate") val clothCountCacheTemplate: CacheTemplate<Long>
+    @Qualifier("clothCountCacheTemplate") val clothCountCacheTemplate: CacheTemplate<Long>,
 ) {
     fun save(cloth: Cloth): Cloth = clothRepository.save(cloth)
 
@@ -24,7 +24,10 @@ class ClothService(
     fun getCount() = clothCountCacheTemplate[CACHE_NAME] ?: 0
 
     fun addCareLabel(id: Long, careLabel: CareLabel): Cloth =
-        clothRepository.findById(id).orElseThrow().apply { this.careLabel = careLabel }.run {
+        clothRepository.findById(id).orElseThrow().apply {
+            careLabel.clothId = id
+            this.careLabel = careLabel
+        }.run {
             clothRepository.save(this)
         }
 

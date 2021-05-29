@@ -1,7 +1,6 @@
 package com.pinocchio.santaclothes.apiserver.service
 
 import com.pinocchio.santaclothes.apiserver.controller.dto.*
-import com.pinocchio.santaclothes.apiserver.entity.ImageType
 import com.pinocchio.santaclothes.apiserver.exception.ExceptionReason
 import com.pinocchio.santaclothes.apiserver.exception.TokenInvalidException
 import org.springframework.beans.factory.annotation.Autowired
@@ -57,7 +56,7 @@ class ViewService(
             val myPageClothes = clothes.map { cloth ->
                 MyPageCloth(
                     clothId = cloth.id!!,
-                    imageUrl = "",
+                    imageUrl = "imageURL", // TODO: 대체
                     requestAt = cloth.createdAt
                 )
             }

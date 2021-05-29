@@ -13,8 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired
 class ClothServiceTest(
     @Autowired val sut: ClothService,
     @Autowired val clothRepository: ClothRepository,
-    @Autowired val userService: UserService,
+    @Autowired val userService: UserService
 ) : SpringDataTest() {
+
     @Test
     fun incrementCount() {
         sut.incrementCount()
@@ -36,6 +37,7 @@ class ClothServiceTest(
         )
 
         val clothId = saved.id!!
+
         val expected = CareLabel(
             waterType = WaterType.FORBIDDEN_BLOWER_JP,
             bleachType = BleachType.CL_BLEACH_KR,

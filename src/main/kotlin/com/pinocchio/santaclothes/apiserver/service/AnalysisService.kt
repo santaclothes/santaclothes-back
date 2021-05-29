@@ -2,7 +2,9 @@ package com.pinocchio.santaclothes.apiserver.service
 
 import com.pinocchio.santaclothes.apiserver.controller.dto.CareLabelIcon
 import com.pinocchio.santaclothes.apiserver.controller.dto.toCareLabel
+import com.pinocchio.santaclothes.apiserver.event.AddCareLabelEvent
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
@@ -11,14 +13,18 @@ import org.springframework.transaction.annotation.Transactional
 class AnalysisService(
     @Autowired val clothService: ClothService,
     @Autowired val imageService: ImageService,
+    @Autowired val publisher: ApplicationEventPublisher,
 ) {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     fun analysis(careLabelImageId: Long, careLabelIcon: CareLabelIcon) {
         val image = imageService.getCareLabelById(careLabelImageId)
-        val savedCloth = clothService.addCareLabel(
-            image.clothId!!, careLabelIcon.toCareLabel()
+        val clothId = image.clothId!!
+        val saved = clothService.addCareLabel(clothId, careLabelIcon.toCareLabel())
+        publisher.publishEvent(
+            AddCareLabelEvent(
+                careLabelId = saved.careLabel!!.id!!,
+                careLabelImageId = careLabelImageId,
+            )
         )
-        image.careLabelId = savedCloth.careLabel!!.id
-        imageService.save(image)
     }
 }
