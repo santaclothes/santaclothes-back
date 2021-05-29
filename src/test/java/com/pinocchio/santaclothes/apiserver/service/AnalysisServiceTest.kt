@@ -10,14 +10,7 @@ import com.pinocchio.santaclothes.apiserver.test.SpringDataTest
 import org.assertj.core.api.BDDAssertions.then
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Import
-import org.springframework.context.annotation.Primary
-import org.springframework.core.task.SyncTaskExecutor
-import java.util.concurrent.Executor
 
-@Import(SyncEventConfiguration::class)
 class AnalysisServiceTest(
     @Autowired val sut: AnalysisService,
     @Autowired val userRepository: UserRepository,
@@ -68,14 +61,5 @@ class AnalysisServiceTest(
             then(dryCleaning).isEqualTo(careLabelIcon.dryCleaning)
             then(ironingType).isEqualTo(careLabelIcon.ironingType)
         }
-    }
-}
-
-@Configuration
-class SyncEventConfiguration {
-    @Bean
-    @Primary
-    fun executor(): Executor {
-        return SyncTaskExecutor()
     }
 }
