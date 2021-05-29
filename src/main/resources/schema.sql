@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS AUTHORIZATION_TOKEN
 (
     id            integer auto_increment PRIMARY KEY,
     user_token    varchar(64),
-    device_token  varchar(64),
+    device_token  varchar(255),
     access_token  uuid unique,
     refresh_token uuid,
     expired_at    timestamp default DATEADD('DAY', 7, NOW()),
