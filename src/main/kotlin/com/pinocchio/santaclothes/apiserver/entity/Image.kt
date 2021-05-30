@@ -1,17 +1,18 @@
 package com.pinocchio.santaclothes.apiserver.entity
 
 import org.springframework.data.annotation.Id
+import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 
 @Table
 data class Image(
-    @Id var imageId: Long? = null,
-    val filePath: String,
-    val thumbnailPath: String? = null,
-    val type: ImageType,
-    var clothId: Long? = null,
-    var careLabelId: Long? = null,
-    var userToken: String? = null,
+    @Id @Column("IMAGE_ID") var imageId: Long? = null,
+    @Column("FILE_PATH") val filePath: String,
+    @Column("THUMBNAIL_PATH") val thumbnailPath: String? = null,
+    @Column("TYPE") val type: ImageType,
+    @Column("CLOTH_ID") var clothId: Long? = null,
+    @Column("CARE_LABEL_ID") var careLabelId: Long? = null,
+    @Column("USER_TOKEN") var userToken: String? = null,
 )
 
 enum class ImageType {
