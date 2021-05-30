@@ -17,14 +17,12 @@
         </div>
         <div class="sub-title"> <!-- 부제 -->
             <div th:utext='${"<h3>" + "현재 처리해야할 라벨 수 : " + imageList.size() + "</h3>"}'/>
-            <!--<h3 class="sub" th:text="${imageListCount}">현재 처리해야할 라벨 수 :  </h3>-->
         </div>
     </div>
     <!-- 하단 이미지리스트 wrapper -->
     <div class="imagelist-wrapper">
         <div class="image-gird">
             <div th:each="image : ${imageList}">
-                <p th:text="${image.getImageId()}"></p>
                 <a th:href="@{/admin/analyze/{imageId}(imageId = ${image.getImageId()})}">
                     <img th:src="${image.getFilePath()}">
                 </a>

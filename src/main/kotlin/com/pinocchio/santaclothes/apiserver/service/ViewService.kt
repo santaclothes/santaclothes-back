@@ -57,7 +57,7 @@ class ViewService(
             val myPageClothes = clothes.map { cloth ->
                 MyPageCloth(
                     clothId = cloth.id!!,
-                    imageUrl = cloth.images.last { it.type == ImageType.CLOTH }.filePath,
+                    imageUrl = "",
                     requestAt = cloth.createdAt
                 )
             }
