@@ -33,8 +33,8 @@ class ApiController(@Autowired val analysisRequestService: AnalysisRequestServic
                     clothName = clothName,
                     clothesColor = clothColor,
                     clothesType = clothType,
-                    clothImage = File("test"), //TODO: 파일 처리
-                    labelImage = File("test")
+                    clothImage = request.clothImage,
+                    labelImage = request.labelImages
                 )
             )
         }

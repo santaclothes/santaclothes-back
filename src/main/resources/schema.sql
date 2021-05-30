@@ -32,6 +32,8 @@ CREATE TABLE IF NOT EXISTS CARE_LABEL
 CREATE TABLE IF NOT EXISTS IMAGE
 (
     image_id       integer auto_increment PRIMARY KEY,
+    file_name      varchar(100) unique,
+    file_url       varchar(255),
     file_path      varchar(255),
     thumbnail_path varchar(255),
     type           varchar(50),

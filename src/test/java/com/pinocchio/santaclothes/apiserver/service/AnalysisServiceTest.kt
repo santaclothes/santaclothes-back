@@ -34,9 +34,12 @@ class AnalysisServiceTest(
         val clothId = cloth.id!!
         val imageId = imageRepository.save(
             Image(
+                fileName = "fileName",
                 filePath = "filePath",
+                fileUrl = "fileUrl",
                 type = ImageType.CARE_LABEL,
-                clothId = clothId
+                clothId = clothId,
+                userToken = "test"
             )
         ).imageId!!
 

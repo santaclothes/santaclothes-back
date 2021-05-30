@@ -7,7 +7,9 @@ import org.springframework.data.relational.core.mapping.Table
 @Table("IMAGE")
 data class Image(
     @Id @Column("IMAGE_ID") var imageId: Long? = null,
+    @Column("FILE_NAME") val fileName: String,
     @Column("FILE_PATH") val filePath: String,
+    @Column("FILE_URL") val fileUrl: String,
     @Column("THUMBNAIL_PATH") val thumbnailPath: String? = null,
     @Column("TYPE") val type: ImageType,
     @Column("CLOTH_ID") var clothId: Long? = null,

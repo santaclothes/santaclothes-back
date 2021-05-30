@@ -24,7 +24,7 @@
         <div class="image-gird">
             <div th:each="image : ${imageList}">
                 <a th:href="@{/admin/analyze/{imageId}(imageId = ${image.getImageId()})}">
-                    <img th:src="${image.getFilePath()}">
+                    <img th:src="${image.getFileUrl()}">
                 </a>
             </div>
         </div>

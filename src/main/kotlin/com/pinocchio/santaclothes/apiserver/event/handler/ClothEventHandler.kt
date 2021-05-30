@@ -13,9 +13,9 @@ class ClothEventHandler(
 
     // @TransactionalEventListener? commit 된 후에 동작, 테스트에서는 Rollback이 이루어지기 떄문에 동작 X
     @EventListener
-    fun addCareLabel(event: AddCareLabelEvent) {
-        val careLabelImage = imageRepository.findCareLabelById(event.careLabelImageId).orElseThrow()
-        careLabelImage.careLabelId = event.careLabelId
+    fun addCareLabel(careLabelEvent: AddCareLabelEvent) {
+        val careLabelImage = imageRepository.findCareLabelById(careLabelEvent.careLabelImageId).orElseThrow()
+        careLabelImage.careLabelId = careLabelEvent.careLabelId
         imageRepository.save(careLabelImage)
     }
 }
