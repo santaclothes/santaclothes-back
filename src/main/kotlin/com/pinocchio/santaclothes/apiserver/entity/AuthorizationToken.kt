@@ -8,7 +8,7 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.UUID
 
-@Table
+@Table("AUTHORIZATION_TOKEN")
 data class AuthorizationToken(
     @JsonIgnore @Id @Column("ID") var id: Long? = null,
     @JsonIgnore @Column("USER_TOKEN") var userToken: String,

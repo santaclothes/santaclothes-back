@@ -7,7 +7,7 @@ import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
 import java.time.Instant
 
-@Table
+@Table("ANALYSIS_REQUEST")
 data class AnalysisRequest(
     @JsonIgnore @Id @Column("ID") var id: Long? = null,
     @Column("USER_TOKEN") val userToken: String,

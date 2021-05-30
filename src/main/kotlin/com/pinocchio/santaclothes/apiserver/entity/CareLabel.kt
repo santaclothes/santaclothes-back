@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 
-@Table
+@Table("CARE_LABEL")
 data class CareLabel(
     @Id @Column("ID") var id: Long? = null,
     @Column("CLOTH_ID") var clothId: Long? = null,

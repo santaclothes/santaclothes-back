@@ -8,7 +8,7 @@ import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
 import java.time.Instant
 
-@Table
+@Table("CLOTH")
 data class Cloth(
     @Id @Column("ID") var id: Long? = null,
     @Column("NAME") val name: String,

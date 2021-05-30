@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 
-@Table
+@Table("IMAGE")
 data class Image(
     @Id @Column("IMAGE_ID") var imageId: Long? = null,
     @Column("FILE_PATH") val filePath: String,
