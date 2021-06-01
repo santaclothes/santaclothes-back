@@ -1,6 +1,9 @@
 package com.pinocchio.santaclothes.apiserver.service
 
-import com.pinocchio.santaclothes.apiserver.entity.*
+import com.pinocchio.santaclothes.apiserver.entity.AnalysisRequest
+import com.pinocchio.santaclothes.apiserver.entity.AnalysisStatus
+import com.pinocchio.santaclothes.apiserver.entity.Cloth
+import com.pinocchio.santaclothes.apiserver.entity.ImageType
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesColor
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesType
 import com.pinocchio.santaclothes.apiserver.repository.AnalysisRequestRepository
@@ -8,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
-import java.io.File
+import org.springframework.web.multipart.MultipartFile
 import java.time.Instant
 import java.util.UUID
 
@@ -22,9 +25,6 @@ class AnalysisRequestService(
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     fun save(document: AnalysisRequestDocument): AnalysisRequest {
-        // TODO: 파일 업로드
-        //       옷 이미지 업로드 후 set
-
         val userToken = authorizationTokenService.getByAccessToken(document.accessToken).userToken
         val saved = analysisRequestRepository.save(
             AnalysisRequest(
@@ -40,29 +40,27 @@ class AnalysisRequestService(
             )
         )
 
-        val clothImage = Image(
-            filePath = document.clothImage.path,
+        val clothId = saved.cloth.id!!
+        imageService.upload(
+            file = document.clothImage,
             type = ImageType.CLOTH,
-            clothId = saved.cloth.id,
-            userToken = saved.userToken
+            userToken = userToken,
+            clothId = clothId
         )
-
-        val labelImage = Image(
-            filePath = document.labelImage.path,
+        imageService.upload(
+            file = document.labelImage,
             type = ImageType.CARE_LABEL,
-            clothId = saved.cloth.id,
-            userToken = saved.userToken
+            userToken = userToken,
+            clothId = clothId
         )
-
-        imageService.saveAll(listOf(clothImage, labelImage))
         return saved
     }
 }
 
 data class AnalysisRequestDocument(
     val accessToken: UUID,
-    val clothImage: File,
-    val labelImage: File,
+    val clothImage: MultipartFile,
+    val labelImage: MultipartFile,
     val clothName: String,
     val clothesType: ClothesType,
     val clothesColor: ClothesColor,

@@ -22,6 +22,7 @@ class AnalysisService(
         val saved = clothService.addCareLabel(clothId, careLabelIcon.toCareLabel())
         publisher.publishEvent(
             AddCareLabelEvent(
+                clothId = clothId,
                 careLabelId = saved.careLabel!!.id!!,
                 careLabelImageId = careLabelImageId,
             )

@@ -7,14 +7,20 @@ import java.util.Optional
 
 interface ImageRepository : CrudRepository<Image, Long> {
     @Query(
-        "SELECT \"IMAGE_ID\", \"FILE_PATH\", \"THUMBNAIL_PATH\", \"TYPE\", \"USER_TOKEN\", \"CLOTH_ID\" FROM \"IMAGE\" " +
+        "SELECT \"IMAGE_ID\", \"FILE_NAME\", \"FILE_PATH\", \"FILE_URL\", \"THUMBNAIL_PATH\", \"TYPE\"," +
+                " \"USER_TOKEN\", \"CLOTH_ID\" FROM \"IMAGE\" " +
                 "WHERE \"TYPE\" = \'CARE_LABEL\' and \"CARE_LABEL_ID\" is null"
     )
     fun findAllCareLabelsToProcess(): List<Image>
 
     @Query(
-        "SELECT \"IMAGE_ID\", \"FILE_PATH\", \"THUMBNAIL_PATH\", \"TYPE\", \"USER_TOKEN\", \"CLOTH_ID\" FROM \"IMAGE\"" +
+        "SELECT \"IMAGE_ID\",\"FILE_NAME\", \"FILE_PATH\", \"FILE_URL\", \"THUMBNAIL_PATH\", \"TYPE\", " +
+                "\"USER_TOKEN\", \"CLOTH_ID\" FROM \"IMAGE\"" +
                 "WHERE \"TYPE\" = \'CARE_LABEL\' and \"CARE_LABEL_ID\" is null and \"IMAGE_ID\" = :id"
     )
     fun findCareLabelById(id: Long): Optional<Image>
+
+    fun findByClothId(clothId: Long): List<Image>
+
+    fun findByFileName(fileName: String): Optional<Image>
 }

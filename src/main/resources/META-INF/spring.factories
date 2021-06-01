@@ -1,0 +1,1 @@
+org.springframework.boot.env.EnvironmentPostProcessor=com.pinocchio.santaclothes.apiserver.config.processor.PathPostProcessor

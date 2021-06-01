@@ -3,6 +3,7 @@ package com.pinocchio.santaclothes.apiserver.service
 import com.pinocchio.santaclothes.apiserver.controller.dto.CareLabelIcon
 import com.pinocchio.santaclothes.apiserver.entity.*
 import com.pinocchio.santaclothes.apiserver.entity.type.*
+import com.pinocchio.santaclothes.apiserver.repository.AnalysisRequestRepository
 import com.pinocchio.santaclothes.apiserver.repository.ClothRepository
 import com.pinocchio.santaclothes.apiserver.repository.ImageRepository
 import com.pinocchio.santaclothes.apiserver.repository.UserRepository
@@ -15,28 +16,38 @@ class AnalysisServiceTest(
     @Autowired val sut: AnalysisService,
     @Autowired val userRepository: UserRepository,
     @Autowired val clothRepository: ClothRepository,
-    @Autowired val imageRepository: ImageRepository
+    @Autowired val imageRepository: ImageRepository,
+    @Autowired val analysisRequestRepository: AnalysisRequestRepository,
 ) : SpringDataTest() {
     @Test
     fun analysis() {
+        val userToken = "test"
         userRepository.insert(
-            User("test", "name", AccountType.KAKAO)
+            User(userToken, "name", AccountType.KAKAO)
         )
-        val cloth = clothRepository.save(
-            Cloth(
-                name = "cloth",
-                type = ClothesType.TOP,
-                color = ClothesColor.BEIGE,
-                userToken = "test"
+        val cloth = Cloth(
+            name = "cloth",
+            type = ClothesType.TOP,
+            color = ClothesColor.BEIGE,
+            userToken = userToken
+        )
+
+        val analysisRequest = analysisRequestRepository.save(
+            AnalysisRequest(
+                userToken = userToken,
+                cloth = cloth
             )
         )
 
-        val clothId = cloth.id!!
+        val clothId = analysisRequest.cloth.id!!
         val imageId = imageRepository.save(
             Image(
+                fileName = "fileName",
                 filePath = "filePath",
+                fileUrl = "fileUrl",
                 type = ImageType.CARE_LABEL,
-                clothId = clothId
+                clothId = clothId,
+                userToken = userToken
             )
         ).imageId!!
 
@@ -61,5 +72,8 @@ class AnalysisServiceTest(
             then(dryCleaning).isEqualTo(careLabelIcon.dryCleaning)
             then(ironingType).isEqualTo(careLabelIcon.ironingType)
         }
+
+        val expectedAnalysisRequest = analysisRequestRepository.findByClothId(clothId).orElseThrow()
+        then(expectedAnalysisRequest.status).isEqualTo(AnalysisStatus.CLASSIFIED)
     }
 }

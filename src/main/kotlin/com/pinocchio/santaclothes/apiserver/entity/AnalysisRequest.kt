@@ -11,8 +11,8 @@ import java.time.Instant
 data class AnalysisRequest(
     @JsonIgnore @Id @Column("ID") var id: Long? = null,
     @Column("USER_TOKEN") val userToken: String,
-    @MappedCollection(idColumn = "ID") val cloth: Cloth,
-    @Column("STATUS") val status: AnalysisStatus = AnalysisStatus.REQUEST,
+    @MappedCollection(idColumn = "ANALYSIS_REQUEST_ID") var cloth: Cloth,
+    @Column("STATUS") var status: AnalysisStatus = AnalysisStatus.REQUEST,
     @Column("CREATED_AT") val createdAt: Instant = Instant.now()
 )
 
