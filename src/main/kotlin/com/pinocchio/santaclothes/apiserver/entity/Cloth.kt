@@ -10,7 +10,7 @@ import java.time.Instant
 
 @Table("CLOTH")
 data class Cloth(
-    @Id @Column("ID") var id: Long? = null,
+    @Id @Column("CLOTH_ID") var id: Long? = null,
     @Column("NAME") val name: String,
     @Column("COLOR") val color: ClothesColor,
     @Column("TYPE") val type: ClothesType,
