@@ -61,6 +61,6 @@ class ImageService(
     fun saveAll(images: Iterable<Image>): Iterable<Image> = imageRepository.saveAll(images)
 
     companion object {
-        private const val IMAGE_API_PREFIX = "image"
+        private const val IMAGE_API_PREFIX = "image/"
     }
 }
