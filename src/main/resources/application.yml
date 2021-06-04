@@ -15,6 +15,9 @@ spring:
     prefix: classpath:templates/
     suffix: .html
     cache: false
+  servlet:
+    multipart:
+      max-file-size: 20MB
 pinocchio:
   images:
     path: /tmp/santaclothes
