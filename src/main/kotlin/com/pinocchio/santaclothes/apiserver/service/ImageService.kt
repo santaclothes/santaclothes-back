@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile
 import java.io.File
 import java.util.UUID
 
-
 @Service
 class ImageService(
     @Autowired val imageRepository: ImageRepository,
@@ -61,6 +60,6 @@ class ImageService(
     fun saveAll(images: Iterable<Image>): Iterable<Image> = imageRepository.saveAll(images)
 
     companion object {
-        private const val IMAGE_API_PREFIX = "image/"
+        private const val IMAGE_API_PREFIX = "/image/"
     }
 }
