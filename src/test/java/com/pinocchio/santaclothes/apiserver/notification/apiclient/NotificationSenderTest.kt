@@ -18,18 +18,15 @@ class NotificationSenderTest(
     fun send() {
         val accessToken = "token"
         val message = "테스트"
-        val deviceToken =
-            "eXFeH_aPQQG9hTsG5P4rPv:APA91bEa65NwhI-xLbDKAmZhC10m-HmwLUiUoNlCXzSwRWQxMcY-5sLx91ZgvAvRM2SGUCaUDrejkBlVj" +
-                    "9OsOxCPFL2C01bGIh4QHI42zq-r5DgIdjvMdYpDiEG-spx8okkmnu2vra6q"
+        val deviceToken = "deviceToken"
         val request = FirebaseMessageWrapper(deviceToken, "Santaclothes 알리미", message, "")
 
         mockSendNotificationApi(
             projectId = projectId,
             accessToken = accessToken,
-            request = request,
             response = """
                             {
-                                "name": "성공"     
+                                "name": "성공"
                             }
                         """.trimIndent()
         )

@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS ANALYSIS_REQUEST
     id         integer auto_increment PRIMARY KEY,
     user_token varchar(64),
     status     varchar(10),
-    created_at timestamp default now(),
+    created_at timestamp default now()
 );
 
 CREATE TABLE IF NOT EXISTS CLOTH
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS CLOTH
     analysis_request_id integer,
     type                varchar(20),
     user_token          varchar(64),
-    created_at          timestamp default now(),
+    created_at          timestamp default now()
 );
 
 CREATE TABLE IF NOT EXISTS CARE_LABEL
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS CARE_LABEL
     dry_type     varchar(50),
     dry_cleaning varchar(50),
     ironing_type varchar(50),
-    cloth_id     bigint,
+    cloth_id     bigint
 );
 
 CREATE TABLE IF NOT EXISTS IMAGE
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS AUTHORIZATION_TOKEN
     access_token  uuid unique,
     refresh_token uuid,
     expired_at    timestamp default DATEADD('DAY', 7, NOW()),
-    created_at    timestamp default now(),
+    created_at    timestamp default now()
 );
 
 CREATE TABLE IF NOT EXISTS NOTICE
