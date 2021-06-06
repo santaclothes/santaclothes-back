@@ -2,6 +2,7 @@ package com.pinocchio.santaclothes.apiserver.notification.service
 
 import com.pinocchio.santaclothes.apiserver.authorization.TokenManager
 import com.pinocchio.santaclothes.apiserver.notification.apiclient.NotificationSender
+import com.pinocchio.santaclothes.apiserver.notification.repository.NotificationRepository
 import com.pinocchio.santaclothes.apiserver.notification.service.dto.FirebaseMessageWrapper
 import com.pinocchio.santaclothes.apiserver.notification.service.dto.NotificationResponse
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,7 +12,8 @@ import reactor.core.publisher.Mono
 @Service
 class NotificationService(
     @Autowired val webClient: NotificationSender,
-    @Autowired val tokenManager: TokenManager
+    @Autowired val tokenManager: TokenManager,
+    @Autowired val notificationRepository: NotificationRepository,
 ) {
     fun sendTo(deviceToken: String, message: String): Mono<NotificationResponse> = FirebaseMessageWrapper(
         token = deviceToken,
@@ -21,6 +23,9 @@ class NotificationService(
     ).let {
         webClient.send(it, tokenManager.fcmAccessToken)
     }
+
+    fun hasNew(userToken: String) =
+        notificationRepository.findFirstByUserTokenAndNewOrderByCreatedAtDesc(userToken, true).isPresent
 
     companion object {
         private const val MESSAGE_TITLE = "Santaclothes 알리미"
