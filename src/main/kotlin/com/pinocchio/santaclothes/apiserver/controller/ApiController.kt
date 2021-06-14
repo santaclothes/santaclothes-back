@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
+import java.util.UUID
 
 @Api(tags = ["Api"])
 @RestController
@@ -25,9 +26,9 @@ class ApiController(@Autowired val analysisRequestService: AnalysisRequestServic
     fun makeRequest(
         request: AnalysisRequestForm,
         @ApiParam(hidden = true) @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = true) authorization: String
-    ) {
+    ): AnalysisRequestResult {
         with(request) {
-            analysisRequestService.save(
+            val saved = analysisRequestService.save(
                 AnalysisRequestDocument(
                     accessToken = authorizationToUuid(authorization),
                     clothName = clothName,
@@ -37,6 +38,7 @@ class ApiController(@Autowired val analysisRequestService: AnalysisRequestServic
                     labelImage = request.labelImages
                 )
             )
+            return AnalysisRequestResult(saved.id!!)
         }
     }
 }
@@ -47,4 +49,8 @@ data class AnalysisRequestForm(
     val clothName: String,
     val clothType: ClothesType,
     val clothColor: ClothesColor,
+)
+
+data class AnalysisRequestResult(
+    val analysisRequestId: Long,
 )
