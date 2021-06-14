@@ -27,6 +27,7 @@ class ViewService(
     }
 
     fun analysisRequestView(accessToken: UUID, requestId: Long): AnalysisRequestView {
+        val user = userService.findByAccessToken(accessToken).orElseThrow()
         val analysisRequest = analysisRequestService.getById(requestId)
         val cloth = analysisRequest.cloth
 
@@ -73,6 +74,7 @@ class ViewService(
         } ?: listOf()
 
         return AnalysisRequestView(
+            userName = user.name,
             clothName = cloth.name,
             howToTitle = howToTitle,
             howToContent = howToContent,
