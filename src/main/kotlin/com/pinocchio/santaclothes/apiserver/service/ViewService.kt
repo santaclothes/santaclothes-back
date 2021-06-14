@@ -30,6 +30,7 @@ class ViewService(
 
     fun analysisRequestView(accessToken: UUID, requestId: Long): AnalysisRequestView {
         val user = userService.findByAccessToken(accessToken).orElseThrow()
+        // TODO: 알람 추가 후 상태가 완료된 경우에만 조회하도록 수정
         val analysisRequest = analysisRequestService.getById(requestId)
         val cloth = analysisRequest.cloth
 
@@ -89,6 +90,7 @@ class ViewService(
 
     fun myPageView(accessToken: UUID): MyPageView = userService.findByAccessToken(accessToken).orElseThrow()
         .run {
+            // TODO: 상태가 끝난 후의 옷만 조회하도록 수정
             val clothes = clothService.getByUserToken(token)
             val myClothesCount = clothes.count()
             val myPageClothes = clothes.map { cloth ->

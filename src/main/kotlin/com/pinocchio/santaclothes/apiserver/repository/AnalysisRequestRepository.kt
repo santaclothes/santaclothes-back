@@ -1,6 +1,7 @@
 package com.pinocchio.santaclothes.apiserver.repository
 
 import com.pinocchio.santaclothes.apiserver.entity.AnalysisRequest
+import com.pinocchio.santaclothes.apiserver.entity.AnalysisStatus
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.CrudRepository
 import java.util.Optional
@@ -20,4 +21,6 @@ interface AnalysisRequestRepository : CrudRepository<AnalysisRequest, Long> {
                 WHERE c."CLOTH_ID" = :clothId """
     )
     fun findByClothId(clothId: Long): Optional<AnalysisRequest>
+
+    fun findByIdAndStatus(clothId: Long, status: AnalysisStatus): Optional<AnalysisRequest>
 }
