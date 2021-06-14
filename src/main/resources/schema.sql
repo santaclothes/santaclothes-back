@@ -10,9 +10,7 @@ CREATE TABLE IF NOT EXISTS ANALYSIS_REQUEST
     id         integer auto_increment PRIMARY KEY,
     user_token varchar(64),
     status     varchar(10),
-    created_at timestamp default now(),
-    FOREIGN KEY (user_token)
-        REFERENCES "USER" (token)
+    created_at timestamp default now()
 );
 
 CREATE TABLE IF NOT EXISTS CLOTH
@@ -23,9 +21,7 @@ CREATE TABLE IF NOT EXISTS CLOTH
     analysis_request_id integer,
     type                varchar(20),
     user_token          varchar(64),
-    created_at          timestamp default now(),
-    FOREIGN KEY (user_token) REFERENCES "USER" (token),
-    FOREIGN KEY (analysis_request_id) REFERENCES ANALYSIS_REQUEST (id)
+    created_at          timestamp default now()
 );
 
 CREATE TABLE IF NOT EXISTS CARE_LABEL
@@ -36,9 +32,7 @@ CREATE TABLE IF NOT EXISTS CARE_LABEL
     dry_type     varchar(50),
     dry_cleaning varchar(50),
     ironing_type varchar(50),
-    cloth_id     bigint,
-    FOREIGN KEY (cloth_id)
-        REFERENCES CLOTH (cloth_id)
+    cloth_id     bigint
 );
 
 CREATE TABLE IF NOT EXISTS IMAGE
@@ -51,7 +45,7 @@ CREATE TABLE IF NOT EXISTS IMAGE
     type           varchar(50),
     user_token     varchar(64),
     cloth_id       integer,
-    care_label_id integer
+    care_label_id  integer
 );
 
 CREATE TABLE IF NOT EXISTS AUTHORIZATION_TOKEN
@@ -62,9 +56,7 @@ CREATE TABLE IF NOT EXISTS AUTHORIZATION_TOKEN
     access_token  uuid unique,
     refresh_token uuid,
     expired_at    timestamp default DATEADD('DAY', 7, NOW()),
-    created_at    timestamp default now(),
-    FOREIGN KEY (user_token)
-        REFERENCES "USER" (token)
+    created_at    timestamp default now()
 );
 
 CREATE TABLE IF NOT EXISTS NOTICE
@@ -73,4 +65,14 @@ CREATE TABLE IF NOT EXISTS NOTICE
     title   varchar(50),
     hint    varchar(50),
     content varchar(255)
+);
+
+CREATE TABLE IF NOT EXISTS NOTIFICAITON
+(
+    id                  integer auto_increment PRIMARY KEY,
+    user_token          varchar(64),
+    analysis_request_id integer,
+    category            varchar(20),
+    new                 boolean,
+    created_at          timestamp default now()
 );

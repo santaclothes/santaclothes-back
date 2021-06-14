@@ -4,6 +4,7 @@ import com.pinocchio.santaclothes.apiserver.controller.dto.*
 import com.pinocchio.santaclothes.apiserver.entity.ImageType
 import com.pinocchio.santaclothes.apiserver.exception.ExceptionReason
 import com.pinocchio.santaclothes.apiserver.exception.TokenInvalidException
+import com.pinocchio.santaclothes.apiserver.notification.service.NotificationService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.Instant
@@ -16,14 +17,15 @@ class ViewService(
     @Autowired val clothService: ClothService,
     @Autowired val analysisRequestService: AnalysisRequestService,
     @Autowired val imageService: ImageService,
+    @Autowired val notificationService: NotificationService,
 ) {
     fun homeView(accessToken: UUID): HomeView {
         val user = userService.findByAccessToken(accessToken)
             .orElseThrow { TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN) }
         val notices = noticeService.findAllNotices()
         val clothesCount = clothService.getCount()
-        // TODO: notification 확인 여부
-        return HomeView(user.name, clothesCount, notices, false)
+        val hasNewNotification = notificationService.hasNew(user.token)
+        return HomeView(user.name, clothesCount, notices, hasNewNotification)
     }
 
     fun analysisRequestView(accessToken: UUID, requestId: Long): AnalysisRequestView {
