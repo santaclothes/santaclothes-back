@@ -5,7 +5,7 @@ import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 import java.time.Instant
 
-@Table("NOTIFICAITON")
+@Table("NOTIFICATION")
 data class Notification(
     @Id @Column("ID") var id: Long? = null,
     @Column("USER_TOKEN") val userToken: String,
