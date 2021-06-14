@@ -29,11 +29,16 @@ class ClothEventHandler(
         analysisRequest.status = AnalysisStatus.CLASSIFIED
         analysisRequestRepository.save(analysisRequest)
 
-        val authorizationToken = authorizationTokenService.getByUserToken(analysisRequest.userToken)
 
-        notificationService.sendTo(
-            authorizationToken,
-            analysisRequest
-        )
+
+        // TODO: 주석 해제
+        // val authorizationToken = authorizationTokenService.getByUserToken(analysisRequest.userToken)
+        // notificationService.sendTo(
+        //     authorizationToken,
+        //     analysisRequest
+        // ).block()
+        //
+        // analysisRequest.status = AnalysisStatus.NOTIFIED
+        // analysisRequestRepository.save(analysisRequest)
     }
 }
