@@ -11,7 +11,7 @@ import java.util.UUID
 @Repository
 interface UserRepository : CrudRepository<User, String>, WithInsert<User> {
     @Query(
-        """SELECT token, name, account_type 
+        """SELECT u.token, u.name, u.account_type 
         FROM "USER" u LEFT JOIN "AUTHORIZATION_TOKEN" at on u.token = at.user_token
         | WHERE at.access_token = :accessToken"""
     )
