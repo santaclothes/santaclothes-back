@@ -11,6 +11,7 @@ data class HomeView(
 )
 
 data class AnalysisRequestView(
+    val userName: String,
     val clothName: String,
     val howToTitle: String,
     val howToContent: String,
@@ -24,8 +25,8 @@ data class CareLabelDetail(val iconUrl: String, val name: String, val descriptio
 
 data class MyPageView(
     val userName: String,
-    val myClothesCount : Long,
-    val myPageClothes : List<MyPageCloth>
+    val myClothesCount: Long,
+    val myPageClothes: List<MyPageCloth>
 )
 
-data class MyPageCloth(val clothId : Long,val imageUrl :String, val requestAt :Instant)
+data class MyPageCloth(val clothId: Long, val imageUrl: String, val requestAt: Instant)
