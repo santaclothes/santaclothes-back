@@ -12,6 +12,7 @@ data class HomeView(
 )
 
 data class AnalysisRequestView(
+    val userName: String,
     val clothName: String,
     val howToTitle: String,
     val howToContent: String,

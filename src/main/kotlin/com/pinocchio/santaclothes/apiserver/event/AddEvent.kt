@@ -2,7 +2,7 @@ package com.pinocchio.santaclothes.apiserver.event
 
 import com.pinocchio.santaclothes.apiserver.entity.ImageType
 
-data class AddCareLabelEvent(
+data class AnalysisDoneEvent(
     val clothId: Long,
     val careLabelId: Long,
     val careLabelImageId: Long

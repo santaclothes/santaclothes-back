@@ -2,7 +2,7 @@ package com.pinocchio.santaclothes.apiserver.service
 
 import com.pinocchio.santaclothes.apiserver.controller.dto.CareLabelIcon
 import com.pinocchio.santaclothes.apiserver.controller.dto.toCareLabel
-import com.pinocchio.santaclothes.apiserver.event.AddCareLabelEvent
+import com.pinocchio.santaclothes.apiserver.event.AnalysisDoneEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
@@ -21,7 +21,7 @@ class AnalysisService(
         val clothId = image.clothId!!
         val saved = clothService.addCareLabel(clothId, careLabelIcon.toCareLabel())
         publisher.publishEvent(
-            AddCareLabelEvent(
+            AnalysisDoneEvent(
                 clothId = clothId,
                 careLabelId = saved.careLabel!!.id!!,
                 careLabelImageId = careLabelImageId,

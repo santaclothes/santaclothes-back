@@ -75,5 +75,8 @@ class AnalysisServiceTest(
 
         val expectedAnalysisRequest = analysisRequestRepository.findByClothId(clothId).orElseThrow()
         then(expectedAnalysisRequest.status).isEqualTo(AnalysisStatus.CLASSIFIED)
+
+        // TODO: 노티 처리
     }
+    // TODO: 노티가 없을 떄 예외 테스트 추가
 }

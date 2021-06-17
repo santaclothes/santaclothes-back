@@ -4,6 +4,7 @@ import com.pinocchio.santaclothes.apiserver.controller.dto.*
 import com.pinocchio.santaclothes.apiserver.entity.ImageType
 import com.pinocchio.santaclothes.apiserver.exception.ExceptionReason
 import com.pinocchio.santaclothes.apiserver.exception.TokenInvalidException
+import com.pinocchio.santaclothes.apiserver.notification.service.NotificationService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.Instant
@@ -16,17 +17,20 @@ class ViewService(
     @Autowired val clothService: ClothService,
     @Autowired val analysisRequestService: AnalysisRequestService,
     @Autowired val imageService: ImageService,
+    @Autowired val notificationService: NotificationService,
 ) {
     fun homeView(accessToken: UUID): HomeView {
         val user = userService.findByAccessToken(accessToken)
             .orElseThrow { TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN) }
         val notices = noticeService.findAllNotices()
         val clothesCount = clothService.getCount()
-        // TODO: notification 확인 여부
-        return HomeView(user.name, clothesCount, notices, false)
+        val hasNewNotification = notificationService.hasNew(user.token)
+        return HomeView(user.name, clothesCount, notices, hasNewNotification)
     }
 
     fun analysisRequestView(accessToken: UUID, requestId: Long): AnalysisRequestView {
+        val user = userService.findByAccessToken(accessToken).orElseThrow()
+        // TODO: 알람 추가 후 상태가 완료된 경우에만 조회하도록 수정
         val analysisRequest = analysisRequestService.getById(requestId)
         val cloth = analysisRequest.cloth
 
@@ -73,6 +77,7 @@ class ViewService(
         } ?: listOf()
 
         return AnalysisRequestView(
+            userName = user.name,
             clothName = cloth.name,
             howToTitle = howToTitle,
             howToContent = howToContent,
@@ -85,6 +90,7 @@ class ViewService(
 
     fun myPageView(accessToken: UUID): MyPageView = userService.findByAccessToken(accessToken).orElseThrow()
         .run {
+            // TODO: 상태가 끝난 후의 옷만 조회하도록 수정
             val clothes = clothService.getByUserToken(token)
             val myClothesCount = clothes.count()
             val myPageClothes = clothes.map { cloth ->
