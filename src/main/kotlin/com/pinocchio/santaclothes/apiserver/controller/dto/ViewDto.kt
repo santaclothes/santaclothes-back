@@ -1,6 +1,7 @@
 package com.pinocchio.santaclothes.apiserver.controller.dto
 
 import com.pinocchio.santaclothes.apiserver.entity.Notice
+import com.pinocchio.santaclothes.apiserver.entity.type.ClothesType
 import java.time.Instant
 
 data class HomeView(
@@ -24,8 +25,8 @@ data class CareLabelDetail(val iconUrl: String, val name: String, val descriptio
 
 data class MyPageView(
     val userName: String,
-    val myClothesCount : Long,
-    val myPageClothes : List<MyPageCloth>
+    val myClothesCount: Long,
+    val myPageClothes: List<MyPageCloth>
 )
 
-data class MyPageCloth(val clothId : Long,val imageUrl :String, val requestAt :Instant)
+data class MyPageCloth(val clothId: Long, val clothType: ClothesType, val imageUrl: String, val requestAt: Instant)

@@ -90,6 +90,7 @@ class ViewService(
             val myPageClothes = clothes.map { cloth ->
                 MyPageCloth(
                     clothId = cloth.id!!,
+                    clothType = cloth.type,
                     imageUrl = imageService.getImagesByClothId(cloth.id!!).first { it.type == ImageType.CLOTH }.fileUrl,
                     requestAt = cloth.createdAt
                 )
