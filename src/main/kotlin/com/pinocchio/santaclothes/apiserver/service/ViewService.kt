@@ -1,13 +1,17 @@
 package com.pinocchio.santaclothes.apiserver.service
 
-import com.pinocchio.santaclothes.apiserver.controller.dto.*
+import com.pinocchio.santaclothes.apiserver.controller.dto.AnalysisRequestView
+import com.pinocchio.santaclothes.apiserver.controller.dto.CareLabelDetail
+import com.pinocchio.santaclothes.apiserver.controller.dto.HomeView
+import com.pinocchio.santaclothes.apiserver.controller.dto.MyPageCloth
+import com.pinocchio.santaclothes.apiserver.controller.dto.MyPageView
+import com.pinocchio.santaclothes.apiserver.entity.AnalysisStatus
 import com.pinocchio.santaclothes.apiserver.entity.ImageType
 import com.pinocchio.santaclothes.apiserver.exception.ExceptionReason
 import com.pinocchio.santaclothes.apiserver.exception.TokenInvalidException
 import com.pinocchio.santaclothes.apiserver.notification.service.NotificationService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import org.springframework.util.StringUtils
 import java.time.Instant
 import java.util.UUID
 
@@ -38,6 +42,9 @@ class ViewService(
         // TODO: 알람 추가 후 상태가 완료된 경우에만 조회하도록 수정
         val analysisRequest = analysisRequestService.getById(requestId)
         val cloth = analysisRequest.cloth
+        if (analysisRequest.status == AnalysisStatus.DONE) {
+            throw NoSuchElementException("$requestId is not exists")
+        }
 
         val howToTitle = "폴리는 물세탁이 가장 좋은 섬유입니다."
         val howToContent =

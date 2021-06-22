@@ -22,5 +22,6 @@ enum class AnalysisStatus {
     CLASSIFIED,
     NOTIFIED,
     DONE,
+    DELETED,
     FAILED
 }

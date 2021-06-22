@@ -55,6 +55,16 @@ class AnalysisRequestService(
         )
         return saved
     }
+
+    fun toSaved(id: Long): AnalysisRequest = analysisRequestRepository.save(
+        analysisRequestRepository.findByIdAndStatus(id, AnalysisStatus.NOTIFIED).orElseThrow()
+            .also { it.status = AnalysisStatus.DONE }
+    )
+
+    fun toDeleted(id: Long): AnalysisRequest = analysisRequestRepository.save(
+        analysisRequestRepository.findById(id).orElseThrow()
+            .also { it.status = AnalysisStatus.DELETED }
+    )
 }
 
 data class AnalysisRequestDocument(
