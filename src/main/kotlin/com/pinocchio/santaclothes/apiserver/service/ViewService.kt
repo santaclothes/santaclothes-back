@@ -7,8 +7,11 @@ import com.pinocchio.santaclothes.apiserver.exception.TokenInvalidException
 import com.pinocchio.santaclothes.apiserver.notification.service.NotificationService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import org.springframework.util.StringUtils
 import java.time.Instant
 import java.util.UUID
+
+private const val STRING_ABBREVIATE_LENGTH = 20
 
 @Service
 class ViewService(
@@ -22,7 +25,9 @@ class ViewService(
     fun homeView(accessToken: UUID): HomeView {
         val user = userService.findByAccessToken(accessToken)
             .orElseThrow { TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN) }
-        val notices = noticeService.findAllNotices()
+        val notices = noticeService.findAllNotices().map {
+            it.copy(content = it.content.take(STRING_ABBREVIATE_LENGTH))
+        }
         val clothesCount = clothService.getCount()
         val hasNewNotification = notificationService.hasNew(user.token)
         return HomeView(user.name, clothesCount, notices, hasNewNotification)
@@ -98,6 +103,7 @@ class ViewService(
                     clothId = cloth.id!!,
                     clothType = cloth.type,
                     imageUrl = imageService.getImagesByClothId(cloth.id!!).first { it.type == ImageType.CLOTH }.fileUrl,
+                    careLabelCount = if (cloth.careLabel == null) 0 else 1,
                     requestAt = cloth.createdAt
                 )
             }

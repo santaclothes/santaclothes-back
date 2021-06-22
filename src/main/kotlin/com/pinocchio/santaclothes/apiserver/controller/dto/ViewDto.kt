@@ -30,4 +30,10 @@ data class MyPageView(
     val myPageClothes: List<MyPageCloth>
 )
 
-data class MyPageCloth(val clothId: Long, val clothType: ClothesType, val imageUrl: String, val requestAt: Instant)
+data class MyPageCloth(
+    val clothId: Long,
+    val clothType: ClothesType,
+    val imageUrl: String,
+    val requestAt: Instant,
+    val careLabelCount: Long
+)

@@ -40,6 +40,12 @@ class NotificationService(
     fun hasNew(userToken: String) =
         notificationRepository.findFirstByUserTokenAndNewOrderByCreatedAtDesc(userToken, true).isPresent
 
+    fun findByUserToken(userToken: String) =
+        notificationRepository.findByUserTokenAndCategory(userToken, NotificationCategory.ANALYSIS)
+
+    fun view(id: Long): Notification =
+        notificationRepository.save(notificationRepository.findById(id).orElseThrow().apply { this.new = false })
+
     companion object {
         private const val MESSAGE_TITLE = "Santaclothes 알리미"
         private const val IMAGE_URL = ""
