@@ -41,7 +41,7 @@ public class AdminController {
 	public ModelAndView getPage(@PathVariable long imageId) {
 		ModelAndView modelAndView = new ModelAndView("analyze");
 		Image image = imageService.getCareLabelById(imageId);
-		String imageURL = image.getFilePath();
+		String imageURL = image.getFileUrl();
 		modelAndView.addObject("imageId", imageId);
 		modelAndView.addObject("imageURL", imageURL);
 		return modelAndView;
