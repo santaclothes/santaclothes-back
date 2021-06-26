@@ -49,7 +49,7 @@ class TokenManager(
         authorizationTokenService.getByUserToken(userToken)
     }.onSuccess {
         if (it.isExpiredWhen(Instant.now())) {
-            throw TokenInvalidException(ExceptionReason.INVALID_ACCESS_TOKEN)
+            refreshAccessToken(it.refreshToken)
         }
 
         if (it.deviceToken != deviceToken) {
@@ -63,7 +63,6 @@ class TokenManager(
             )
         )
     }
-
 
     companion object {
         private const val FIREBASE_KEY_PATH = "firebase/santaclothes-key.json"

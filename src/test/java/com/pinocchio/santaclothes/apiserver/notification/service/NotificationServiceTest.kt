@@ -4,6 +4,7 @@ import com.pinocchio.santaclothes.apiserver.authorization.TokenManager
 import com.pinocchio.santaclothes.apiserver.entity.AnalysisRequest
 import com.pinocchio.santaclothes.apiserver.entity.AuthorizationToken
 import com.pinocchio.santaclothes.apiserver.entity.Cloth
+import com.pinocchio.santaclothes.apiserver.entity.NotificationCategory
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesColor
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesType
 import com.pinocchio.santaclothes.apiserver.notification.fixture.mockSendNotificationApi
@@ -59,6 +60,6 @@ class NotificationServiceTest(
                 then(it.name).isEqualTo("성공")
             }
             .verifyComplete()
-        then(notificationRepository.findByUserToken(userToken)).isNotEmpty
+        then(notificationRepository.findByUserTokenAndCategory(userToken, NotificationCategory.ANALYSIS)).isNotEmpty
     }
 }

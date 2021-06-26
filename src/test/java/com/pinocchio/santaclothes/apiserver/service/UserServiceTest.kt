@@ -66,9 +66,7 @@ class UserServiceTest(
             )
         )
 
-        thenThrownBy { sut.login(userToken, deviceToken) }
-            .isExactlyInstanceOf(TokenInvalidException::class.java)
-            .matches { (it as TokenInvalidException).reason == ExceptionReason.INVALID_ACCESS_TOKEN }
+        thenNoException().isThrownBy { sut.login(userToken, deviceToken) }
     }
 
     @Test
