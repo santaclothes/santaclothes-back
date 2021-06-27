@@ -7,6 +7,7 @@ import com.pinocchio.santaclothes.apiserver.controller.dto.MyPageCloth
 import com.pinocchio.santaclothes.apiserver.controller.dto.MyPageView
 import com.pinocchio.santaclothes.apiserver.controller.dto.ReportView
 import com.pinocchio.santaclothes.apiserver.entity.AnalysisStatus
+import com.pinocchio.santaclothes.apiserver.entity.CareLabel
 import com.pinocchio.santaclothes.apiserver.entity.ImageType
 import com.pinocchio.santaclothes.apiserver.exception.ExceptionReason
 import com.pinocchio.santaclothes.apiserver.exception.TokenInvalidException
@@ -58,35 +59,8 @@ class ViewService(
             .filter { it.type == ImageType.CARE_LABEL }
             .map { it.fileUrl }
 
-        val careLabelDetails = cloth.careLabel?.let {
-            listOf(
-                CareLabelDetail(
-                    it.waterType.imageUrl,
-                    it.waterType.name,
-                    it.waterType.description
-                ),
-                CareLabelDetail(
-                    it.dryType.imageUrl,
-                    it.dryType.name,
-                    it.dryType.description
-                ),
-                CareLabelDetail(
-                    it.dryCleaning.imageUrl,
-                    it.dryCleaning.name,
-                    it.dryCleaning.description
-                ),
-                CareLabelDetail(
-                    it.bleachType.imageUrl,
-                    it.bleachType.name,
-                    it.bleachType.description
-                ),
-                CareLabelDetail(
-                    it.ironingType.imageUrl,
-                    it.ironingType.name,
-                    it.ironingType.description
-                )
-            )
-        } ?: listOf()
+        val careLabel = analysisRequest.cloth.careLabel!!
+        val careLabelDetails = careLabel.toDetail()
 
         return AnalysisRequestView(
             userName = user.name,
@@ -127,7 +101,37 @@ class ViewService(
 
         return ReportView(
             careLabelImageUrl = imageService.getCareLabelImageById(careLabel.id!!).fileUrl,
-            careLabelDetails = listOf() // TODO: 채우기
+            careLabelDetails = careLabel.toDetail()
+        )
+    }
+
+    fun CareLabel.toDetail() : List<CareLabelDetail>{
+        return listOf(
+                CareLabelDetail(
+                        waterType.imageUrl,
+                        waterType.name,
+                        waterType.description
+                ),
+                CareLabelDetail(
+                        dryType.imageUrl,
+                        dryType.name,
+                        dryType.description
+                ),
+                CareLabelDetail(
+                        dryCleaning.imageUrl,
+                        dryCleaning.name,
+                        dryCleaning.description
+                ),
+                CareLabelDetail(
+                        bleachType.imageUrl,
+                        bleachType.name,
+                        bleachType.description
+                ),
+                CareLabelDetail(
+                        ironingType.imageUrl,
+                        ironingType.name,
+                        ironingType.description
+                )
         )
     }
 }
