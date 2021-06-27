@@ -62,27 +62,27 @@ class ViewService(
         val careLabelDetails = cloth.careLabel?.let {
             listOf(
                 CareLabelDetail(
-                    "/img/waterwash/machine_30.png",
+                    it.waterType.imageUrl,
                     it.waterType.name,
                     it.waterType.description
                 ),
                 CareLabelDetail(
-                    "/img/dry/ame_flat.png",
+                    it.dryType.imageUrl,
                     it.dryType.name,
                     it.dryType.description
                 ),
                 CareLabelDetail(
-                    "/img/drycleaning/ame_drycleaning.png",
+                    it.dryCleaning.imageUrl,
                     it.dryCleaning.name,
                     it.dryCleaning.description
                 ),
                 CareLabelDetail(
-                    "/img/bleach/allno.png",
+                    it.bleachType.imageUrl,
                     it.bleachType.name,
                     it.bleachType.description
                 ),
                 CareLabelDetail(
-                    "/img/ironing/ame_no.png",
+                    it.ironingType.imageUrl,
                     it.ironingType.name,
                     it.ironingType.description
                 )
