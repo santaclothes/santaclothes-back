@@ -40,7 +40,6 @@ class ViewService(
 
     fun analysisRequestView(accessToken: UUID, requestId: Long): AnalysisRequestView {
         val user = userService.findByAccessToken(accessToken).orElseThrow()
-        // TODO: 알람 추가 후 상태가 완료된 경우에만 조회하도록 수정
         val analysisRequest = analysisRequestService.getById(requestId)
         val cloth = analysisRequest.cloth
         if (analysisRequest.status == AnalysisStatus.DONE) {
