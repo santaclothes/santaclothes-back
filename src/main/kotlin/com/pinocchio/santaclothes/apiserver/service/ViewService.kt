@@ -103,8 +103,7 @@ class ViewService(
 
     fun myPageView(accessToken: UUID): MyPageView = userService.findByAccessToken(accessToken).orElseThrow()
         .run {
-            // TODO: 상태가 끝난 후의 옷만 조회하도록 수정
-            val clothes = clothService.getByUserToken(token)
+            val clothes = clothService.getByUserToken(token).filter { it.careLabel != null }
             val myClothesCount = clothes.count()
             val myPageClothes = clothes.map { cloth ->
                 MyPageCloth(
