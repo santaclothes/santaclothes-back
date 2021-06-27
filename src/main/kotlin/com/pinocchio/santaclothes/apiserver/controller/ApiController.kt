@@ -1,5 +1,6 @@
 package com.pinocchio.santaclothes.apiserver.controller
 
+import com.pinocchio.santaclothes.apiserver.entity.AnalysisStatus
 import com.pinocchio.santaclothes.apiserver.entity.Notification
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesColor
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesType
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -55,16 +57,13 @@ class ApiController(
         }
     }
 
-    @ApiOperation("분석 요청 저장")
+    @ApiOperation("분석 요청 상태 변경")
     @PutMapping("/analysisRequest/{analysisRequestId}")
-    fun saveRequest(@PathVariable analysisRequestId: Long) {
-        analysisRequestService.toSaved(analysisRequestId)
-    }
-
-    @ApiOperation("분석 요청 삭제")
-    @DeleteMapping("/analysisRequest/{analysisRequestId}")
-    fun deleteRequest(@PathVariable analysisRequestId: Long) {
-        analysisRequestService.toDeleted(analysisRequestId)
+    fun changeStatus(
+        @PathVariable analysisRequestId: Long,
+        @RequestBody analysisStatusRequest: AnalysisStatusRequest
+    ) {
+        analysisRequestService.withStatus(analysisRequestId, analysisStatusRequest.status)
     }
 
     @ApiOperation("알람 리스트 조회")
@@ -78,8 +77,6 @@ class ApiController(
         val userToken = userService.findByAccessToken(authorizationToUuid(authorization)).orElseThrow().token
         return notificationService.findByUserTokenWithPaging(userToken)
     }
-
-    // TODO: 레포트 보내기
 }
 
 data class AnalysisRequestForm(
@@ -92,4 +89,8 @@ data class AnalysisRequestForm(
 
 data class AnalysisRequestResult(
     val analysisRequestId: Long,
+)
+
+data class AnalysisStatusRequest(
+    val status: AnalysisStatus
 )

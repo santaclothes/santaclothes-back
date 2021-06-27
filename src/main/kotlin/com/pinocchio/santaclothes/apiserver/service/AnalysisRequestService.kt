@@ -59,21 +59,14 @@ class AnalysisRequestService(
         return saved
     }
 
-    fun toSaved(id: Long): AnalysisRequest = analysisRequestRepository.save(
-        analysisRequestRepository.findByIdAndStatus(id, AnalysisStatus.NOTIFIED).orElseThrow()
-            .also {
-                publisher.publishEvent(AnalysisRequestActionEvent(it.id!!))
-                it.status = AnalysisStatus.DONE
-            }
-    )
-
-    fun toDeleted(id: Long): AnalysisRequest = analysisRequestRepository.save(
+    fun withStatus(id: Long, status: AnalysisStatus): AnalysisRequest = analysisRequestRepository.save(
+        // TODO: 상태에 따라 변경되는 상태 제한
         analysisRequestRepository.findById(id).orElseThrow()
             .also {
                 if (it.status == AnalysisStatus.NOTIFIED) {
                     publisher.publishEvent(AnalysisRequestActionEvent(it.id!!))
                 }
-                it.status = AnalysisStatus.DELETED
+                it.status = status
             }
     )
 }

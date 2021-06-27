@@ -62,7 +62,7 @@ class AnalysisRequestServiceTest(
             )
         )
 
-        val expected = sut.toSaved(actual.id!!)
+        val expected = sut.withStatus(actual.id!!, AnalysisStatus.DONE)
 
         then(expected.status).isEqualTo(AnalysisStatus.DONE)
     }
@@ -89,7 +89,7 @@ class AnalysisRequestServiceTest(
             )
         )
 
-        sut.toSaved(analysisRequestId)
+        sut.withStatus(analysisRequestId, AnalysisStatus.DONE)
 
         val expected = notificationRepository.findByAnalysisRequestId(analysisRequestId)
         then(expected).allMatch { !it.new }
@@ -105,7 +105,7 @@ class AnalysisRequestServiceTest(
             )
         )
 
-        val expected = sut.toDeleted(actual.id!!)
+        val expected = sut.withStatus(actual.id!!, AnalysisStatus.DELETED)
 
         then(expected.status).isEqualTo(AnalysisStatus.DELETED)
     }
@@ -120,36 +120,8 @@ class AnalysisRequestServiceTest(
             )
         )
 
-        val expected = sut.toDeleted(actual.id!!)
+        val expected = sut.withStatus(actual.id!!, AnalysisStatus.DELETED)
 
         then(expected.status).isEqualTo(AnalysisStatus.DELETED)
-    }
-
-    @Test
-    fun toDeletedWhenNotifiedWithEvent(
-        @Autowired analysisRequestRepository: AnalysisRequestRepository,
-        @Autowired notificationRepository: NotificationRepository
-    ) {
-        val analysisRequest = analysisRequestRepository.save(
-            AnalysisRequest(
-                userToken = "userToken",
-                status = AnalysisStatus.NOTIFIED,
-                cloth = Cloth(name = "test", color = ClothesColor.RED, type = ClothesType.TOP, userToken = "userToken")
-            )
-        )
-        val analysisRequestId = analysisRequest.id!!
-        notificationRepository.save(
-            Notification(
-                userToken = "userToken",
-                analysisRequestId = analysisRequestId,
-                category = NotificationCategory.ANALYSIS,
-                new = true
-            )
-        )
-
-        sut.toDeleted(analysisRequestId)
-
-        val actual = notificationRepository.findByAnalysisRequestId(analysisRequestId)
-        then(actual).allMatch { !it.new }
     }
 }
