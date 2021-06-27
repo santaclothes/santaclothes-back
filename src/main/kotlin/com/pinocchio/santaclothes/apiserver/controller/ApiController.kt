@@ -59,6 +59,7 @@ class ApiController(
     @PutMapping("/analysisRequest/{analysisRequestId}")
     fun saveRequest(@PathVariable analysisRequestId: Long) {
         analysisRequestService.toSaved(analysisRequestId)
+        // TODO: 알림 조회
     }
 
     @ApiOperation("분석 요청 삭제")
@@ -70,22 +71,16 @@ class ApiController(
     @ApiOperation("알람 리스트 조회")
     @GetMapping("/notification")
     fun notifications(
-        @ApiParam(hidden = true) @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = true) authorization: String
-    ): List<Notification> {
-        val userToken = userService.findByAccessToken(authorizationToUuid(authorization)).orElseThrow().token
-        return notificationService.findByUserToken(userToken)
-    }
-
-    @ApiOperation("알람 조회")
-    @GetMapping("/notification/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    fun notifications(
         @ApiParam(hidden = true)
         @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = true) authorization: String,
-        @PathVariable id: Long
-    ) {
-        notificationService.view(id)
+        @ApiParam("page") page: Long,
+        @ApiParam("size") size: Long
+    ): List<Notification> {
+        val userToken = userService.findByAccessToken(authorizationToUuid(authorization)).orElseThrow().token
+        return notificationService.findByUserTokenWithPaging(userToken)
     }
+
+    // TODO: 레포트 보내기
 }
 
 data class AnalysisRequestForm(

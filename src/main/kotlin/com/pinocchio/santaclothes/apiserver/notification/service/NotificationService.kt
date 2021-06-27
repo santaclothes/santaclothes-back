@@ -9,6 +9,8 @@ import com.pinocchio.santaclothes.apiserver.notification.apiclient.NotificationS
 import com.pinocchio.santaclothes.apiserver.notification.repository.NotificationRepository
 import com.pinocchio.santaclothes.apiserver.notification.service.dto.FirebaseMessageWrapper
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -40,8 +42,12 @@ class NotificationService(
     fun hasNew(userToken: String) =
         notificationRepository.findFirstByUserTokenAndNewOrderByCreatedAtDesc(userToken, true).isPresent
 
-    fun findByUserToken(userToken: String) =
-        notificationRepository.findByUserTokenAndCategory(userToken, NotificationCategory.ANALYSIS)
+    fun findByUserTokenWithPaging(userToken: String, page: Int = 0, size: Int = 20) =
+        notificationRepository.findByUserTokenAndCategory(
+            userToken,
+            NotificationCategory.ANALYSIS,
+            PageRequest.of(page, size, Sort.by("id"))
+        )
 
     fun view(id: Long): Notification =
         notificationRepository.save(notificationRepository.findById(id).orElseThrow().apply { this.new = false })

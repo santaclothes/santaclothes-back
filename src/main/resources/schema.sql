@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS NOTICE
     content varchar(255)
 );
 
-CREATE TABLE IF NOT EXISTS NOTIFICAITON
+CREATE TABLE IF NOT EXISTS NOTIFICATION
 (
     id                  integer auto_increment PRIMARY KEY,
     user_token          varchar(64),
