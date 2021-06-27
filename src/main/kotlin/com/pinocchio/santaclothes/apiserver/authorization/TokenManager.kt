@@ -49,11 +49,11 @@ class TokenManager(
         authorizationTokenService.getByUserToken(userToken)
     }.onSuccess {
         if (it.isExpiredWhen(Instant.now())) {
-            refreshAccessToken(it.refreshToken)
+            return refreshAccessToken(it.refreshToken)
         }
 
         if (it.deviceToken != deviceToken) {
-            authorizationTokenService.save(it.copy(deviceToken = deviceToken))
+            return authorizationTokenService.save(it.copy(deviceToken = deviceToken))
         }
     }.getOrElse {
         authorizationTokenService.save(

@@ -4,27 +4,31 @@ import com.pinocchio.santaclothes.apiserver.controller.dto.CareLabelIcon
 import com.pinocchio.santaclothes.apiserver.entity.*
 import com.pinocchio.santaclothes.apiserver.entity.type.*
 import com.pinocchio.santaclothes.apiserver.repository.AnalysisRequestRepository
+import com.pinocchio.santaclothes.apiserver.repository.AuthorizationTokenRepository
 import com.pinocchio.santaclothes.apiserver.repository.ClothRepository
 import com.pinocchio.santaclothes.apiserver.repository.ImageRepository
 import com.pinocchio.santaclothes.apiserver.repository.UserRepository
 import com.pinocchio.santaclothes.apiserver.test.SpringDataTest
 import org.assertj.core.api.BDDAssertions.then
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
 class AnalysisServiceTest(
     @Autowired val sut: AnalysisService,
     @Autowired val userRepository: UserRepository,
+    @Autowired val authorizationTokenRepository: AuthorizationTokenRepository,
     @Autowired val clothRepository: ClothRepository,
     @Autowired val imageRepository: ImageRepository,
     @Autowired val analysisRequestRepository: AnalysisRequestRepository,
 ) : SpringDataTest() {
     @Test
+    @Disabled("실제로 테스트에서 알람을 보낼지 결정한 후 활성화")
     fun analysis() {
         val userToken = "test"
-        userRepository.insert(
-            User(userToken, "name", AccountType.KAKAO)
-        )
+        userRepository.insert(User(userToken, "name", AccountType.KAKAO))
+        authorizationTokenRepository.save(AuthorizationToken(userToken = userToken, deviceToken = "deviceToken"))
+
         val cloth = Cloth(
             name = "cloth",
             type = ClothesType.TOP,
