@@ -6,8 +6,10 @@ import com.pinocchio.santaclothes.apiserver.entity.Cloth
 import com.pinocchio.santaclothes.apiserver.entity.ImageType
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesColor
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesType
+import com.pinocchio.santaclothes.apiserver.event.AnalysisRequestActionEvent
 import com.pinocchio.santaclothes.apiserver.repository.AnalysisRequestRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
@@ -20,6 +22,7 @@ class AnalysisRequestService(
     @Autowired val analysisRequestRepository: AnalysisRequestRepository,
     @Autowired val imageService: ImageService,
     @Autowired val authorizationTokenService: AuthorizationTokenService,
+    @Autowired val publisher: ApplicationEventPublisher,
 ) {
     fun getById(id: Long): AnalysisRequest = analysisRequestRepository.findById(id).orElseThrow()
 
@@ -58,12 +61,20 @@ class AnalysisRequestService(
 
     fun toSaved(id: Long): AnalysisRequest = analysisRequestRepository.save(
         analysisRequestRepository.findByIdAndStatus(id, AnalysisStatus.NOTIFIED).orElseThrow()
-            .also { it.status = AnalysisStatus.DONE }
+            .also {
+                publisher.publishEvent(AnalysisRequestActionEvent(it.id!!))
+                it.status = AnalysisStatus.DONE
+            }
     )
 
     fun toDeleted(id: Long): AnalysisRequest = analysisRequestRepository.save(
         analysisRequestRepository.findById(id).orElseThrow()
-            .also { it.status = AnalysisStatus.DELETED }
+            .also {
+                if (it.status == AnalysisStatus.NOTIFIED) {
+                    publisher.publishEvent(AnalysisRequestActionEvent(it.id!!))
+                }
+                it.status = AnalysisStatus.DELETED
+            }
     )
 }
 

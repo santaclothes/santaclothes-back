@@ -59,7 +59,6 @@ class ApiController(
     @PutMapping("/analysisRequest/{analysisRequestId}")
     fun saveRequest(@PathVariable analysisRequestId: Long) {
         analysisRequestService.toSaved(analysisRequestId)
-        // TODO: 알림 조회
     }
 
     @ApiOperation("분석 요청 삭제")

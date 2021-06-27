@@ -16,3 +16,5 @@ data class ImageUploadEvent(
     val clothId: Long,
     val userToken: String
 )
+
+data class AnalysisRequestActionEvent(val analysisRequestId: Long)

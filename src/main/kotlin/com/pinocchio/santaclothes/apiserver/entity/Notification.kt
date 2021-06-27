@@ -11,7 +11,7 @@ data class Notification(
     @Column("USER_TOKEN") val userToken: String,
     @Column("ANALYSIS_REQUEST_ID") var analysisRequestId: Long,
     @Column("CATEGORY") val category: NotificationCategory,
-    @Column("NEW") var new: Boolean,
+    @Column("NEW") var new: Boolean = true,
     @Column("CREATED_AT") val createdAt: Instant = Instant.now(),
 )
 

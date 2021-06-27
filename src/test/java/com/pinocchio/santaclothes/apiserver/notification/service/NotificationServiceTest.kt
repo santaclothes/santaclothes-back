@@ -4,6 +4,7 @@ import com.pinocchio.santaclothes.apiserver.authorization.TokenManager
 import com.pinocchio.santaclothes.apiserver.entity.AnalysisRequest
 import com.pinocchio.santaclothes.apiserver.entity.AuthorizationToken
 import com.pinocchio.santaclothes.apiserver.entity.Cloth
+import com.pinocchio.santaclothes.apiserver.entity.Notification
 import com.pinocchio.santaclothes.apiserver.entity.NotificationCategory
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesColor
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesType
@@ -61,5 +62,34 @@ class NotificationServiceTest(
             }
             .verifyComplete()
         then(notificationRepository.findByUserTokenAndCategory(userToken, NotificationCategory.ANALYSIS)).isNotEmpty
+    }
+
+    @Test
+    fun viewByAnalysisRequestId(@Autowired notificationRepository: NotificationRepository) {
+        val analysisRequestId: Long = 1
+        notificationRepository.saveAll(
+            listOf(
+                Notification(
+                    userToken = "userToken",
+                    analysisRequestId = analysisRequestId,
+                    category = NotificationCategory.ANALYSIS
+                ),
+                Notification(
+                    userToken = "userToken",
+                    analysisRequestId = analysisRequestId,
+                    category = NotificationCategory.ANALYSIS
+                ),
+                Notification(
+                    userToken = "userToken",
+                    analysisRequestId = analysisRequestId,
+                    category = NotificationCategory.ANALYSIS
+                )
+            )
+        )
+
+        this.sut.viewByAnalysisRequestId(analysisRequestId)
+
+        val actual = notificationRepository.findByAnalysisRequestId(analysisRequestId)
+        then(actual).allMatch { !it.new }
     }
 }

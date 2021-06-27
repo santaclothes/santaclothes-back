@@ -1,8 +1,15 @@
 package com.pinocchio.santaclothes.apiserver.service
 
 import com.pinocchio.santaclothes.apiserver.entity.AccountType
+import com.pinocchio.santaclothes.apiserver.entity.AnalysisRequest
+import com.pinocchio.santaclothes.apiserver.entity.AnalysisStatus
+import com.pinocchio.santaclothes.apiserver.entity.Cloth
+import com.pinocchio.santaclothes.apiserver.entity.Notification
+import com.pinocchio.santaclothes.apiserver.entity.NotificationCategory
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesColor
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesType
+import com.pinocchio.santaclothes.apiserver.notification.repository.NotificationRepository
+import com.pinocchio.santaclothes.apiserver.repository.AnalysisRequestRepository
 import com.pinocchio.santaclothes.apiserver.test.SpringDataTest
 import org.assertj.core.api.BDDAssertions.then
 import org.junit.jupiter.api.Test
@@ -43,5 +50,106 @@ class AnalysisRequestServiceTest(
             then(this.userToken).isEqualTo(saved.userToken)
             then(this.status).isEqualTo(saved.status)
         }
+    }
+
+    @Test
+    fun toSaved(@Autowired analysisRequestRepository: AnalysisRequestRepository) {
+        val actual = analysisRequestRepository.save(
+            AnalysisRequest(
+                userToken = "userToken",
+                status = AnalysisStatus.NOTIFIED,
+                cloth = Cloth(name = "test", color = ClothesColor.RED, type = ClothesType.TOP, userToken = "userToken")
+            )
+        )
+
+        val expected = sut.toSaved(actual.id!!)
+
+        then(expected.status).isEqualTo(AnalysisStatus.DONE)
+    }
+
+    @Test
+    fun toSavedWithEvent(
+        @Autowired analysisRequestRepository: AnalysisRequestRepository,
+        @Autowired notificationRepository: NotificationRepository
+    ) {
+        val analysisRequest = analysisRequestRepository.save(
+            AnalysisRequest(
+                userToken = "userToken",
+                status = AnalysisStatus.NOTIFIED,
+                cloth = Cloth(name = "test", color = ClothesColor.RED, type = ClothesType.TOP, userToken = "userToken")
+            )
+        )
+        val analysisRequestId = analysisRequest.id!!
+        notificationRepository.save(
+            Notification(
+                userToken = "userToken",
+                analysisRequestId = analysisRequestId,
+                category = NotificationCategory.ANALYSIS,
+                new = true
+            )
+        )
+
+        sut.toSaved(analysisRequestId)
+
+        val expected = notificationRepository.findByAnalysisRequestId(analysisRequestId)
+        then(expected).allMatch { !it.new }
+    }
+
+    @Test
+    fun toDeletedWhenNotified(@Autowired analysisRequestRepository: AnalysisRequestRepository) {
+        val actual = analysisRequestRepository.save(
+            AnalysisRequest(
+                userToken = "userToken",
+                status = AnalysisStatus.NOTIFIED,
+                cloth = Cloth(name = "test", color = ClothesColor.RED, type = ClothesType.TOP, userToken = "userToken")
+            )
+        )
+
+        val expected = sut.toDeleted(actual.id!!)
+
+        then(expected.status).isEqualTo(AnalysisStatus.DELETED)
+    }
+
+    @Test
+    fun toDeletedWhenDone(@Autowired analysisRequestRepository: AnalysisRequestRepository) {
+        val actual = analysisRequestRepository.save(
+            AnalysisRequest(
+                userToken = "userToken",
+                status = AnalysisStatus.DONE,
+                cloth = Cloth(name = "test", color = ClothesColor.RED, type = ClothesType.TOP, userToken = "userToken")
+            )
+        )
+
+        val expected = sut.toDeleted(actual.id!!)
+
+        then(expected.status).isEqualTo(AnalysisStatus.DELETED)
+    }
+
+    @Test
+    fun toDeletedWhenNotifiedWithEvent(
+        @Autowired analysisRequestRepository: AnalysisRequestRepository,
+        @Autowired notificationRepository: NotificationRepository
+    ) {
+        val analysisRequest = analysisRequestRepository.save(
+            AnalysisRequest(
+                userToken = "userToken",
+                status = AnalysisStatus.NOTIFIED,
+                cloth = Cloth(name = "test", color = ClothesColor.RED, type = ClothesType.TOP, userToken = "userToken")
+            )
+        )
+        val analysisRequestId = analysisRequest.id!!
+        notificationRepository.save(
+            Notification(
+                userToken = "userToken",
+                analysisRequestId = analysisRequestId,
+                category = NotificationCategory.ANALYSIS,
+                new = true
+            )
+        )
+
+        sut.toDeleted(analysisRequestId)
+
+        val actual = notificationRepository.findByAnalysisRequestId(analysisRequestId)
+        then(actual).allMatch { !it.new }
     }
 }

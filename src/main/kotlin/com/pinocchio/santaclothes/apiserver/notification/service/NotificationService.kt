@@ -49,8 +49,14 @@ class NotificationService(
             PageRequest.of(page, size, Sort.by("id"))
         )
 
-    fun view(id: Long): Notification =
-        notificationRepository.save(notificationRepository.findById(id).orElseThrow().apply { this.new = false })
+    fun viewByAnalysisRequestId(analysisRequestId: Long) {
+        notificationRepository.saveAll(
+            notificationRepository.findByAnalysisRequestId(analysisRequestId).map {
+                it.new = false
+                it
+            }.toList()
+        )
+    }
 
     companion object {
         private const val MESSAGE_TITLE = "Santaclothes 알리미"

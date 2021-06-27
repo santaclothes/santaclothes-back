@@ -15,4 +15,6 @@ interface NotificationRepository : CrudRepository<Notification, Long> {
     ): List<Notification>
 
     fun findFirstByUserTokenAndNewOrderByCreatedAtDesc(userToken: String, new: Boolean): Optional<Notification>
+
+    fun findByAnalysisRequestId(analysisRequestId: Long): List<Notification>
 }
