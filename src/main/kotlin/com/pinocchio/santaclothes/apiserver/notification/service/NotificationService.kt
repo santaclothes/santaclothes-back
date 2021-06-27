@@ -31,6 +31,7 @@ class NotificationService(
             notificationRepository.save(
                 Notification(
                     userToken = authorizationToken.userToken,
+                    clothName = analysisRequest.cloth.name,
                     analysisRequestId = analysisRequest.id!!,
                     category = NotificationCategory.ANALYSIS,
                     new = true

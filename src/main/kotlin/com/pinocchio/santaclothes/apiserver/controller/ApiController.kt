@@ -73,9 +73,17 @@ class ApiController(
         @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = true) authorization: String,
         @ApiParam("page") page: Long,
         @ApiParam("size") size: Long
-    ): List<Notification> {
-        val userToken = userService.findByAccessToken(authorizationToUuid(authorization)).orElseThrow().token
-        return notificationService.findByUserTokenWithPaging(userToken)
+    ): NotificationList {
+        val user = userService.findByAccessToken(authorizationToUuid(authorization)).orElseThrow()
+        val notificationElements = notificationService.findByUserTokenWithPaging(user.token).map {
+            NotificationElement(
+                id = it.id!!,
+                analysisRequestId = it.analysisRequestId,
+                clothName = it.clothName
+            )
+        }
+
+        return NotificationList(user.name, notificationElements)
     }
 }
 
@@ -93,4 +101,15 @@ data class AnalysisRequestResult(
 
 data class AnalysisStatusRequest(
     val status: AnalysisStatus
+)
+
+data class NotificationList(
+    val userName: String,
+    val notificationElements: List<NotificationElement>
+)
+
+data class NotificationElement(
+    val id: Long,
+    val analysisRequestId: Long,
+    val clothName: String
 )

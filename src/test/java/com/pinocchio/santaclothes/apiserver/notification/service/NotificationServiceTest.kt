@@ -71,16 +71,19 @@ class NotificationServiceTest(
             listOf(
                 Notification(
                     userToken = "userToken",
+                    clothName = "clothName",
                     analysisRequestId = analysisRequestId,
                     category = NotificationCategory.ANALYSIS
                 ),
                 Notification(
                     userToken = "userToken",
+                    clothName = "clothName",
                     analysisRequestId = analysisRequestId,
                     category = NotificationCategory.ANALYSIS
                 ),
                 Notification(
                     userToken = "userToken",
+                    clothName = "clothName",
                     analysisRequestId = analysisRequestId,
                     category = NotificationCategory.ANALYSIS
                 )
