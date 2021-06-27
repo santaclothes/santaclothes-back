@@ -1,12 +1,10 @@
 package com.pinocchio.santaclothes.apiserver.controller;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +38,7 @@ public class AdminController {
 	@GetMapping("/analyze/{imageId}")
 	public ModelAndView getPage(@PathVariable long imageId) {
 		ModelAndView modelAndView = new ModelAndView("analyze");
-		Image image = imageService.getCareLabelById(imageId);
+		Image image = imageService.getCareLabelImageById(imageId);
 		String imageURL = image.getFileUrl();
 		modelAndView.addObject("imageId", imageId);
 		modelAndView.addObject("imageURL", imageURL);

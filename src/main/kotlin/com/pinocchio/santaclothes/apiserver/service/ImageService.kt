@@ -22,8 +22,8 @@ class ImageService(
         return imageRepository.findAllCareLabelsToProcess()
     }
 
-    fun getCareLabelById(id: Long): Image {
-        return imageRepository.findCareLabelById(id).orElseThrow()
+    fun getCareLabelImageById(id: Long): Image {
+        return imageRepository.findCareLabelImageById(id).orElseThrow()
     }
 
     fun getImagesByClothId(clothId: Long): List<Image> {

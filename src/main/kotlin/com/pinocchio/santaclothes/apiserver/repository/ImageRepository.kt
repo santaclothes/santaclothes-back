@@ -18,7 +18,7 @@ interface ImageRepository : CrudRepository<Image, Long> {
                 "\"USER_TOKEN\", \"CLOTH_ID\" FROM \"IMAGE\"" +
                 "WHERE \"TYPE\" = \'CARE_LABEL\' and \"CARE_LABEL_ID\" is null and \"IMAGE_ID\" = :id"
     )
-    fun findCareLabelById(id: Long): Optional<Image>
+    fun findCareLabelImageById(id: Long): Optional<Image>
 
     fun findByClothId(clothId: Long): List<Image>
 

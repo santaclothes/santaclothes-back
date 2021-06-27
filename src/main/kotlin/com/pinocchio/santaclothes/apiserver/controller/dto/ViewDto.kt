@@ -37,3 +37,8 @@ data class MyPageCloth(
     val requestAt: Instant,
     val careLabelCount: Long
 )
+
+data class ReportView(
+    val careLabelImageUrl: String,
+    val careLabelDetails: List<CareLabelDetail>,
+)

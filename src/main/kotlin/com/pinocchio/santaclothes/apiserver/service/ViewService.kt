@@ -5,6 +5,7 @@ import com.pinocchio.santaclothes.apiserver.controller.dto.CareLabelDetail
 import com.pinocchio.santaclothes.apiserver.controller.dto.HomeView
 import com.pinocchio.santaclothes.apiserver.controller.dto.MyPageCloth
 import com.pinocchio.santaclothes.apiserver.controller.dto.MyPageView
+import com.pinocchio.santaclothes.apiserver.controller.dto.ReportView
 import com.pinocchio.santaclothes.apiserver.entity.AnalysisStatus
 import com.pinocchio.santaclothes.apiserver.entity.ImageType
 import com.pinocchio.santaclothes.apiserver.exception.ExceptionReason
@@ -121,4 +122,14 @@ class ViewService(
                 myPageClothes = myPageClothes
             )
         }
+
+    fun reportView(requestId: Long): ReportView {
+        val analysisRequest = analysisRequestService.getById(requestId)
+        val careLabel = analysisRequest.cloth.careLabel!!
+
+        return ReportView(
+            careLabelImageUrl = imageService.getCareLabelImageById(careLabel.id!!).fileUrl,
+            careLabelDetails = listOf() // TODO: 채우기
+        )
+    }
 }

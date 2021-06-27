@@ -3,6 +3,7 @@ package com.pinocchio.santaclothes.apiserver.controller
 import com.pinocchio.santaclothes.apiserver.controller.dto.AnalysisRequestView
 import com.pinocchio.santaclothes.apiserver.controller.dto.HomeView
 import com.pinocchio.santaclothes.apiserver.controller.dto.MyPageView
+import com.pinocchio.santaclothes.apiserver.controller.dto.ReportView
 import com.pinocchio.santaclothes.apiserver.service.ViewService
 import com.pinocchio.santaclothes.apiserver.support.authorizationToUuid
 import io.swagger.annotations.Api
@@ -33,11 +34,18 @@ class ViewController(@Autowired val viewService: ViewService) {
     ): AnalysisRequestView =
         viewService.analysisRequestView(authorizationToUuid(authorization), resultId)
 
-
     @ApiOperation("마이페이지 화면")
     @GetMapping("/myPage")
     fun getMyPage(
         @ApiParam(hidden = true)
         @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = true) authorization: String
     ): MyPageView = viewService.myPageView(authorizationToUuid(authorization))
+
+    @ApiOperation("레포트 화면")
+    @GetMapping("/analysisRequest/{requestId}/report")
+    fun checkRequest(
+        @PathVariable("requestId") requestId: Long,
+        @ApiParam(hidden = true)
+        @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = true) authorization: String
+    ) : ReportView = viewService.reportView(requestId)
 }

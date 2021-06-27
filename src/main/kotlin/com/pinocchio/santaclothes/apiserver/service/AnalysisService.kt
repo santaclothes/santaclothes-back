@@ -17,7 +17,7 @@ class AnalysisService(
 ) {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     fun analysis(careLabelImageId: Long, careLabelIcon: CareLabelIcon) {
-        val image = imageService.getCareLabelById(careLabelImageId)
+        val image = imageService.getCareLabelImageById(careLabelImageId)
         val clothId = image.clothId!!
         val saved = clothService.addCareLabel(clothId, careLabelIcon.toCareLabel())
         publisher.publishEvent(
