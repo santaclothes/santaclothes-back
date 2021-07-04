@@ -97,6 +97,9 @@ class ViewService(
 
     fun reportView(requestId: Long): ReportView {
         val analysisRequest = analysisRequestService.getById(requestId)
+        if (analysisRequest.status != AnalysisStatus.REPORTED) {
+            throw IllegalArgumentException("Report does not exist for given request id : $requestId")
+        }
         val careLabel = analysisRequest.cloth.careLabel!!
 
         return ReportView(
@@ -105,33 +108,33 @@ class ViewService(
         )
     }
 
-    fun CareLabel.toDetail() : List<CareLabelDetail>{
+    fun CareLabel.toDetail(): List<CareLabelDetail> {
         return listOf(
-                CareLabelDetail(
-                        waterType.imageUrl,
-                        waterType.name,
-                        waterType.description
-                ),
-                CareLabelDetail(
-                        dryType.imageUrl,
-                        dryType.name,
-                        dryType.description
-                ),
-                CareLabelDetail(
-                        dryCleaning.imageUrl,
-                        dryCleaning.name,
-                        dryCleaning.description
-                ),
-                CareLabelDetail(
-                        bleachType.imageUrl,
-                        bleachType.name,
-                        bleachType.description
-                ),
-                CareLabelDetail(
-                        ironingType.imageUrl,
-                        ironingType.name,
-                        ironingType.description
-                )
+            CareLabelDetail(
+                waterType.imageUrl,
+                waterType.name,
+                waterType.description
+            ),
+            CareLabelDetail(
+                dryType.imageUrl,
+                dryType.name,
+                dryType.description
+            ),
+            CareLabelDetail(
+                dryCleaning.imageUrl,
+                dryCleaning.name,
+                dryCleaning.description
+            ),
+            CareLabelDetail(
+                bleachType.imageUrl,
+                bleachType.name,
+                bleachType.description
+            ),
+            CareLabelDetail(
+                ironingType.imageUrl,
+                ironingType.name,
+                ironingType.description
+            )
         )
     }
 }
