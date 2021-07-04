@@ -8,17 +8,24 @@ import java.util.Optional
 interface ImageRepository : CrudRepository<Image, Long> {
     @Query(
         "SELECT \"IMAGE_ID\", \"FILE_NAME\", \"FILE_PATH\", \"FILE_URL\", \"THUMBNAIL_PATH\", \"TYPE\"," +
-                " \"USER_TOKEN\", \"CLOTH_ID\" FROM \"IMAGE\" " +
-                "WHERE \"TYPE\" = \'CARE_LABEL\' and \"CARE_LABEL_ID\" is null"
+            " \"USER_TOKEN\", \"CLOTH_ID\" FROM \"IMAGE\" " +
+            "WHERE \"TYPE\" = \'CARE_LABEL\' and \"CARE_LABEL_ID\" is null"
     )
     fun findAllCareLabelsToProcess(): List<Image>
 
     @Query(
         "SELECT \"IMAGE_ID\",\"FILE_NAME\", \"FILE_PATH\", \"FILE_URL\", \"THUMBNAIL_PATH\", \"TYPE\", " +
-                "\"USER_TOKEN\", \"CLOTH_ID\" FROM \"IMAGE\"" +
-                "WHERE \"TYPE\" = \'CARE_LABEL\' and \"CARE_LABEL_ID\" is null and \"IMAGE_ID\" = :id"
+            "\"USER_TOKEN\", \"CLOTH_ID\" FROM \"IMAGE\"" +
+            "WHERE \"TYPE\" = \'CARE_LABEL\' and \"CARE_LABEL_ID\" is null and \"IMAGE_ID\" = :imageId"
     )
-    fun findCareLabelImageById(id: Long): Optional<Image>
+    fun findNotClassifiedCareLabelImageByImageId(imageId: Long): Optional<Image>
+
+    @Query(
+        "SELECT \"IMAGE_ID\",\"FILE_NAME\", \"FILE_PATH\", \"FILE_URL\", \"THUMBNAIL_PATH\", \"TYPE\", " +
+            "\"USER_TOKEN\", \"CLOTH_ID\" FROM \"IMAGE\"" +
+            "WHERE \"TYPE\" = \'CARE_LABEL\' and \"CARE_LABEL_ID\" = :careLabelId"
+    )
+    fun findImageByCareLabelId(careLabelId: Long): Optional<Image>
 
     fun findByClothId(clothId: Long): List<Image>
 

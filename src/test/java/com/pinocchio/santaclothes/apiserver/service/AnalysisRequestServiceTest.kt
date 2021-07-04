@@ -84,6 +84,7 @@ class AnalysisRequestServiceTest(
             Notification(
                 userToken = "userToken",
                 analysisRequestId = analysisRequestId,
+                clothName = "test",
                 category = NotificationCategory.ANALYSIS,
                 new = true
             )

@@ -3,7 +3,6 @@ package com.pinocchio.santaclothes.apiserver.authorization
 import com.pinocchio.santaclothes.apiserver.entity.AccountType
 import com.pinocchio.santaclothes.apiserver.entity.AuthorizationToken
 import com.pinocchio.santaclothes.apiserver.entity.User
-import com.pinocchio.santaclothes.apiserver.exception.ExceptionReason
 import com.pinocchio.santaclothes.apiserver.exception.TokenInvalidException
 import com.pinocchio.santaclothes.apiserver.repository.AuthorizationTokenRepository
 import com.pinocchio.santaclothes.apiserver.repository.UserRepository
@@ -56,7 +55,13 @@ class TokenManagerTest(
         val deviceToken = "deviceToken"
 
         userRepository.insert(User(token = userToken, name = "test", accountType = AccountType.KAKAO))
-        authorizationTokenRepository.save(AuthorizationToken(userToken = userToken, deviceToken = deviceToken, expiredAt = Instant.now()))
+        authorizationTokenRepository.save(
+            AuthorizationToken(
+                userToken = userToken,
+                deviceToken = deviceToken,
+                expiredAt = Instant.now()
+            )
+        )
             .run {
                 thenThrownBy { sut.validateAccessToken(accessToken) }
                     .isExactlyInstanceOf(TokenInvalidException::class.java)
@@ -78,17 +83,15 @@ class TokenManagerTest(
         val deviceToken = "deviceToken"
         userRepository.insert(User(token = userToken, name = "test", accountType = AccountType.KAKAO))
 
-        authorizationTokenRepository.save(
-            AuthorizationToken(
-                userToken = userToken,
-                deviceToken = deviceToken,
-                expiredAt = Instant.now().minus(1, ChronoUnit.DAYS)
-            )
+        val accessToken = AuthorizationToken(
+            userToken = userToken,
+            deviceToken = deviceToken,
+            expiredAt = Instant.now().minus(1, ChronoUnit.DAYS)
         )
+        authorizationTokenRepository.save(accessToken)
 
-        thenThrownBy { sut.acquireAccessToken(userToken, deviceToken) }
-            .isExactlyInstanceOf(TokenInvalidException::class.java)
-            .matches { (it as TokenInvalidException).reason == ExceptionReason.INVALID_ACCESS_TOKEN }
+        val refreshedAccessTokenToken = sut.acquireAccessToken(userToken, deviceToken)
+        then(refreshedAccessTokenToken).isNotEqualTo(accessToken)
     }
 
     @Test

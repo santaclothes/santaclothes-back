@@ -72,6 +72,7 @@ CREATE TABLE IF NOT EXISTS NOTIFICATION
     id                  integer auto_increment PRIMARY KEY,
     user_token          varchar(64),
     analysis_request_id integer,
+    cloth_name          varchar(255),
     category            varchar(20),
     new                 boolean,
     created_at          timestamp default now()

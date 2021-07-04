@@ -1,7 +1,6 @@
 package com.pinocchio.santaclothes.apiserver.controller
 
 import com.pinocchio.santaclothes.apiserver.entity.AnalysisStatus
-import com.pinocchio.santaclothes.apiserver.entity.Notification
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesColor
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesType
 import com.pinocchio.santaclothes.apiserver.notification.service.NotificationService
@@ -15,7 +14,6 @@ import io.swagger.annotations.ApiParam
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -73,9 +71,17 @@ class ApiController(
         @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = true) authorization: String,
         @ApiParam("page") page: Long,
         @ApiParam("size") size: Long
-    ): List<Notification> {
-        val userToken = userService.findByAccessToken(authorizationToUuid(authorization)).orElseThrow().token
-        return notificationService.findByUserTokenWithPaging(userToken)
+    ): NotificationList {
+        val user = userService.findByAccessToken(authorizationToUuid(authorization)).orElseThrow()
+        val notificationElements = notificationService.findNewByUserTokenWithPaging(user.token).map {
+            NotificationElement(
+                id = it.id!!,
+                analysisRequestId = it.analysisRequestId,
+                clothName = it.clothName
+            )
+        }
+
+        return NotificationList(user.name, notificationElements)
     }
 }
 
@@ -93,4 +99,15 @@ data class AnalysisRequestResult(
 
 data class AnalysisStatusRequest(
     val status: AnalysisStatus
+)
+
+data class NotificationList(
+    val userName: String,
+    val notificationElements: List<NotificationElement>
+)
+
+data class NotificationElement(
+    val id: Long,
+    val analysisRequestId: Long,
+    val clothName: String
 )

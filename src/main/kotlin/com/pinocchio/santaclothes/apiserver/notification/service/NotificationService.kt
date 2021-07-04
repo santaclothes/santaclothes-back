@@ -31,6 +31,7 @@ class NotificationService(
             notificationRepository.save(
                 Notification(
                     userToken = authorizationToken.userToken,
+                    clothName = analysisRequest.cloth.name,
                     analysisRequestId = analysisRequest.id!!,
                     category = NotificationCategory.ANALYSIS,
                     new = true
@@ -42,10 +43,11 @@ class NotificationService(
     fun hasNew(userToken: String) =
         notificationRepository.findFirstByUserTokenAndNewOrderByCreatedAtDesc(userToken, true).isPresent
 
-    fun findByUserTokenWithPaging(userToken: String, page: Int = 0, size: Int = 20) =
-        notificationRepository.findByUserTokenAndCategory(
+    fun findNewByUserTokenWithPaging(userToken: String, page: Int = 0, size: Int = 20) =
+        notificationRepository.findByUserTokenAndCategoryAndNew(
             userToken,
             NotificationCategory.ANALYSIS,
+            true,
             PageRequest.of(page, size, Sort.by("id"))
         )
 

@@ -8,9 +8,10 @@ import org.springframework.data.repository.CrudRepository
 import java.util.Optional
 
 interface NotificationRepository : CrudRepository<Notification, Long> {
-    fun findByUserTokenAndCategory(
+    fun findByUserTokenAndCategoryAndNew(
         userToken: String,
         category: NotificationCategory,
+        new: Boolean,
         pageable: Pageable = PageRequest.of(0, 20)
     ): List<Notification>
 
