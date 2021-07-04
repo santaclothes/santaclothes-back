@@ -97,7 +97,7 @@ class ViewService(
 
     fun reportView(requestId: Long): ReportView {
         val analysisRequest = analysisRequestService.getById(requestId)
-        if (analysisRequest.status != AnalysisStatus.REPORTED) {
+        if (analysisRequest.status != AnalysisStatus.NOTIFIED) {
             throw IllegalArgumentException("Report does not exist for given request id : $requestId")
         }
         val careLabel = analysisRequest.cloth.careLabel!!
