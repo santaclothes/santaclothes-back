@@ -1,5 +1,8 @@
 package com.pinocchio.santaclothes.apiserver.notification.service.dto
 
+import com.fasterxml.jackson.annotation.JsonProperty
+
+
 data class FirebaseMessageWrapper(val message: FirebaseMessage) {
     constructor(token: String, title: String, body: String, image: String?) : this(
         message = FirebaseMessage(
@@ -8,7 +11,11 @@ data class FirebaseMessageWrapper(val message: FirebaseMessage) {
         )
     )
 
-    data class FirebaseMessage(val token: String, val notificationContent: NotificationContent)
+    data class FirebaseMessage(
+        val token: String,
+        @JsonProperty("notification") val notificationContent: NotificationContent
+    )
+
     data class NotificationContent(val title: String, val body: String, val image: String?)
 }
 
