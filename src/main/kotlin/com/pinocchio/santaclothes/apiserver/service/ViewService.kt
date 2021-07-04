@@ -103,7 +103,7 @@ class ViewService(
         val careLabel = analysisRequest.cloth.careLabel!!
 
         return ReportView(
-            careLabelImageUrl = imageService.getCareLabelImageById(careLabel.id!!).fileUrl,
+            careLabelImageUrl = imageService.getCareLabelImageByCareLabelId(careLabel.id!!).fileUrl,
             careLabelDetails = careLabel.toDetail()
         )
     }

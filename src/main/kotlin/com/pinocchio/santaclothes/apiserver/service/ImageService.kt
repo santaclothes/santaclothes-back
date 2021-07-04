@@ -22,9 +22,12 @@ class ImageService(
         return imageRepository.findAllCareLabelsToProcess()
     }
 
-    fun getCareLabelImageById(id: Long): Image {
-        return imageRepository.findCareLabelImageById(id).orElseThrow()
+    fun getNotClassifiedCareLabelImageByImageId(imageId: Long): Image {
+        return imageRepository.findNotClassifiedCareLabelImageByImageId(imageId).orElseThrow()
     }
+
+    fun getCareLabelImageByCareLabelId(careLabelId: Long): Image =
+        imageRepository.findImageByCareLabelId(careLabelId).orElseThrow()
 
     fun getImagesByClothId(clothId: Long): List<Image> {
         return imageRepository.findByClothId(clothId)
