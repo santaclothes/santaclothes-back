@@ -33,7 +33,7 @@ interface AnalysisRequestRepository : CrudRepository<AnalysisRequest, Long> {
                 cl."IRONING_TYPE" as "cloth_careLabel_IRONING_TYPE", cl."CLOTH_ID" as "cloth_careLabel_CLOTH_ID"
                 FROM "ANALYSIS_REQUEST" ar LEFT JOIN "CLOTH" c ON ar."ID" = c."ANALYSIS_REQUEST_ID"
                 LEFT JOIN "CARE_LABEL" cl ON c."CLOTH_ID" = cl."CLOTH_ID"
-                WHERE "cloth_USER_TOKEN" = :userToken """
+                WHERE c."USER_TOKEN" = :userToken """
     )
     fun findByUserToken(userToken: String): List<AnalysisRequest>
 
