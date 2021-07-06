@@ -50,15 +50,4 @@ class ClothServiceTest(
         val actual = clothRepository.findById(clothId).orElseThrow().careLabel
         then(actual).isEqualTo(expected)
     }
-
-    @Test
-    fun getByUserToken() {
-        val userToken = "token"
-        userService.register(userToken, "name", AccountType.KAKAO)
-        val saved = clothRepository.saveAll(
-            listOf(Cloth(name = "cloth1", color = ClothesColor.BEIGE, type = ClothesType.TOP, userToken = userToken))
-        )
-
-        then(sut.getByUserToken(userToken)).isEqualTo(saved)
-    }
 }

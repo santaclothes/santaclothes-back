@@ -13,10 +13,6 @@ class ClothService(
     @Autowired val clothRepository: ClothRepository,
     @Qualifier("clothCountCacheTemplate") val clothCountCacheTemplate: CacheTemplate<Long>,
 ) {
-    fun save(cloth: Cloth): Cloth = clothRepository.save(cloth)
-
-    fun getOne(id: Long): Cloth = clothRepository.findById(id).orElseThrow()
-
     fun incrementCount() {
         clothCountCacheTemplate[CACHE_NAME] = clothCountCacheTemplate[CACHE_NAME] ?: 0 + 1L
     }
@@ -30,8 +26,6 @@ class ClothService(
         }.run {
             clothRepository.save(this)
         }
-
-    fun getByUserToken(userToken: String): List<Cloth> = clothRepository.findByUserToken(userToken)
 
     companion object {
         private const val CACHE_NAME = "cloth-count"

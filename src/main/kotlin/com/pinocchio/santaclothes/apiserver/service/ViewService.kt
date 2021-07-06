@@ -1,11 +1,6 @@
 package com.pinocchio.santaclothes.apiserver.service
 
-import com.pinocchio.santaclothes.apiserver.controller.dto.AnalysisRequestView
-import com.pinocchio.santaclothes.apiserver.controller.dto.CareLabelDetail
-import com.pinocchio.santaclothes.apiserver.controller.dto.HomeView
-import com.pinocchio.santaclothes.apiserver.controller.dto.MyPageCloth
-import com.pinocchio.santaclothes.apiserver.controller.dto.MyPageView
-import com.pinocchio.santaclothes.apiserver.controller.dto.ReportView
+import com.pinocchio.santaclothes.apiserver.controller.dto.*
 import com.pinocchio.santaclothes.apiserver.entity.AnalysisStatus
 import com.pinocchio.santaclothes.apiserver.entity.CareLabel
 import com.pinocchio.santaclothes.apiserver.entity.ImageType
@@ -76,17 +71,21 @@ class ViewService(
 
     fun myPageView(accessToken: UUID): MyPageView = userService.findByAccessToken(accessToken).orElseThrow()
         .run {
-            val clothes = clothService.getByUserToken(token).filter { it.careLabel != null }
-            val myClothesCount = clothes.count()
-            val myPageClothes = clothes.map { cloth ->
-                MyPageCloth(
-                    clothId = cloth.id!!,
-                    clothType = cloth.type,
-                    imageUrl = imageService.getImagesByClothId(cloth.id!!).first { it.type == ImageType.CLOTH }.fileUrl,
-                    careLabelCount = if (cloth.careLabel == null) 0 else 1,
-                    requestAt = cloth.createdAt
-                )
-            }
+            val myPageClothes = analysisRequestService.getByUserToken(token)
+                .filter { it.status == AnalysisStatus.DONE }
+                .map {
+                    MyPageCloth(
+                        clothId = it.cloth.id!!,
+                        clothType = it.cloth.type,
+                        imageUrl = imageService.getImagesByClothId(it.cloth.id!!)
+                            .first { image -> image.type == ImageType.CLOTH }.fileUrl,
+                        careLabelCount = if (it.cloth.careLabel == null) 0 else 1,
+                        requestAt = it.createdAt
+                    )
+                }
+                .toList()
+
+            val myClothesCount = myPageClothes.count()
 
             MyPageView(
                 userName = name,

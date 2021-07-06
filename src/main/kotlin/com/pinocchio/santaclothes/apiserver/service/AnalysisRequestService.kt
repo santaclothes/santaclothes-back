@@ -26,6 +26,8 @@ class AnalysisRequestService(
 ) {
     fun getById(id: Long): AnalysisRequest = analysisRequestRepository.findById(id).orElseThrow()
 
+    fun getByUserToken(userToken: String): List<AnalysisRequest> = analysisRequestRepository.findByUserToken(userToken)
+
     @Transactional(isolation = Isolation.SERIALIZABLE)
     fun save(document: AnalysisRequestDocument): AnalysisRequest {
         val userToken = authorizationTokenService.getByAccessToken(document.accessToken).userToken
