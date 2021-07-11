@@ -17,4 +17,6 @@ data class ImageUploadEvent(
     val userToken: String
 )
 
-data class AnalysisRequestActionEvent(val analysisRequestId: Long)
+data class AnalysisRequestNotifiedEvent(val analysisRequestId: Long)
+
+data class AnalysisRequestDoneEvent(val analysisRequestId: Long)

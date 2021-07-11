@@ -6,7 +6,8 @@ import com.pinocchio.santaclothes.apiserver.entity.Cloth
 import com.pinocchio.santaclothes.apiserver.entity.ImageType
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesColor
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesType
-import com.pinocchio.santaclothes.apiserver.event.AnalysisRequestActionEvent
+import com.pinocchio.santaclothes.apiserver.event.AnalysisRequestDoneEvent
+import com.pinocchio.santaclothes.apiserver.event.AnalysisRequestNotifiedEvent
 import com.pinocchio.santaclothes.apiserver.repository.AnalysisRequestRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationEventPublisher
@@ -65,8 +66,10 @@ class AnalysisRequestService(
         // TODO: 상태에 따라 변경되는 상태 제한
         analysisRequestRepository.findById(id).orElseThrow()
             .also {
-                if (it.status == AnalysisStatus.NOTIFIED) {
-                    publisher.publishEvent(AnalysisRequestActionEvent(it.id!!))
+                when (it.status) {
+                    AnalysisStatus.NOTIFIED -> publisher.publishEvent(AnalysisRequestNotifiedEvent(it.id!!))
+                    AnalysisStatus.DONE -> publisher.publishEvent(AnalysisRequestDoneEvent(it.id!!))
+                    else -> Unit
                 }
                 it.status = status
             }
