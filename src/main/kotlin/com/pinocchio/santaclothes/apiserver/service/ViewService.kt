@@ -112,27 +112,27 @@ class ViewService(
         return listOf(
             CareLabelDetail(
                 waterType.imageUrl,
-                waterType.name,
+                "물세탁",
                 waterType.description
             ),
             CareLabelDetail(
                 dryType.imageUrl,
-                dryType.name,
+                "건",
                 dryType.description
             ),
             CareLabelDetail(
                 dryCleaning.imageUrl,
-                dryCleaning.name,
+                "드라이클리닝",
                 dryCleaning.description
             ),
             CareLabelDetail(
                 bleachType.imageUrl,
-                bleachType.name,
+                "표백",
                 bleachType.description
             ),
             CareLabelDetail(
                 ironingType.imageUrl,
-                ironingType.name,
+                "다림질",
                 ironingType.description
             )
         )
