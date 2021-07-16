@@ -1,24 +1,19 @@
 package com.pinocchio.santaclothes.apiserver.event.handler
 
-import com.pinocchio.santaclothes.apiserver.entity.Image
-import com.pinocchio.santaclothes.apiserver.event.ImageUploadEvent
-import com.pinocchio.santaclothes.apiserver.repository.ImageRepository
+import com.pinocchio.santaclothes.apiserver.event.ImageUploadCommand
+import com.pinocchio.santaclothes.apiserver.support.FileSupports
 import org.springframework.context.event.EventListener
+import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
+import java.io.File
 
 @Component
-class ImageEventHandler(private val imageRepository: ImageRepository) {
+class ImageEventHandler {
+    @Async
     @EventListener
-    fun uploadEvent(imageUploadEvent: ImageUploadEvent) {
-        imageRepository.save(
-            Image(
-                fileName = imageUploadEvent.fileName,
-                filePath = imageUploadEvent.filePath,
-                fileUrl = imageUploadEvent.fileUrl,
-                type = imageUploadEvent.type,
-                clothId = imageUploadEvent.clothId,
-                userToken = imageUploadEvent.userToken
-            )
-        )
+    fun uploadEvent(command: ImageUploadCommand) {
+        FileSupports.createImageFolderIfNotExists()
+        val transferFile = File(command.filePath)
+        command.file.transferTo(transferFile)
     }
 }

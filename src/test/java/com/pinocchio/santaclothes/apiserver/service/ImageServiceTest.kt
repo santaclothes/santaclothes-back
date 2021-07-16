@@ -6,6 +6,7 @@ import com.pinocchio.santaclothes.apiserver.entity.ImageType
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesColor
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesType
 import com.pinocchio.santaclothes.apiserver.repository.ClothRepository
+import com.pinocchio.santaclothes.apiserver.repository.ImageRepository
 import com.pinocchio.santaclothes.apiserver.support.FileSupports.Companion.resolvePath
 import com.pinocchio.santaclothes.apiserver.test.SpringDataTest
 import org.assertj.core.api.BDDAssertions.then
@@ -15,11 +16,11 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.web.multipart.MultipartFile
-import java.io.File
 
 class ImageServiceTest @Autowired constructor(
     private val sut: ImageService,
     private val clothRepository: ClothRepository,
+    private val imageRepository: ImageRepository,
     private val userService: UserService
 ) : SpringDataTest() {
     @MockBean
@@ -49,8 +50,11 @@ class ImageServiceTest @Autowired constructor(
         val fileName = this.sut.upload(mockFile, ImageType.CLOTH, userToken, clothId)
 
         // then
-        val filePath = resolvePath("$fileName.png")
-        val uploadFile = File(filePath)
-        then(uploadFile).exists()
+        val actual = imageRepository.findByClothId(clothId)[0]
+        then(actual.fileName).isEqualTo(fileName)
+        then(actual.filePath).isEqualTo(resolvePath("$fileName.png"))
+        then(actual.type).isEqualTo(ImageType.CLOTH)
+        then(actual.clothId).isEqualTo(clothId)
+        then(actual.userToken).isEqualTo(userToken)
     }
 }

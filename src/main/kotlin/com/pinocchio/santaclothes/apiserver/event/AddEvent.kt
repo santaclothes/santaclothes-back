@@ -1,6 +1,6 @@
 package com.pinocchio.santaclothes.apiserver.event
 
-import com.pinocchio.santaclothes.apiserver.entity.ImageType
+import org.springframework.web.multipart.MultipartFile
 
 data class CareLabelUpdateCommand(
     val analysisRequestId: Long,
@@ -10,13 +10,9 @@ data class CareLabelUpdateCommand(
 
 data class NotificationSendCommand(val analysisRequestId: Long)
 
-data class ImageUploadEvent(
-    val fileName: String,
-    val filePath: String,
-    val fileUrl: String,
-    val type: ImageType,
-    val clothId: Long,
-    val userToken: String
+data class ImageUploadCommand(
+    val file: MultipartFile,
+    val filePath: String
 )
 
 data class AnalysisRequestNotifiedEvent(val analysisRequestId: Long)
