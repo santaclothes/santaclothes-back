@@ -29,8 +29,11 @@ class AnalysisRequestService(
     fun getByUserToken(userToken: String): List<AnalysisRequest> = analysisRequestRepository.findByUserToken(userToken)
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    fun save(document: AnalysisRequestDocument): AnalysisRequest {
-        val userToken = authorizationTokenService.getByAccessToken(document.accessToken).userToken
+    fun save(
+        accessToken: UUID,
+        document: AnalysisRequestDocument
+    ): AnalysisRequest {
+        val userToken = authorizationTokenService.getByAccessToken(accessToken).userToken
         val saved = analysisRequestRepository.save(
             AnalysisRequest(
                 userToken = userToken,
@@ -76,7 +79,6 @@ class AnalysisRequestService(
 }
 
 data class AnalysisRequestDocument(
-    val accessToken: UUID,
     val clothImage: MultipartFile,
     val labelImage: MultipartFile,
     val clothName: String,

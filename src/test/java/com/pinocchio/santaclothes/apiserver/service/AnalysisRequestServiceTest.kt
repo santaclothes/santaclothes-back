@@ -23,6 +23,7 @@ class AnalysisRequestServiceTest(
 ) : SpringDataTest() {
     @Test
     fun save() {
+        // given
         val auth = userService.register("token", "name", AccountType.KAKAO).run {
             userService.login(token, "device")
         }
@@ -33,9 +34,10 @@ class AnalysisRequestServiceTest(
             "test".toByteArray()
         )
 
+        // when
         val saved = sut.save(
+            auth.accessToken,
             AnalysisRequestDocument(
-                auth.accessToken,
                 mockFile,
                 mockFile,
                 "clothName",
@@ -44,6 +46,7 @@ class AnalysisRequestServiceTest(
             )
         )
 
+        // then
         val expected = sut.getById(saved.id!!)
         with(expected) {
             then(this.id).isEqualTo(saved.id)
@@ -54,6 +57,7 @@ class AnalysisRequestServiceTest(
 
     @Test
     fun toSaved(@Autowired analysisRequestRepository: AnalysisRequestRepository) {
+        // given
         val actual = analysisRequestRepository.save(
             AnalysisRequest(
                 userToken = "userToken",
@@ -62,6 +66,7 @@ class AnalysisRequestServiceTest(
             )
         )
 
+        // when
         val expected = sut.withStatus(actual.id!!, AnalysisStatus.DONE)
 
         then(expected.status).isEqualTo(AnalysisStatus.DONE)
@@ -72,6 +77,7 @@ class AnalysisRequestServiceTest(
         @Autowired analysisRequestRepository: AnalysisRequestRepository,
         @Autowired notificationRepository: NotificationRepository
     ) {
+        // given 
         val analysisRequest = analysisRequestRepository.save(
             AnalysisRequest(
                 userToken = "userToken",
@@ -90,6 +96,7 @@ class AnalysisRequestServiceTest(
             )
         )
 
+        // when
         sut.withStatus(analysisRequestId, AnalysisStatus.DONE)
 
         val expected = notificationRepository.findByAnalysisRequestId(analysisRequestId)
@@ -98,6 +105,7 @@ class AnalysisRequestServiceTest(
 
     @Test
     fun toDeletedWhenNotified(@Autowired analysisRequestRepository: AnalysisRequestRepository) {
+        // given
         val actual = analysisRequestRepository.save(
             AnalysisRequest(
                 userToken = "userToken",
@@ -106,6 +114,7 @@ class AnalysisRequestServiceTest(
             )
         )
 
+        // when
         val expected = sut.withStatus(actual.id!!, AnalysisStatus.DELETED)
 
         then(expected.status).isEqualTo(AnalysisStatus.DELETED)
@@ -113,6 +122,7 @@ class AnalysisRequestServiceTest(
 
     @Test
     fun toDeletedWhenDone(@Autowired analysisRequestRepository: AnalysisRequestRepository) {
+        // given
         val actual = analysisRequestRepository.save(
             AnalysisRequest(
                 userToken = "userToken",
@@ -121,6 +131,7 @@ class AnalysisRequestServiceTest(
             )
         )
 
+        // when
         val expected = sut.withStatus(actual.id!!, AnalysisStatus.DELETED)
 
         then(expected.status).isEqualTo(AnalysisStatus.DELETED)

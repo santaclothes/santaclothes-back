@@ -53,7 +53,7 @@ class NotificationService(
     fun viewByAnalysisRequestId(analysisRequestId: Long) {
         notificationRepository.saveAll(
             notificationRepository.findByAnalysisRequestId(analysisRequestId)
-                .filter { !it.new }
+                .filter { it.new }
                 .map {
                     it.new = false
                     it

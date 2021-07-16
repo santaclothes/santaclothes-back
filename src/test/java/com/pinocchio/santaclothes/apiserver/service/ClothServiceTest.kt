@@ -3,7 +3,13 @@ package com.pinocchio.santaclothes.apiserver.service
 import com.pinocchio.santaclothes.apiserver.entity.AccountType
 import com.pinocchio.santaclothes.apiserver.entity.CareLabel
 import com.pinocchio.santaclothes.apiserver.entity.Cloth
-import com.pinocchio.santaclothes.apiserver.entity.type.*
+import com.pinocchio.santaclothes.apiserver.entity.type.BleachType
+import com.pinocchio.santaclothes.apiserver.entity.type.ClothesColor
+import com.pinocchio.santaclothes.apiserver.entity.type.ClothesType
+import com.pinocchio.santaclothes.apiserver.entity.type.DryCleaning
+import com.pinocchio.santaclothes.apiserver.entity.type.DryType
+import com.pinocchio.santaclothes.apiserver.entity.type.IroningType
+import com.pinocchio.santaclothes.apiserver.entity.type.WaterType
 import com.pinocchio.santaclothes.apiserver.repository.ClothRepository
 import com.pinocchio.santaclothes.apiserver.test.SpringDataTest
 import org.assertj.core.api.BDDAssertions.then
@@ -18,6 +24,7 @@ class ClothServiceTest(
 
     @Test
     fun incrementCount() {
+        // when
         sut.incrementCount()
 
         then(sut.getCount()).isEqualTo(1L)
@@ -25,6 +32,7 @@ class ClothServiceTest(
 
     @Test
     fun addCareLabel() {
+        // given
         val userToken = "token"
         userService.register(userToken, "name", AccountType.KAKAO)
         val saved = clothRepository.save(
@@ -45,6 +53,8 @@ class ClothServiceTest(
             dryType = DryType.DRY_BLOWER_FORBIDDEN_KR,
             ironingType = IroningType.IRONING_140_160_FABRIC_KR
         )
+
+        // when
         sut.addCareLabel(clothId, expected)
 
         val actual = clothRepository.findById(clothId).orElseThrow().careLabel

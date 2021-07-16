@@ -39,19 +39,11 @@ class ApiController(
         request: AnalysisRequestForm,
         @ApiParam(hidden = true) @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = true) authorization: String
     ): AnalysisRequestResult {
-        with(request) {
-            val saved = analysisRequestService.save(
-                AnalysisRequestDocument(
-                    accessToken = authorizationToUuid(authorization),
-                    clothName = clothName,
-                    clothesColor = clothColor,
-                    clothesType = clothType,
-                    clothImage = request.clothImage,
-                    labelImage = request.labelImages
-                )
-            )
-            return AnalysisRequestResult(saved.id!!)
-        }
+        val saved = analysisRequestService.save(
+            accessToken = authorizationToUuid(authorization),
+            request.toAnalysisRequestDocument()
+        )
+        return AnalysisRequestResult(saved.id!!)
     }
 
     @ApiOperation("분석 요청 상태 변경")
@@ -110,3 +102,12 @@ data class NotificationElement(
     val analysisRequestId: Long,
     val clothName: String
 )
+
+fun AnalysisRequestForm.toAnalysisRequestDocument() =
+    AnalysisRequestDocument(
+        clothName = clothName,
+        clothesColor = clothColor,
+        clothesType = clothType,
+        clothImage = clothImage,
+        labelImage = labelImages
+    )
