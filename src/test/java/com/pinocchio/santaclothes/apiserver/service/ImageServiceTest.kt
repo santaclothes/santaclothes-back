@@ -11,17 +11,19 @@ import com.pinocchio.santaclothes.apiserver.test.SpringDataTest
 import org.assertj.core.api.BDDAssertions.then
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.mock.web.MockMultipartFile
-
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
 
-
-class ImageServiceTest(
-    @Autowired val sut: ImageService,
-    @Autowired val clothRepository: ClothRepository,
-    @Autowired val userService: UserService
+class ImageServiceTest @Autowired constructor(
+    private val sut: ImageService,
+    private val clothRepository: ClothRepository,
+    private val userService: UserService
 ) : SpringDataTest() {
+    @MockBean
+    lateinit var eventPublisher: ApplicationEventPublisher
 
     @Test
     fun upload() {
@@ -50,10 +52,5 @@ class ImageServiceTest(
         val filePath = resolvePath("$fileName.png")
         val uploadFile = File(filePath)
         then(uploadFile).exists()
-
-        val image = this.sut.getImagesByClothId(clothId)[0]
-        then(image.type).isEqualTo(ImageType.CLOTH)
-        then(image.clothId).isEqualTo(clothId)
-        then(image.userToken).isEqualTo(userToken)
     }
 }
