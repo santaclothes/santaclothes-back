@@ -22,12 +22,17 @@ class NotificationEventHandler(
     fun sendNotification(event: NotificationSendEvent) {
         val analysisRequest = analysisRequestService.getById(event.analysisRequestId)
         val authorizationToken = authorizationTokenService.getByUserToken(analysisRequest.userToken)
+        val analysisRequestId = analysisRequest.id!!
+
         notificationService.sendTo(
             authorizationToken,
-            NotificationSendRequest(analysisRequest.cloth.name, analysisRequest.id!!)
+            NotificationSendRequest(
+                analysisRequest.cloth.name,
+                analysisRequestId
+            )
         ).block()
 
-        analysisRequestService.withStatus(analysisRequest.id!!, AnalysisStatus.NOTIFIED)
+        analysisRequestService.withStatus(analysisRequestId, AnalysisStatus.NOTIFIED)
     }
 
     @EventListener
