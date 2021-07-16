@@ -2,11 +2,13 @@ package com.pinocchio.santaclothes.apiserver.event
 
 import com.pinocchio.santaclothes.apiserver.entity.ImageType
 
-data class CareLabelUpdateEvent(
+data class CareLabelUpdateCommand(
     val analysisRequestId: Long,
     val careLabelId: Long,
     val careLabelImageId: Long
 )
+
+data class NotificationSendCommand(val analysisRequestId: Long)
 
 data class ImageUploadEvent(
     val fileName: String,
@@ -20,5 +22,3 @@ data class ImageUploadEvent(
 data class AnalysisRequestNotifiedEvent(val analysisRequestId: Long)
 
 data class AnalysisRequestDoneEvent(val analysisRequestId: Long)
-
-data class NotificationSendEvent(val analysisRequestId: Long)

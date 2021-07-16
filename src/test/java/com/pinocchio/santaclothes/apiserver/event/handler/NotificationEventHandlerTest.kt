@@ -13,7 +13,7 @@ import com.pinocchio.santaclothes.apiserver.entity.type.DryCleaning
 import com.pinocchio.santaclothes.apiserver.entity.type.DryType
 import com.pinocchio.santaclothes.apiserver.entity.type.IroningType
 import com.pinocchio.santaclothes.apiserver.entity.type.WaterType
-import com.pinocchio.santaclothes.apiserver.event.NotificationSendEvent
+import com.pinocchio.santaclothes.apiserver.event.NotificationSendCommand
 import com.pinocchio.santaclothes.apiserver.fixture.mockSendNotificationApi
 import com.pinocchio.santaclothes.apiserver.repository.AnalysisRequestRepository
 import com.pinocchio.santaclothes.apiserver.service.AuthorizationTokenService
@@ -76,7 +76,7 @@ class NotificationEventHandlerTest @Autowired constructor(
         )
 
         // when
-        publisher.publishEvent(NotificationSendEvent(analysisRequestId))
+        publisher.publishEvent(NotificationSendCommand(analysisRequestId))
 
         // then
         val actual = analysisRequestRepository.findById(analysisRequestId).orElseThrow()

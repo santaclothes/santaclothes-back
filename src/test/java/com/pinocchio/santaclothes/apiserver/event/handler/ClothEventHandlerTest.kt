@@ -14,7 +14,7 @@ import com.pinocchio.santaclothes.apiserver.entity.type.DryCleaning
 import com.pinocchio.santaclothes.apiserver.entity.type.DryType
 import com.pinocchio.santaclothes.apiserver.entity.type.IroningType
 import com.pinocchio.santaclothes.apiserver.entity.type.WaterType
-import com.pinocchio.santaclothes.apiserver.event.CareLabelUpdateEvent
+import com.pinocchio.santaclothes.apiserver.event.CareLabelUpdateCommand
 import com.pinocchio.santaclothes.apiserver.repository.AnalysisRequestRepository
 import com.pinocchio.santaclothes.apiserver.repository.ImageRepository
 import com.pinocchio.santaclothes.apiserver.service.AuthorizationTokenService
@@ -79,7 +79,7 @@ class ClothEventHandlerTest @Autowired constructor(
 
         // when
         sut.publishEvent(
-            CareLabelUpdateEvent(
+            CareLabelUpdateCommand(
                 analysisRequestId = analysisRequest.id!!,
                 careLabelId = careLabelId,
                 careLabelImageId = careLabelImageId

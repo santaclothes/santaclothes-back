@@ -2,8 +2,8 @@ package com.pinocchio.santaclothes.apiserver.service
 
 import com.pinocchio.santaclothes.apiserver.controller.dto.CareLabelIcon
 import com.pinocchio.santaclothes.apiserver.controller.dto.toCareLabel
-import com.pinocchio.santaclothes.apiserver.event.CareLabelUpdateEvent
-import com.pinocchio.santaclothes.apiserver.event.NotificationSendEvent
+import com.pinocchio.santaclothes.apiserver.event.CareLabelUpdateCommand
+import com.pinocchio.santaclothes.apiserver.event.NotificationSendCommand
 import com.pinocchio.santaclothes.apiserver.repository.AnalysisRequestRepository
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
@@ -25,13 +25,13 @@ class AnalysisService(
         val analysisRequestId = analysisRequestRepository.findByClothId(clothId).orElseThrow().id!!
 
         publisher.publishEvent(
-            CareLabelUpdateEvent(
+            CareLabelUpdateCommand(
                 analysisRequestId = analysisRequestId,
                 careLabelId = saved.careLabel!!.id!!,
                 careLabelImageId = careLabelImageId,
             )
         )
 
-        publisher.publishEvent(NotificationSendEvent(analysisRequestId = analysisRequestId))
+        publisher.publishEvent(NotificationSendCommand(analysisRequestId = analysisRequestId))
     }
 }

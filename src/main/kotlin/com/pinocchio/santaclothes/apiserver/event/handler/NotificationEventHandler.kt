@@ -2,7 +2,7 @@ package com.pinocchio.santaclothes.apiserver.event.handler
 
 import com.pinocchio.santaclothes.apiserver.entity.AnalysisStatus
 import com.pinocchio.santaclothes.apiserver.event.AnalysisRequestNotifiedEvent
-import com.pinocchio.santaclothes.apiserver.event.NotificationSendEvent
+import com.pinocchio.santaclothes.apiserver.event.NotificationSendCommand
 import com.pinocchio.santaclothes.apiserver.notification.service.NotificationSendRequest
 import com.pinocchio.santaclothes.apiserver.notification.service.NotificationService
 import com.pinocchio.santaclothes.apiserver.service.AnalysisRequestService
@@ -19,8 +19,8 @@ class NotificationEventHandler(
 ) {
     @EventListener
     @Async
-    fun sendNotification(event: NotificationSendEvent) {
-        val analysisRequest = analysisRequestService.getById(event.analysisRequestId)
+    fun sendNotification(command: NotificationSendCommand) {
+        val analysisRequest = analysisRequestService.getById(command.analysisRequestId)
         val authorizationToken = authorizationTokenService.getByUserToken(analysisRequest.userToken)
         val analysisRequestId = analysisRequest.id!!
 
