@@ -15,7 +15,6 @@ import reactor.core.publisher.Mono
 class NotificationSender(
     @Qualifier("notificationWebClient") val webClient: WebClient,
 ) {
-    // TODO: 실패시 재시도 처리?
     fun send(
         messageWrapper: FirebaseMessageWrapper,
         accessToken: String
@@ -26,5 +25,4 @@ class NotificationSender(
         .retrieve()
         .onStatus(HttpStatus::is4xxClientError, ClientResponse::createException)
         .bodyToMono(NotificationResponse::class.java)
-    // TODO: 성공 응답 코드 확인, 찾아봐도 없음
 }

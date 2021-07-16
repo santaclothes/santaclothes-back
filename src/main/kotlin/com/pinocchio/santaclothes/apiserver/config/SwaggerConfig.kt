@@ -28,7 +28,6 @@ class SwaggerConfig {
 
 fun securityContext(): SecurityContext = SecurityContext.builder().securityReferences(defaultAuth()).build()
 
-
 fun defaultAuth(): List<SecurityReference> {
     val authorizationScope = AuthorizationScope("global", "accessEverything")
     val authorizationScopes = arrayOf(

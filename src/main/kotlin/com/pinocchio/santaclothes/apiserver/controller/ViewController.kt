@@ -11,7 +11,11 @@ import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestHeader
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @Api(tags = ["View"])
 @RestController
@@ -47,5 +51,5 @@ class ViewController(@Autowired val viewService: ViewService) {
         @PathVariable("requestId") requestId: Long,
         @ApiParam(hidden = true)
         @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = true) authorization: String
-    ) : ReportView = viewService.reportView(requestId)
+    ): ReportView = viewService.reportView(requestId)
 }

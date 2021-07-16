@@ -1,6 +1,5 @@
 package com.pinocchio.santaclothes.apiserver.event.handler
 
-import com.pinocchio.santaclothes.apiserver.event.AnalysisRequestDoneEvent
 import com.pinocchio.santaclothes.apiserver.event.AnalysisRequestNotifiedEvent
 import com.pinocchio.santaclothes.apiserver.notification.service.NotificationService
 import org.springframework.beans.factory.annotation.Autowired

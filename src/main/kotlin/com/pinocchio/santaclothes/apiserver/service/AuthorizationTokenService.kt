@@ -44,5 +44,4 @@ class AuthorizationTokenService(
     )
     fun save(authorizationToken: AuthorizationToken): AuthorizationToken =
         authorizationTokenRepository.save(authorizationToken)
-
 }
