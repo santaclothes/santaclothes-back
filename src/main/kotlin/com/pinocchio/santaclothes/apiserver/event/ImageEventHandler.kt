@@ -1,6 +1,5 @@
-package com.pinocchio.santaclothes.apiserver.event.handler
+package com.pinocchio.santaclothes.apiserver.event
 
-import com.pinocchio.santaclothes.apiserver.event.ImageUploadCommand
 import com.pinocchio.santaclothes.apiserver.support.FileSupports
 import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Async

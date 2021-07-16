@@ -1,8 +1,6 @@
-package com.pinocchio.santaclothes.apiserver.event.handler
+package com.pinocchio.santaclothes.apiserver.event
 
 import com.pinocchio.santaclothes.apiserver.entity.AnalysisStatus
-import com.pinocchio.santaclothes.apiserver.event.AnalysisRequestDoneEvent
-import com.pinocchio.santaclothes.apiserver.event.CareLabelUpdateCommand
 import com.pinocchio.santaclothes.apiserver.repository.ImageRepository
 import com.pinocchio.santaclothes.apiserver.service.AnalysisRequestService
 import com.pinocchio.santaclothes.apiserver.service.ClothService
