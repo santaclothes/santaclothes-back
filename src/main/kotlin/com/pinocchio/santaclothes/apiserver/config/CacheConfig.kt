@@ -1,12 +1,14 @@
 package com.pinocchio.santaclothes.apiserver.config
 
 import com.github.benmanes.caffeine.cache.Caffeine
+import com.pinocchio.santaclothes.apiserver.repository.NoticeRepository
 import org.springframework.cache.Cache
 import org.springframework.cache.CacheManager
 import org.springframework.cache.caffeine.CaffeineCache
 import org.springframework.cache.support.SimpleCacheManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.time.Duration
 
 @Configuration
 class CacheConfig {
@@ -15,19 +17,21 @@ class CacheConfig {
         CacheTemplate<Long>(cacheManager.getCache(CLOTH_COUNT_NAME)!!)
 
     @Bean
-    fun cacheManager(): CacheManager {
+    fun cacheManager(noticeRepository: NoticeRepository): CacheManager {
         val caches = listOf(
             CaffeineCache(
                 AUTHORIZATION_TOKEN_BY_USER_TOKEN_NAME,
-                Caffeine.newBuilder().recordStats() // TODO: caffeine 설정 검토
-                    .maximumSize(1000L) // entries 개수
+                Caffeine.newBuilder().recordStats()
+                    .maximumSize(1000L)
+                    .expireAfterAccess(Duration.ofMinutes(5))
                     .build(),
             ),
             CaffeineCache(
                 NOTICE_NAME,
-                Caffeine.newBuilder().recordStats() // TODO: caffeine 설정 검토
+                Caffeine.newBuilder().recordStats()
                     .maximumSize(10L)
-                    .build()
+                    .refreshAfterWrite(Duration.ofMinutes(10))
+                    .build { noticeRepository.findAll() }
             ),
             CaffeineCache(
                 CLOTH_COUNT_NAME,
@@ -39,6 +43,7 @@ class CacheConfig {
                 AUTHORIZATION_TOKEN_BY_ACCESS_TOKEN_NAME,
                 Caffeine.newBuilder().recordStats()
                     .maximumSize(1000L)
+                    .expireAfterAccess(Duration.ofMinutes(5))
                     .build()
             )
         )
