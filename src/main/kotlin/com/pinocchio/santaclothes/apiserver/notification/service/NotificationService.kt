@@ -52,10 +52,12 @@ class NotificationService(
 
     fun viewByAnalysisRequestId(analysisRequestId: Long) {
         notificationRepository.saveAll(
-            notificationRepository.findByAnalysisRequestId(analysisRequestId).map {
-                it.new = false
-                it
-            }.toList()
+            notificationRepository.findByAnalysisRequestId(analysisRequestId)
+                .filter { !it.new }
+                .map {
+                    it.new = false
+                    it
+                }.toList()
         )
     }
 
