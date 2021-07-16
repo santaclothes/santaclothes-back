@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -22,7 +23,7 @@ import javax.validation.Valid
 
 @Api(tags = ["Auth"])
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/auth", produces = [MediaType.APPLICATION_JSON_VALUE])
 class AuthController(
     private val userService: UserService,
     private val tokenManager: TokenManager
