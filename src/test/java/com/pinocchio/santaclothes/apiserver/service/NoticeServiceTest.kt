@@ -7,13 +7,13 @@ import org.assertj.core.api.BDDAssertions.then
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-
 class NoticeServiceTest(
     @Autowired val sut: NoticeService,
     @Autowired val noticeRepository: NoticeRepository,
 ) : SpringDataTest() {
     @Test
     fun findAllNotices() {
+        // given
         val expected = listOf(
             Notice(title = "title1", hint = "hint1", content = "content1"),
             Notice(title = "title2", hint = "hint2", content = "content2"),
@@ -21,6 +21,7 @@ class NoticeServiceTest(
         )
         noticeRepository.saveAll(expected)
 
+        // when
         val actual = sut.findAllNotices()
 
         then(actual).isEqualTo(expected)
@@ -28,6 +29,7 @@ class NoticeServiceTest(
 
     @Test
     fun findAllNoticesCache() {
+        // given
         val expected = listOf(
             Notice(title = "title1", hint = "hint1", content = "content1"),
             Notice(title = "title2", hint = "hint2", content = "content2"),
@@ -37,6 +39,7 @@ class NoticeServiceTest(
         sut.findAllNotices()
         noticeRepository.save(Notice(title = "title4", hint = "hint4", content = "content4"))
 
+        // when
         val actual = sut.findAllNotices()
 
         then(actual.size).isEqualTo(3)

@@ -1,13 +1,12 @@
 package com.pinocchio.santaclothes.apiserver.service
 
 import com.pinocchio.santaclothes.apiserver.entity.AccountType
-import com.pinocchio.santaclothes.apiserver.entity.User
 import com.pinocchio.santaclothes.apiserver.entity.AuthorizationToken
+import com.pinocchio.santaclothes.apiserver.entity.User
 import com.pinocchio.santaclothes.apiserver.exception.DatabaseException
 import com.pinocchio.santaclothes.apiserver.exception.ExceptionReason
-import com.pinocchio.santaclothes.apiserver.exception.TokenInvalidException
-import com.pinocchio.santaclothes.apiserver.repository.UserRepository
 import com.pinocchio.santaclothes.apiserver.repository.AuthorizationTokenRepository
+import com.pinocchio.santaclothes.apiserver.repository.UserRepository
 import com.pinocchio.santaclothes.apiserver.test.SpringDataTest
 import org.assertj.core.api.BDDAssertions.then
 import org.assertj.core.api.BDDAssertions.thenNoException
@@ -24,8 +23,10 @@ class UserServiceTest(
 ) : SpringDataTest() {
     @Test
     fun register() {
+        // given
         val userToken = "token"
 
+        // when
         sut.register(userToken, "name", AccountType.KAKAO)
 
         thenNoException().isThrownBy {
@@ -35,7 +36,10 @@ class UserServiceTest(
 
     @Test
     fun registerTwice() {
+        // given
         val userToken = "token"
+
+        // when
         sut.register(userToken, "name", AccountType.KAKAO)
 
         thenThrownBy { sut.register(userToken, "name", AccountType.KAKAO) }
@@ -45,15 +49,18 @@ class UserServiceTest(
 
     @Test
     fun login() {
+        // given
         val userToken = "token"
         val deviceToken = "deviceToken"
         userRepository.insert(User(userToken, "name", AccountType.KAKAO))
 
+        // when, then
         thenNoException().isThrownBy { sut.login(userToken, deviceToken) }
     }
 
     @Test
     fun loginWithExpiredToken() {
+        // given
         val userToken = "token"
         val deviceToken = "deviceToken"
 
@@ -66,18 +73,27 @@ class UserServiceTest(
             )
         )
 
+        // when, then
         thenNoException().isThrownBy { sut.login(userToken, deviceToken) }
     }
 
     @Test
     fun findByAccessToken() {
+        // given
         val userToken = "token"
         val deviceToken = "deviceToken"
-
         userRepository.insert(User(userToken, "name", AccountType.KAKAO))
-        authorizationTokenRepository.save(AuthorizationToken(userToken = userToken, deviceToken = deviceToken)).apply {
-            val expected = sut.findByAccessToken(accessToken)
-            then(expected).isNotEmpty
-        }
+
+        val accessToken = authorizationTokenRepository.save(
+            AuthorizationToken(
+                userToken = userToken,
+                deviceToken = deviceToken
+            )
+        ).accessToken
+
+        // when
+        val expected = sut.findByAccessToken(accessToken)
+
+        then(expected).isNotEmpty
     }
 }
