@@ -11,7 +11,6 @@ import com.pinocchio.santaclothes.apiserver.support.authorizationToUuid
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
@@ -29,9 +28,9 @@ import org.springframework.web.multipart.MultipartFile
 @RestController
 @RequestMapping("/api")
 class ApiController(
-    @Autowired val analysisRequestService: AnalysisRequestService,
-    @Autowired val notificationService: NotificationService,
-    @Autowired val userService: UserService
+    private val analysisRequestService: AnalysisRequestService,
+    private val notificationService: NotificationService,
+    private val userService: UserService
 ) {
     @ApiOperation("분석 요청")
     @PostMapping("/analysisRequest", consumes = ["multipart/form-data"])

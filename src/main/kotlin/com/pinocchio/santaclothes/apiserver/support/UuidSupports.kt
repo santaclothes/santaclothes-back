@@ -4,7 +4,6 @@ import com.pinocchio.santaclothes.apiserver.exception.ExceptionReason
 import com.pinocchio.santaclothes.apiserver.exception.TokenInvalidException
 import java.util.UUID
 
-
 private const val TOKEN_PREFIX = 7 // BEARER
 
 fun authorizationToUuid(authorization: String): UUID =

@@ -9,7 +9,6 @@ import com.pinocchio.santaclothes.apiserver.entity.type.ClothesType
 import com.pinocchio.santaclothes.apiserver.event.AnalysisRequestDoneEvent
 import com.pinocchio.santaclothes.apiserver.event.AnalysisRequestNotifiedEvent
 import com.pinocchio.santaclothes.apiserver.repository.AnalysisRequestRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Isolation
@@ -20,10 +19,10 @@ import java.util.UUID
 
 @Service
 class AnalysisRequestService(
-    @Autowired val analysisRequestRepository: AnalysisRequestRepository,
-    @Autowired val imageService: ImageService,
-    @Autowired val authorizationTokenService: AuthorizationTokenService,
-    @Autowired val publisher: ApplicationEventPublisher,
+    private val analysisRequestRepository: AnalysisRequestRepository,
+    private val imageService: ImageService,
+    private val authorizationTokenService: AuthorizationTokenService,
+    private val publisher: ApplicationEventPublisher,
 ) {
     fun getById(id: Long): AnalysisRequest = analysisRequestRepository.findById(id).orElseThrow()
 

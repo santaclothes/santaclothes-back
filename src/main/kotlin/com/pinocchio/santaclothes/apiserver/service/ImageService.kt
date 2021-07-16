@@ -6,7 +6,6 @@ import com.pinocchio.santaclothes.apiserver.event.ImageUploadEvent
 import com.pinocchio.santaclothes.apiserver.repository.ImageRepository
 import com.pinocchio.santaclothes.apiserver.support.FileSupports.Companion.createImageFolderIfNotExists
 import com.pinocchio.santaclothes.apiserver.support.FileSupports.Companion.resolvePath
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
@@ -15,8 +14,8 @@ import java.util.UUID
 
 @Service
 class ImageService(
-    @Autowired val imageRepository: ImageRepository,
-    @Autowired val publisher: ApplicationEventPublisher
+    private val imageRepository: ImageRepository,
+    private val publisher: ApplicationEventPublisher
 ) {
     fun findAllCareLabelsToProcess(): List<Image> {
         return imageRepository.findAllCareLabelsToProcess()

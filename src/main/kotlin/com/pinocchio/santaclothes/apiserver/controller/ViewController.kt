@@ -9,7 +9,6 @@ import com.pinocchio.santaclothes.apiserver.support.authorizationToUuid
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 @Api(tags = ["View"])
 @RestController
 @RequestMapping("/view")
-class ViewController(@Autowired val viewService: ViewService) {
+class ViewController(private val viewService: ViewService) {
     @ApiOperation("메인화면")
     @GetMapping("/home")
     fun home(

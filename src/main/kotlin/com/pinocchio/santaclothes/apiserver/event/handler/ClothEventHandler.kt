@@ -8,17 +8,16 @@ import com.pinocchio.santaclothes.apiserver.repository.AnalysisRequestRepository
 import com.pinocchio.santaclothes.apiserver.repository.ImageRepository
 import com.pinocchio.santaclothes.apiserver.service.AuthorizationTokenService
 import com.pinocchio.santaclothes.apiserver.service.ClothService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
 
 @Component
 class ClothEventHandler(
-    @Autowired val imageRepository: ImageRepository,
-    @Autowired val analysisRequestRepository: AnalysisRequestRepository,
-    @Autowired val notificationService: NotificationService,
-    @Autowired val authorizationTokenService: AuthorizationTokenService,
-    @Autowired val clothService: ClothService,
+    private val imageRepository: ImageRepository,
+    private val analysisRequestRepository: AnalysisRequestRepository,
+    private val notificationService: NotificationService,
+    private val authorizationTokenService: AuthorizationTokenService,
+    private val clothService: ClothService,
 ) {
 
     // @TransactionalEventListener? commit 된 후에 동작, 테스트에서는 Rollback이 이루어지기 떄문에 동작 X

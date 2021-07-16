@@ -13,7 +13,6 @@ import com.pinocchio.santaclothes.apiserver.exception.ExceptionReason
 import com.pinocchio.santaclothes.apiserver.exception.TokenInvalidException
 import com.pinocchio.santaclothes.apiserver.manager.ClothManager
 import com.pinocchio.santaclothes.apiserver.notification.service.NotificationService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.util.UUID
@@ -22,12 +21,12 @@ private const val STRING_ABBREVIATE_LENGTH = 20
 
 @Service
 class ViewService(
-    @Autowired val userService: UserService,
-    @Autowired val noticeService: NoticeService,
-    @Autowired val clothService: ClothService,
-    @Autowired val analysisRequestService: AnalysisRequestService,
-    @Autowired val imageService: ImageService,
-    @Autowired val notificationService: NotificationService,
+    private val userService: UserService,
+    private val noticeService: NoticeService,
+    private val clothService: ClothService,
+    private val analysisRequestService: AnalysisRequestService,
+    private val imageService: ImageService,
+    private val notificationService: NotificationService,
 ) {
     private val clothManager: ClothManager = ClothManager()
 

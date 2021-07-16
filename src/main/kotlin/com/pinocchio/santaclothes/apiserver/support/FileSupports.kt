@@ -17,7 +17,6 @@ class FileSupports {
                 it.toString()
             }
 
-
         private val FILE_PREFIX_URL = System.getProperty("PINOCCHIO_IMAGES_PATH")
     }
 }

@@ -5,7 +5,6 @@ import com.pinocchio.santaclothes.apiserver.entity.AuthorizationToken
 import com.pinocchio.santaclothes.apiserver.exception.ExceptionReason
 import com.pinocchio.santaclothes.apiserver.exception.TokenInvalidException
 import com.pinocchio.santaclothes.apiserver.repository.AuthorizationTokenRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.cache.annotation.Caching
@@ -13,9 +12,7 @@ import org.springframework.stereotype.Service
 import java.util.UUID
 
 @Service
-class AuthorizationTokenService(
-    @Autowired val authorizationTokenRepository: AuthorizationTokenRepository
-) {
+class AuthorizationTokenService(private val authorizationTokenRepository: AuthorizationTokenRepository) {
     @Cacheable(cacheNames = [CacheConfig.AUTHORIZATION_TOKEN_BY_ACCESS_TOKEN_NAME], key = "#accessToken")
     fun getByAccessToken(accessToken: UUID): AuthorizationToken =
         authorizationTokenRepository.findFirstByAccessTokenOrderByCreatedAtDesc(accessToken)

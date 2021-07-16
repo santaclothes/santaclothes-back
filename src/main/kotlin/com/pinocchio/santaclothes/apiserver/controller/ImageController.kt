@@ -3,7 +3,6 @@ package com.pinocchio.santaclothes.apiserver.controller
 import com.pinocchio.santaclothes.apiserver.entity.Image
 import com.pinocchio.santaclothes.apiserver.service.ImageService
 import io.swagger.annotations.Api
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -16,9 +15,7 @@ import javax.servlet.http.HttpServletResponse
 @Api(tags = ["Image"])
 @RestController
 @RequestMapping("/image")
-class ImageController(
-    @Autowired val imageService: ImageService
-) {
+class ImageController(private val imageService: ImageService) {
     @GetMapping("/{fileName}")
     @ResponseStatus(HttpStatus.OK)
     fun render(@PathVariable fileName: String, response: HttpServletResponse) {

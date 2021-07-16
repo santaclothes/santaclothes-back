@@ -8,7 +8,6 @@ import com.pinocchio.santaclothes.apiserver.entity.NotificationCategory
 import com.pinocchio.santaclothes.apiserver.notification.apiclient.NotificationSender
 import com.pinocchio.santaclothes.apiserver.notification.repository.NotificationRepository
 import com.pinocchio.santaclothes.apiserver.notification.service.dto.FirebaseMessageWrapper
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
@@ -16,9 +15,9 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class NotificationService(
-    @Autowired val webClient: NotificationSender,
-    @Autowired val tokenManager: TokenManager,
-    @Autowired val notificationRepository: NotificationRepository,
+    private val webClient: NotificationSender,
+    private val tokenManager: TokenManager,
+    private val notificationRepository: NotificationRepository,
 ) {
     @Transactional
     fun sendTo(authorizationToken: AuthorizationToken, analysisRequest: AnalysisRequest) =

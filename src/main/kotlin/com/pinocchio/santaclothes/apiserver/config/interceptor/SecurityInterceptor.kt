@@ -8,9 +8,7 @@ import org.springframework.web.servlet.HandlerInterceptor
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class SecurityInterceptor(
-    private val tokenManager: TokenManager
-) : HandlerInterceptor {
+class SecurityInterceptor(private val tokenManager: TokenManager) : HandlerInterceptor {
 
     override fun preHandle(
         request: HttpServletRequest,
@@ -29,7 +27,6 @@ class SecurityInterceptor(
 
         return true
     }
-
 
     companion object {
         private val permitHosts: List<String> = listOf(
