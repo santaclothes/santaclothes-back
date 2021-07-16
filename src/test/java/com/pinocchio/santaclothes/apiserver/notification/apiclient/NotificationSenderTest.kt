@@ -23,7 +23,7 @@ class NotificationSenderTest(
 
         mockSendNotificationApi(
             projectId = projectId,
-            accessToken = accessToken,
+            fcmToken = accessToken,
             response = """
                             {
                                 "name": "성공"
@@ -34,7 +34,7 @@ class NotificationSenderTest(
         StepVerifier.create(
             sut.send(
                 request,
-                accessToken = accessToken
+                fcmToken = accessToken
             )
         )
             .assertNext {

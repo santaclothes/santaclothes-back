@@ -8,12 +8,17 @@ import org.springframework.http.HttpHeaders
 
 fun mockSendNotificationApi(
     projectId: String,
-    accessToken: String,
-    response: String
+    fcmToken: String,
+    response: String =
+        """
+                            {
+                                "name": "성공"
+                            }
+        """.trimIndent()
 ) {
     givenThat(
         post("/v1/projects/$projectId/messages:send")
-            .withHeader(HttpHeaders.AUTHORIZATION, matching("Bearer $accessToken"))
+            .withHeader(HttpHeaders.AUTHORIZATION, matching("Bearer $fcmToken"))
             .willReturn(
                 okJson(response)
             )

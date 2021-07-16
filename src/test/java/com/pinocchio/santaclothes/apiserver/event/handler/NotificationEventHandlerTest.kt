@@ -2,11 +2,10 @@ package com.pinocchio.santaclothes.apiserver.event.handler
 
 import com.pinocchio.santaclothes.apiserver.authorization.TokenManager
 import com.pinocchio.santaclothes.apiserver.entity.AnalysisRequest
+import com.pinocchio.santaclothes.apiserver.entity.AnalysisStatus
 import com.pinocchio.santaclothes.apiserver.entity.AuthorizationToken
 import com.pinocchio.santaclothes.apiserver.entity.CareLabel
 import com.pinocchio.santaclothes.apiserver.entity.Cloth
-import com.pinocchio.santaclothes.apiserver.entity.Image
-import com.pinocchio.santaclothes.apiserver.entity.ImageType
 import com.pinocchio.santaclothes.apiserver.entity.type.BleachType
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesColor
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesType
@@ -14,23 +13,25 @@ import com.pinocchio.santaclothes.apiserver.entity.type.DryCleaning
 import com.pinocchio.santaclothes.apiserver.entity.type.DryType
 import com.pinocchio.santaclothes.apiserver.entity.type.IroningType
 import com.pinocchio.santaclothes.apiserver.entity.type.WaterType
-import com.pinocchio.santaclothes.apiserver.event.CareLabelUpdateEvent
+import com.pinocchio.santaclothes.apiserver.event.NotificationSendEvent
+import com.pinocchio.santaclothes.apiserver.fixture.mockSendNotificationApi
 import com.pinocchio.santaclothes.apiserver.repository.AnalysisRequestRepository
-import com.pinocchio.santaclothes.apiserver.repository.ImageRepository
 import com.pinocchio.santaclothes.apiserver.service.AuthorizationTokenService
 import com.pinocchio.santaclothes.apiserver.test.SpringDataTest
 import org.assertj.core.api.BDDAssertions.then
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.given
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.ApplicationEventPublisher
 
-class ClothEventHandlerTest @Autowired constructor(
-    private val sut: ApplicationEventPublisher,
+class NotificationEventHandlerTest @Autowired constructor(
+    private val publisher: ApplicationEventPublisher,
     private val analysisRequestRepository: AnalysisRequestRepository,
-    private val imageRepository: ImageRepository,
+    @Value("\${google-fcm.project-id}") private val projectId: String,
 ) : SpringDataTest() {
+
     @MockBean
     lateinit var authorizationTokenService: AuthorizationTokenService
 
@@ -38,8 +39,9 @@ class ClothEventHandlerTest @Autowired constructor(
     lateinit var tokenManager: TokenManager
 
     @Test
-    fun analysisDone() {
+    fun sendNotification() {
         val userToken = "userToken"
+        val fcmToken = "fcmToken"
         val analysisRequest = analysisRequestRepository.save(
             AnalysisRequest(
                 userToken = userToken,
@@ -59,35 +61,25 @@ class ClothEventHandlerTest @Autowired constructor(
             )
         )
 
-        val careLabelId = analysisRequest.cloth.careLabel!!.id!!
-
-        val careLabelImageId = imageRepository.save(
-            Image(
-                fileName = "fileName",
-                filePath = "filePath",
-                fileUrl = "fileUrl",
-                type = ImageType.CARE_LABEL
-            )
-        ).imageId!!
-
         given { authorizationTokenService.getByUserToken(userToken) }.willReturn(
             AuthorizationToken(
                 userToken = userToken,
                 deviceToken = "deviceToken"
             )
         )
+        given { tokenManager.fcmAccessToken }.willReturn(fcmToken)
 
-        // when
-        sut.publishEvent(
-            CareLabelUpdateEvent(
-                analysisRequestId = analysisRequest.id!!,
-                careLabelId = careLabelId,
-                careLabelImageId = careLabelImageId
-            )
+        val analysisRequestId = analysisRequest.id!!
+        mockSendNotificationApi(
+            projectId = projectId,
+            fcmToken = fcmToken,
         )
 
+        // when
+        publisher.publishEvent(NotificationSendEvent(analysisRequestId))
+
         // then
-        val careLabelImage = imageRepository.findById(careLabelImageId).orElseThrow()
-        then(careLabelImage.careLabelId).isEqualTo(careLabelId)
+        val actual = analysisRequestRepository.findById(analysisRequestId).orElseThrow()
+        then(actual.status).isEqualTo(AnalysisStatus.NOTIFIED)
     }
 }

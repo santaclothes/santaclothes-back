@@ -73,7 +73,9 @@ class AnalysisRequestService(
                     AnalysisStatus.DONE -> publisher.publishEvent(AnalysisRequestDoneEvent(it.id!!))
                     else -> Unit
                 }
-                it.status = status
+                if (it.status.ordinal <= status.ordinal) {
+                    it.status = status
+                }
             }
     )
 }

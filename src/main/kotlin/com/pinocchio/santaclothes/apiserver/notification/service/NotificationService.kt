@@ -1,7 +1,6 @@
 package com.pinocchio.santaclothes.apiserver.notification.service
 
 import com.pinocchio.santaclothes.apiserver.authorization.TokenManager
-import com.pinocchio.santaclothes.apiserver.entity.AnalysisRequest
 import com.pinocchio.santaclothes.apiserver.entity.AuthorizationToken
 import com.pinocchio.santaclothes.apiserver.entity.Notification
 import com.pinocchio.santaclothes.apiserver.entity.NotificationCategory
@@ -20,18 +19,18 @@ class NotificationService(
     private val notificationRepository: NotificationRepository,
 ) {
     @Transactional
-    fun sendTo(authorizationToken: AuthorizationToken, analysisRequest: AnalysisRequest) =
+    fun sendTo(authorizationToken: AuthorizationToken, request: NotificationSendRequest) =
         FirebaseMessageWrapper(
             token = authorizationToken.deviceToken,
             title = MESSAGE_TITLE,
-            body = "${analysisRequest.cloth.name}의 케어 라벨이 분석 완료됐습니다.",
+            body = "${request.clothName}의 케어 라벨이 분석 완료됐습니다.",
             image = IMAGE_URL
         ).let {
             notificationRepository.save(
                 Notification(
                     userToken = authorizationToken.userToken,
-                    clothName = analysisRequest.cloth.name,
-                    analysisRequestId = analysisRequest.id!!,
+                    clothName = request.clothName,
+                    analysisRequestId = request.analysisRequestId,
                     category = NotificationCategory.ANALYSIS,
                     new = true
                 )
@@ -66,3 +65,8 @@ class NotificationService(
         private const val IMAGE_URL = ""
     }
 }
+
+data class NotificationSendRequest(
+    val clothName: String,
+    val analysisRequestId: Long
+)

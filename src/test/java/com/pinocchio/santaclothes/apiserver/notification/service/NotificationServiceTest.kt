@@ -1,13 +1,9 @@
 package com.pinocchio.santaclothes.apiserver.notification.service
 
 import com.pinocchio.santaclothes.apiserver.authorization.TokenManager
-import com.pinocchio.santaclothes.apiserver.entity.AnalysisRequest
 import com.pinocchio.santaclothes.apiserver.entity.AuthorizationToken
-import com.pinocchio.santaclothes.apiserver.entity.Cloth
 import com.pinocchio.santaclothes.apiserver.entity.Notification
 import com.pinocchio.santaclothes.apiserver.entity.NotificationCategory
-import com.pinocchio.santaclothes.apiserver.entity.type.ClothesColor
-import com.pinocchio.santaclothes.apiserver.entity.type.ClothesType
 import com.pinocchio.santaclothes.apiserver.fixture.mockSendNotificationApi
 import com.pinocchio.santaclothes.apiserver.notification.repository.NotificationRepository
 import com.pinocchio.santaclothes.apiserver.test.SpringDataTest
@@ -36,20 +32,10 @@ class NotificationServiceTest(
         given { tokenManager.fcmAccessToken }.willReturn(accessToken)
 
         val authorizationToken = AuthorizationToken(userToken = userToken, deviceToken = deviceToken)
-        val analysisRequest = AnalysisRequest(
-            id = 1L,
-            userToken = userToken,
-            cloth = Cloth(
-                name = "옷",
-                userToken = userToken,
-                color = ClothesColor.BEIGE,
-                type = ClothesType.TOP
-            )
-        )
 
         mockSendNotificationApi(
             projectId = projectId,
-            accessToken = accessToken,
+            fcmToken = accessToken,
             response = """
                             {
                                 "name": "성공"     
@@ -58,7 +44,7 @@ class NotificationServiceTest(
         )
 
         // when
-        StepVerifier.create(sut.sendTo(authorizationToken, analysisRequest))
+        StepVerifier.create(sut.sendTo(authorizationToken, NotificationSendRequest("clothName", 1L)))
             .assertNext { then(it.name).isEqualTo("성공") }
             .verifyComplete()
 

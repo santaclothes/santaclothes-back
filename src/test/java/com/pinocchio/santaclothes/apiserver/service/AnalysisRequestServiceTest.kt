@@ -136,4 +136,21 @@ class AnalysisRequestServiceTest(
 
         then(expected.status).isEqualTo(AnalysisStatus.DELETED)
     }
+
+    @Test
+    fun toRequestWhenClassified(@Autowired analysisRequestRepository: AnalysisRequestRepository) {
+        // given
+        val actual = analysisRequestRepository.save(
+            AnalysisRequest(
+                userToken = "userToken",
+                status = AnalysisStatus.CLASSIFIED,
+                cloth = Cloth(name = "test", color = ClothesColor.RED, type = ClothesType.TOP, userToken = "userToken")
+            )
+        )
+
+        // when
+        val expected = sut.withStatus(actual.id!!, AnalysisStatus.REQUEST)
+
+        then(expected.status).isEqualTo(AnalysisStatus.CLASSIFIED)
+    }
 }

@@ -17,11 +17,11 @@ class NotificationSender(
 ) {
     fun send(
         messageWrapper: FirebaseMessageWrapper,
-        accessToken: String
+        fcmToken: String
     ): Mono<NotificationResponse> = webClient.post()
         .uri("/messages:send")
         .body(BodyInserters.fromValue(messageWrapper))
-        .header(HttpHeaders.AUTHORIZATION, "Bearer $accessToken")
+        .header(HttpHeaders.AUTHORIZATION, "Bearer $fcmToken")
         .retrieve()
         .onStatus(HttpStatus::is4xxClientError, ClientResponse::createException)
         .bodyToMono(NotificationResponse::class.java)
