@@ -1,6 +1,6 @@
 package com.pinocchio.santaclothes.apiserver.notification.apiclient
 
-import com.pinocchio.santaclothes.apiserver.notification.fixture.mockSendNotificationApi
+import com.pinocchio.santaclothes.apiserver.fixture.mockSendNotificationApi
 import com.pinocchio.santaclothes.apiserver.notification.service.dto.FirebaseMessageWrapper
 import com.pinocchio.santaclothes.apiserver.test.SpringTest
 import org.assertj.core.api.BDDAssertions.then
@@ -28,7 +28,7 @@ class NotificationSenderTest(
                             {
                                 "name": "성공"
                             }
-                        """.trimIndent()
+            """.trimIndent()
         )
 
         StepVerifier.create(

@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "google-fcm.host",
+      "type": "java.lang.String",
+      "description": "구글 파이어베이스 호스트 주소"
+    },
+    {
+      "name": "google-fcm.url",
+      "type": "java.lang.String",
+      "description": "구글 파이어베이스 요청 주소"
+    },
+    {
+      "name": "google-fcm.project-id",
+      "type": "java.lang.String",
+      "description": "구글 파이어베이스에 등록된 프로젝트 아이디"
+    }
+  ]
+}

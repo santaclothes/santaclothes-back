@@ -1,4 +1,4 @@
-package com.pinocchio.santaclothes.apiserver.notification.fixture
+package com.pinocchio.santaclothes.apiserver.fixture
 
 import com.github.tomakehurst.wiremock.client.WireMock.givenThat
 import com.github.tomakehurst.wiremock.client.WireMock.matching
