@@ -68,13 +68,18 @@ class AnalysisRequestService(
         // TODO: 상태에 따라 변경되는 상태 제한
         analysisRequestRepository.findById(id).orElseThrow()
             .also {
-                when (it.status) {
-                    AnalysisStatus.NOTIFIED -> publisher.publishEvent(AnalysisRequestNotifiedEvent(it.id!!))
-                    AnalysisStatus.DONE -> publisher.publishEvent(AnalysisRequestDoneEvent(it.id!!))
-                    else -> Unit
-                }
                 if (it.status.ordinal <= status.ordinal) {
                     it.status = status
+                }
+
+                when (status) {
+                    AnalysisStatus.NOTIFIED -> publisher.publishEvent(AnalysisRequestNotifiedEvent(it.id!!))
+                    AnalysisStatus.REPORTED -> {
+                        it.cloth.careLabel?.clothId = null
+                        it.cloth.careLabel = null
+                    }
+                    AnalysisStatus.DONE -> publisher.publishEvent(AnalysisRequestDoneEvent(it.id!!))
+                    else -> Unit
                 }
             }
     )
