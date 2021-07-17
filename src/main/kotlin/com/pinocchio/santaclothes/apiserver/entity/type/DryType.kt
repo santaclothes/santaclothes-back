@@ -9,19 +9,19 @@ enum class DryType(var code: Int, var nationType: NationType, var description: S
     DRY_SUNNY_DOWN_KR(2, NationType.KR, "햇빛에 바닥에 뉘어서 건조하세요", "/img/dry/laysun.png"), DRY_CLOUD_DOWN_KR(3, NationType.KR, "그늘에서 바닥에 뉘어서 건조하세요", "/img/dry/lay.png"), DRY_BLOWER_KR(
         4,
         NationType.KR,
-        "손으로 짜는 것이 가능합니다", "/img/dry/squeeze.png"
+        "비틀기가 가능합니다", "/img/dry/squeeze.png"
     ),
-    DRY_BLOWER_FORBIDDEN_KR(5, NationType.KR, "손으로 짜서는 안됩니다", "/img/dry/nosqueeze.png"), DRY_MACHINE_KR(
+    DRY_BLOWER_FORBIDDEN_KR(5, NationType.KR, "비틀기가 불가합니다", "/img/dry/nosqueeze.png"), DRY_MACHINE_KR(
         6,
         NationType.KR,
         "기계 건조가 가능합니다", "/img/dry/machine.png"
     ),
-    DRY_MACHINE_FORBIDDEN_KR(7, NationType.KR, "기계 건조를 사용할 수 없습니다", "/img/dry/nomachine.png"), DRY_MACHINE_USA(
+    DRY_MACHINE_FORBIDDEN_KR(7, NationType.KR, "기계 건조가 불가합니다", "/img/dry/nomachine.png"), DRY_MACHINE_USA(
         8,
         NationType.USA,
         "기계 건조가 가능합니다", "/img/dry/machine.png"
     ),
-    DRY_MACHINE_FORBIDDEN_USA(9, NationType.USA, "기계 건조를 사용할 수 없습니다", "/img/dry/ame_nomachine.png"), DRY_WET_HANGER_USA(
+    DRY_MACHINE_FORBIDDEN_USA(9, NationType.USA, "기계 건조가 불가합니다", "/img/dry/ame_nomachine.png"), DRY_WET_HANGER_USA(
         10,
         NationType.USA,
         "젖은 채로 줄이나 막대기에 널어서 건조하세요", "/img/dry/ame_wetroap.png"

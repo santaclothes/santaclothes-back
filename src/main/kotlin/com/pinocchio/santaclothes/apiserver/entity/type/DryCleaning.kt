@@ -19,9 +19,9 @@ enum class DryCleaning(var code: Int, var nationType: NationType, var descriptio
     DRY_CLEANING_SHORT_USA(6, NationType.USA, "짧은 드라이 클리닝만 가능합니다", "/img/dryCleaning/ame_short.png"), DRY_CLEANING_LOW_HUMIDITY_USA(
         7,
         NationType.USA,
-        "낮은 습도에서 드라이 클리닝이 필요합니다", "/img/dryCleaning/ame_lowmoi.png"
+        "낮은 습도에서 드라이 클리닝이 가능합니다", "/img/dryCleaning/ame_lowmoi.png"
     ),
-    DRY_CLEANING_NOT_HOT_USA(8, NationType.USA, "열을 줄여서 드라이 클리닝이 필요합니다", "/img/dryCleaning/ame_lowheat.png"), DRY_CLEANING_JP(
+    DRY_CLEANING_NOT_HOT_USA(8, NationType.USA, "열을 줄여서 드라이 클리닝이 가능합니다", "/img/dryCleaning/ame_lowheat.png"), DRY_CLEANING_JP(
         9,
         NationType.JP,
         "드라이 클리닝이 가능합니다", "/img/dryCleaning/jap_can.png"

@@ -1,7 +1,7 @@
 package com.pinocchio.santaclothes.apiserver.entity.type
 
 enum class WaterType(var code: Int, var nationType: NationType, var description: String, var imageUrl:String) {
-    HAND_KR(0, NationType.KR, "물 온도 30°C로 중성세제를 사용하여 손세탁이 필요합니다.", "/img/waterwash/handwash.png"), FORBIDDEN_KR(1, NationType.KR, "물세탁이 불가합니다", "/img/waterwash/nohandwash.png"), WASHER_30_NEUTRAL_KR(
+    HAND_KR(0, NationType.KR, "물 온도 30°C로 중성세제를 사용하여 손세탁하세요.", "/img/waterwash/handwash.png"), FORBIDDEN_KR(1, NationType.KR, "물세탁이 불가합니다", "/img/waterwash/nohandwash.png"), WASHER_30_NEUTRAL_KR(
         2,
         NationType.KR,
         "물 온도 30°C로 중성세제를 사용하여 세탁기로 약하게 세탁하세요", "/img/waterwash/machine_30.png"
@@ -11,7 +11,7 @@ enum class WaterType(var code: Int, var nationType: NationType, var description:
         NationType.KR,
         "물 온도 60°C로 세탁기를 사용하여 세탁하세요", "/img/waterwash/machine60.png"
     ),
-    WASHER_90_KR(6, NationType.KR, "물 온도 95°C로 세탁기를 사용하여 세탁하세요(삶기 가능)", "/img/waterwash/machine95.png"), HAND_USA(7, NationType.USA, "손 세탁이 가능합니다", "/img/waterwash/ame_handwash.png"), FORBIDDEN_USA(
+    WASHER_90_KR(6, NationType.KR, "물 온도 95°C로 세탁기를 사용하여 세탁하세요(삶기 가능)", "/img/waterwash/machine95.png"), HAND_USA(7, NationType.USA, "손세탁하세요", "/img/waterwash/ame_handwash.png"), FORBIDDEN_USA(
         8,
         NationType.USA,
         "물 세탁이 불가합니다", "/img/waterwash/ame_no.png"
