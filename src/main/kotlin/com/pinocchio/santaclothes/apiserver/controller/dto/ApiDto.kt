@@ -5,6 +5,7 @@ import com.pinocchio.santaclothes.apiserver.entity.type.ClothesColor
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesType
 import com.pinocchio.santaclothes.apiserver.service.AnalysisRequestDocument
 import org.springframework.web.multipart.MultipartFile
+import java.time.Instant
 
 data class AnalysisRequestForm(
     val clothImage: MultipartFile,
@@ -30,7 +31,8 @@ data class NotificationList(
 data class NotificationElement(
     val id: Long,
     val analysisRequestId: Long,
-    val clothName: String
+    val clothName: String,
+    val requestAt: Instant,
 )
 
 fun AnalysisRequestForm.toAnalysisRequestDocument() =

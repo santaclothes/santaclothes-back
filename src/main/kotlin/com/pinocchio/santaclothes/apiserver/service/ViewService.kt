@@ -114,6 +114,11 @@ class ViewService(
         )
     }
 
+    fun clothView(accessToken: UUID, clothId: Long): AnalysisRequestView {
+        val analysisRequestId = analysisRequestService.getByClothId(clothId).id!!
+        return analysisRequestView(accessToken, analysisRequestId)
+    }
+
     fun CareLabel.toDetail(): List<CareLabelDetail> {
         return listOf(
             CareLabelDetail(

@@ -8,6 +8,9 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.zalando.problem.ProblemModule
 import org.zalando.problem.violations.ConstraintViolationProblemModule
+import java.time.ZoneId
+import java.util.Locale
+import java.util.TimeZone
 
 class JsonSupports {
     companion object {
@@ -20,6 +23,8 @@ class JsonSupports {
             .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+            .setTimeZone(TimeZone.getTimeZone(ZoneId.of("Asia/Seoul")))
+            .setLocale(Locale.KOREA)
 
         fun <T> toJsonString(value: T): String = JSON_MAPPER.writeValueAsString(value)
     }

@@ -26,6 +26,8 @@ class AnalysisRequestService(
 ) {
     fun getById(id: Long): AnalysisRequest = analysisRequestRepository.findById(id).orElseThrow()
 
+    fun getByClothId(clothId: Long): AnalysisRequest = analysisRequestRepository.findByClothId(clothId).orElseThrow()
+
     fun getByUserToken(userToken: String): List<AnalysisRequest> = analysisRequestRepository.findByUserToken(userToken)
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
@@ -65,7 +67,6 @@ class AnalysisRequestService(
     }
 
     fun withStatus(id: Long, status: AnalysisStatus): AnalysisRequest = analysisRequestRepository.save(
-        // TODO: 상태에 따라 변경되는 상태 제한
         analysisRequestRepository.findById(id).orElseThrow()
             .also {
                 when (it.status) { // 이전 상태

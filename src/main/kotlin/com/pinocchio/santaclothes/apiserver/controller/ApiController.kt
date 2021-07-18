@@ -69,7 +69,8 @@ class ApiController(
             NotificationElement(
                 id = it.id!!,
                 analysisRequestId = it.analysisRequestId,
-                clothName = it.clothName
+                clothName = it.clothName,
+                requestAt = it.createdAt
             )
         }
 

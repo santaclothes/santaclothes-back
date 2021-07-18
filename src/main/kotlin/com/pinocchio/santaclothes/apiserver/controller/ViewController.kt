@@ -37,6 +37,15 @@ class ViewController(private val viewService: ViewService) {
     ): AnalysisRequestView =
         viewService.analysisRequestView(authorizationToUuid(authorization), resultId)
 
+    @ApiOperation("옷 분석 결과 화면")
+    @GetMapping("/cloth/{clothId}")
+    fun getCloth(
+        @PathVariable("clothId") clothId: Long,
+        @ApiParam(hidden = true)
+        @RequestHeader(name = HttpHeaders.AUTHORIZATION, required = true) authorization: String
+    ): AnalysisRequestView =
+        viewService.clothView(authorizationToUuid(authorization), clothId)
+
     @ApiOperation("마이페이지 화면")
     @GetMapping("/myPage")
     fun getMyPage(

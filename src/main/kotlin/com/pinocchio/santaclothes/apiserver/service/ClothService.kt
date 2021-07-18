@@ -13,7 +13,7 @@ class ClothService(
     @Qualifier("clothCountCacheTemplate") private val clothCountCacheTemplate: CacheTemplate<Long>,
 ) {
     fun incrementCount() {
-        clothCountCacheTemplate[CACHE_NAME] = clothCountCacheTemplate[CACHE_NAME] ?: 0 + 1L
+        clothCountCacheTemplate[CACHE_NAME] = (clothCountCacheTemplate[CACHE_NAME] ?: 0) + 1L
     }
 
     fun getCount() = clothCountCacheTemplate[CACHE_NAME] ?: 0
