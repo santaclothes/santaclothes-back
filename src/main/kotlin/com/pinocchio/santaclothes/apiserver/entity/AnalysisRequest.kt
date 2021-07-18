@@ -20,7 +20,7 @@ enum class AnalysisStatus {
     REQUEST,
     CLASSIFIED,
     NOTIFIED,
+    REPORTED,
     DONE,
     DELETED,
-    REPORTED,
 }
