@@ -2,7 +2,7 @@ package com.pinocchio.santaclothes.apiserver.controller.dto
 
 import com.pinocchio.santaclothes.apiserver.entity.Notice
 import com.pinocchio.santaclothes.apiserver.entity.type.ClothesType
-import java.time.Instant
+import java.time.LocalDateTime
 
 data class HomeView(
     val userName: String,
@@ -19,7 +19,7 @@ data class AnalysisRequestView(
     val clothImageUrl: String?,
     val careLabelImageUrls: List<String>,
     val careLabelDetails: List<CareLabelDetail>,
-    val createdDate: Instant
+    val createdDate: LocalDateTime
 )
 
 data class CareLabelDetail(val iconUrl: String, val name: String, val description: String)
@@ -34,7 +34,7 @@ data class MyPageCloth(
     val clothId: Long,
     val clothType: ClothesType,
     val imageUrl: String,
-    val requestAt: Instant,
+    val requestAt: LocalDateTime,
     val careLabelCount: Long
 )
 

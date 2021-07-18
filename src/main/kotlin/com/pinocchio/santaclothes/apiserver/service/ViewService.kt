@@ -13,6 +13,7 @@ import com.pinocchio.santaclothes.apiserver.exception.ExceptionReason
 import com.pinocchio.santaclothes.apiserver.exception.TokenInvalidException
 import com.pinocchio.santaclothes.apiserver.manager.ClothManager
 import com.pinocchio.santaclothes.apiserver.notification.service.NotificationService
+import com.pinocchio.santaclothes.apiserver.support.toLocalDateTime
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.util.UUID
@@ -71,7 +72,7 @@ class ViewService(
             clothImageUrl = clothImageUrl,
             careLabelImageUrls = careLabelImageUrls,
             careLabelDetails = careLabelDetails,
-            Instant.now()
+            createdDate = Instant.now().toLocalDateTime()
         )
     }
 
@@ -86,7 +87,7 @@ class ViewService(
                         imageUrl = imageService.getImagesByClothId(it.cloth.id!!)
                             .first { image -> image.type == ImageType.CLOTH }.fileUrl,
                         careLabelCount = if (it.cloth.careLabel == null) 0 else 1,
-                        requestAt = it.createdAt
+                        requestAt = it.createdAt.toLocalDateTime()
                     )
                 }
                 .sortedBy { it.requestAt }

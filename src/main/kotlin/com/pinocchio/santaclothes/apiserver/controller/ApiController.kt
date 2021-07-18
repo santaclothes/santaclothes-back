@@ -10,6 +10,7 @@ import com.pinocchio.santaclothes.apiserver.notification.service.NotificationSer
 import com.pinocchio.santaclothes.apiserver.service.AnalysisRequestService
 import com.pinocchio.santaclothes.apiserver.service.UserService
 import com.pinocchio.santaclothes.apiserver.support.authorizationToUuid
+import com.pinocchio.santaclothes.apiserver.support.toLocalDateTime
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiParam
@@ -70,7 +71,7 @@ class ApiController(
                 id = it.id!!,
                 analysisRequestId = it.analysisRequestId,
                 clothName = it.clothName,
-                requestAt = it.createdAt
+                requestAt = it.createdAt.toLocalDateTime()
             )
         }
 
