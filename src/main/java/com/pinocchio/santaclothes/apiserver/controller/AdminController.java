@@ -15,40 +15,50 @@ import com.pinocchio.santaclothes.apiserver.entity.Image;
 import com.pinocchio.santaclothes.apiserver.service.AnalysisService;
 import com.pinocchio.santaclothes.apiserver.service.ImageService;
 
-@Controller
-@RequestMapping("/admin")
-public class AdminController {
-	@Autowired
-	public AdminController(ImageService imageService, AnalysisService analysisService) {
-		this.imageService = imageService;
-		this.analysisService = analysisService;
-	}
+@Controller @RequestMapping("/admin") public class AdminController {
+    @Autowired public AdminController(ImageService imageService, AnalysisService analysisService) {
+        this.imageService = imageService;
+        this.analysisService = analysisService;
+    }
 
-	private final ImageService imageService; //불필요하게 변경 가능한 건 지워야한다.
-	private final AnalysisService analysisService;
+    private final ImageService imageService; //불필요하게 변경 가능한 건 지워야한다.
+    private final AnalysisService analysisService;
 
-	@GetMapping("")
-	public ModelAndView home() {
-		ModelAndView modelAndView = new ModelAndView("home");
-		List<Image> imageList = imageService.findAllCareLabelsToProcess();
-		modelAndView.addObject("imageList", imageList);
-		return modelAndView;
-	}
+    @GetMapping("") public ModelAndView home() {
+        ModelAndView modelAndView = new ModelAndView("home");
+        List<Image> imageList = imageService.findAllCareLabelsToProcess();
+        modelAndView.addObject("imageList", imageList);
+        return modelAndView;
+    }
 
-	@GetMapping("/analyze/{imageId}")
-	public ModelAndView getPage(@PathVariable long imageId) {
-		ModelAndView modelAndView = new ModelAndView("analyze");
-		Image image = imageService.getNotClassifiedCareLabelImageByImageId(imageId);
-		String imageURL = image.getFileUrl();
-		modelAndView.addObject("imageId", imageId);
-		modelAndView.addObject("imageURL", imageURL);
-		return modelAndView;
-	}
+    @GetMapping("/notify") public ModelAndView getNotifyPage() {
+        ModelAndView modelAndView = new ModelAndView("notify");
+        return modelAndView;
+    }
 
-	@PostMapping("/analyze/{imageId}")
-	public ModelAndView analyze(@PathVariable long imageId, CareLabelIcon careLabel) {
-		ModelAndView test = new ModelAndView("redirect:/admin");
-		analysisService.analysis(imageId, careLabel);
-		return test;
-	}
+    @GetMapping("/notify/addcontent") public ModelAndView getAddContentPage() {
+        ModelAndView modelAndView = new ModelAndView("notify_board");
+        return modelAndView;
+    }
+
+    @GetMapping("/notify/detail") public ModelAndView viewDetail() {
+        ModelAndView modelAndView = new ModelAndView("detail");
+        return modelAndView;
+    }
+
+    @GetMapping("/analyze/{imageId}") public ModelAndView getPage(@PathVariable long imageId) {
+        ModelAndView modelAndView = new ModelAndView("analyze");
+        Image image = imageService.getNotClassifiedCareLabelImageByImageId(imageId);
+        String imageURL = image.getFileUrl();
+        modelAndView.addObject("imageId", imageId);
+        modelAndView.addObject("imageURL", imageURL);
+        return modelAndView;
+    }
+
+    @PostMapping("/analyze/{imageId}")
+    public ModelAndView analyze(@PathVariable long imageId, CareLabelIcon careLabel) {
+        ModelAndView test = new ModelAndView("redirect:/admin");
+        analysisService.analysis(imageId, careLabel);
+        return test;
+    }
 }

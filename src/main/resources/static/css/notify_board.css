@@ -1,0 +1,53 @@
+body {
+    background-color: #E9EDF0;
+}
+
+textarea{
+    resize: none;
+}
+
+.title textarea{
+    height: 40px;
+}
+
+.hint textarea{
+    height: 40px;
+}
+
+.addcontent-wrapper {
+    width: 100%;
+    padding: 30px;
+}
+
+.form-control{
+    padding: 5px;
+    border-color: transparent;
+}
+
+.form-control-input:focus{
+    border-color: #2C52AE;
+}
+
+.subbtn{
+    background-color: #2C52AE;
+    border: #fbfbfb solid 3px;
+    cursor:pointer;
+    color: white;
+    font-size:18px;
+    padding-top:12px;
+    padding-bottom:12px;
+    float: left;
+    margin: 10px 10px 10px 0px;
+}
+
+.cancelbtn{
+    background-color: #2C52AE;
+    border: #fbfbfb solid 3px;
+    cursor:pointer;
+    color: white;
+    font-size:18px;
+    padding-top:12px;
+    padding-bottom:12px;
+    float: left;
+    margin : 10px;
+}

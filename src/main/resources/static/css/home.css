@@ -1,26 +1,52 @@
-body{
+body {
     background-color: aliceblue;
 }
+
+.noti-wrapper {
+    background-color: #bce1e3;
+    border: 2px solid #000;
+    position: fixed;
+    right: 50%;
+    top: 180px;
+    margin-right: -615px;
+    text-align: center;
+    width: 70px;
+    height: 120px;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+}
+.noti-floating{
+    padding-top: 30px;
+}
+.noti-floating a{
+    text-decoration-line: none;
+    font-family: "Nanum Gothic";
+}
+
 .home-wrapper {
     height: 98%;
     width: 100%;
 }
-.title-wrapper{
+
+.title-wrapper {
     width: 100%;
     text-align: center;
     font-family: "Nanum Gothic";
     margin: auto;
 }
-.imagelist-wrapper{
+
+.imagelist-wrapper {
     width: 100%;
 }
-.image-gird{
+
+.image-gird {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-auto-rows: 220px;
     grid-gap: 10px;
 }
-.image-gird img{
+
+.image-gird img {
     vertical-align: middle;
     width: 100%;
     height: 100%;

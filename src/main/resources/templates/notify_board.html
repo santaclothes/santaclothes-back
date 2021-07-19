@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Notify Add Page</title>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" type="text/css" href="/css/notify_board.css">
+</head>
+<body>
+<div class="addcontent-wrapper">
+    <div class="main-title">
+        <h1>내용 등록</h1>
+    </div>
+
+    <form method="post" action="">
+        <div class="title">
+            <h4>제목</h4>
+            <p><textarea cols="50" rows="1" name="title" id="title" class="form-control" placeholder="공지사항의 제목을 입력하시오" required="required"></textarea></p>
+        </div>
+
+        <div class="hint">
+            <h4>부제목</h4>
+            <p><textarea cols="50" rows="1" name="hint" id="hint" class="form-control" placeholder="제목 밑에 들어갈 부제목을 입력하시오" required="required"></textarea></p>
+        </div>
+
+        <div class="content">
+            <h4>내용</h4>
+            <p><textarea cols="50" rows="10" name="content" id="content" class="form-control" placeholder="내용을 입력하시오" required="required"></textarea></p>
+        </div>
+
+        <div class="submitbtn">
+            <input type="submit" value="저장" class="subbtn"/>
+        </div>
+    </form>
+
+    <div class="cancel">
+        <button type="button" value="취소" class="cancelbtn" onclick = "location.href = '/admin/notify'">취소</button>
+    </div>
+
+</div>
+
+</body>
+</html>

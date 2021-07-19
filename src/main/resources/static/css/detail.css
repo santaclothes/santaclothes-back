@@ -1,0 +1,43 @@
+body {
+    background-color: #E9EDF0;
+}
+
+.addcontent-wrapper {
+    width: 100%;
+    padding: 30px;
+}
+
+.updatebtn{
+    background-color: #2C52AE;
+    border: #fbfbfb solid 3px;
+    cursor:pointer;
+    color: white;
+    font-size:18px;
+    padding-top:12px;
+    padding-bottom:12px;
+    float: left;
+    margin: 10px 10px 10px 0px;
+}
+
+.deletebtn{
+    background-color: darkred;
+    border: #fbfbfb solid 3px;
+    cursor:pointer;
+    color: white;
+    font-size:18px;
+    padding-top:12px;
+    padding-bottom:12px;
+    float: left;
+    margin : 10px;
+}
+
+.golistbtn{
+    background-color: #868e96;
+    border: #fbfbfb solid 3px;
+    cursor:pointer;
+    color: white;
+    font-size:18px;
+    padding-top:12px;
+    padding-bottom:12px;
+    margin: 10px 10px 10px 0px;
+}
