@@ -36,7 +36,7 @@ class CacheConfig {
             CaffeineCache(
                 CLOTH_COUNT_NAME,
                 Caffeine.newBuilder().recordStats()
-                    .maximumSize(0L)
+                    .maximumSize(1L)
                     .build()
             ),
             CaffeineCache(
