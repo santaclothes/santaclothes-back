@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service
 import java.time.Instant
 import java.util.UUID
 
-private const val STRING_ABBREVIATE_LENGTH = 20
+private const val STRING_ABBREVIATE_LENGTH = 40
 
 @Service
 class ViewService(
