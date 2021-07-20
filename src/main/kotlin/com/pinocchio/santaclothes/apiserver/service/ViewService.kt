@@ -46,7 +46,7 @@ class ViewService(
         val user = userService.findByAccessToken(accessToken).orElseThrow()
         val analysisRequest = analysisRequestService.getById(requestId)
         val cloth = analysisRequest.cloth
-        if (analysisRequest.status != AnalysisStatus.DONE) {
+        if (analysisRequest.status != AnalysisStatus.DONE || analysisRequest.status != AnalysisStatus.NOTIFIED) {
             throw NoSuchElementException("$requestId is not exists")
         }
 
